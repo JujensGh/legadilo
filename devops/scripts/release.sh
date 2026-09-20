@@ -18,11 +18,13 @@ fi
 docker login rg.fr-par.scw.cloud/legadilo -u nologin --password-stdin < ~/.private/scw-registry-password
 
 release_tag=$(git tag --list  | sort -r | head -n 1)
+git checkout "${release_tag}"
 echo "Releasing version ${release_tag} Press enter to accept."
 read -r
 
-just build-production-images
 docker image tag legadilo_production_django:latest "rg.fr-par.scw.cloud/legadilo/legadilo-django:${release_tag}"
 docker image tag legadilo_production_django:latest rg.fr-par.scw.cloud/legadilo/legadilo-django:latest
 docker image push "rg.fr-par.scw.cloud/legadilo/legadilo-django:${release_tag}"
 docker image push rg.fr-par.scw.cloud/legadilo/legadilo-django:latest
+
+git checkout main

@@ -67,10 +67,10 @@ update-po:
     uv run python manage.py makemessages --all --no-location
 
 compile-po:
-    uv run python manage.py compilemessages
+    uv run python manage.py compilemessages --verbosity 0
 
 build-production-images:
-    docker compose -f production.yml build --pull newer django
+    docker compose -f production.yml build django --pull
 
 test-production-images: build-production-images
     docker run --rm \
@@ -78,6 +78,7 @@ test-production-images: build-production-images
       --env IS_PRODUCTION=true \
       --env DJANGO_SECRET_KEY=ci \
       --env DJANGO_ADMIN_URL=/admin/ \
+      --env DATABASE_URL="sqlite://:memory:" \
       legadilo_production_django:latest \
       python manage.py check
 
@@ -104,8 +105,8 @@ ci:
 ci-run:
     bash ./devops/scripts/local-ci.sh
 
-bump-version:
+bump-version: ci-run
     bash ./devops/scripts/bumb-version.sh
 
-release:
+release: build-production-images
     bash ./devops/scripts/release.sh
