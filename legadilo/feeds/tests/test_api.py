@@ -244,7 +244,7 @@ class TestListFeedsView:
             response = logged_in_sync_client.get(self.url)
 
         assert response.status_code == HTTPStatus.OK
-        snapshot.assert_match(serialize_for_snapshot(response.json()), "feeds.json")
+        assert serialize_for_snapshot(response.json()) == snapshot
 
     def test_filter_by_urls(self, logged_in_sync_client):
         response = logged_in_sync_client.get(self.url, {"feed_urls": [self.feed.feed_url]})
@@ -306,9 +306,7 @@ class TestSubscribeToFeedView:
         assert feed.feed_url == feed_url
         assert feed.category is None
         assert feed.user == user
-        snapshot.assert_match(
-            serialize_for_snapshot(_prepare_feed_for_snapshot(response.json(), feed)), "feed.json"
-        )
+        assert serialize_for_snapshot(_prepare_feed_for_snapshot(response.json(), feed)) == snapshot
 
     def test_subscribe_to_feed(
         self, user, logged_in_sync_client, mocker, django_assert_num_queries, snapshot
@@ -340,9 +338,7 @@ class TestSubscribeToFeedView:
         assert list(feed.tags.values_list("title", flat=True)) == ["Some tag", existing_tag.title]
         assert feed.user == user
         assert feed.category == category
-        snapshot.assert_match(
-            serialize_for_snapshot(_prepare_feed_for_snapshot(response.json(), feed)), "feed.json"
-        )
+        assert serialize_for_snapshot(_prepare_feed_for_snapshot(response.json(), feed)) == snapshot
 
     def test_subscribe_to_feed_with_category_slug(
         self, user, logged_in_sync_client, mocker, django_assert_num_queries, snapshot
@@ -401,10 +397,7 @@ class TestSubscribeToFeedView:
 
         assert response.status_code == HTTPStatus.ALREADY_REPORTED
         feed = Feed.objects.get()
-        snapshot.assert_match(
-            serialize_for_snapshot(_prepare_feed_for_snapshot(response.json(), feed)),
-            "feed.json",
-        )
+        assert serialize_for_snapshot(_prepare_feed_for_snapshot(response.json(), feed)) == snapshot
 
     def test_subscribe_to_feed_but_error_occurred(self, user, logged_in_sync_client, mocker):
         mocker.patch("legadilo.feeds.api.get_feed_data", side_effect=httpx2.HTTPError("Kaboom!"))
@@ -445,7 +438,7 @@ class TestGetFeedView:
 
         assert response.status_code == HTTPStatus.OK
 
-        snapshot.assert_match(serialize_for_snapshot(response.json()), "feed.json")
+        assert serialize_for_snapshot(response.json()) == snapshot
 
 
 @pytest.mark.django_db
@@ -486,7 +479,7 @@ class TestUpdateFeedView:
         assert response.status_code == HTTPStatus.OK
         self.feed.refresh_from_db()
         assert self.feed.category_id == self.other_feed_category.id
-        snapshot.assert_match(serialize_for_snapshot(response.json()), "feed.json")
+        assert serialize_for_snapshot(response.json()) == snapshot
 
     def test_update_category_from_slug(
         self, logged_in_sync_client, django_assert_num_queries, snapshot
@@ -513,7 +506,7 @@ class TestUpdateFeedView:
         assert response.status_code == HTTPStatus.OK
         self.feed.refresh_from_db()
         assert self.feed.category_id is None
-        snapshot.assert_match(serialize_for_snapshot(response.json()), "feed.json")
+        assert serialize_for_snapshot(response.json()) == snapshot
 
     def test_disable_feed_invalid_payload(self, logged_in_sync_client):
         response = logged_in_sync_client.patch(
@@ -555,7 +548,7 @@ class TestUpdateFeedView:
         assert self.feed.enabled
         assert self.feed.refresh_delay == constants.FeedRefreshDelays.TWICE_A_WEEK
         assert self.feed.article_retention_time == 600
-        snapshot.assert_match(serialize_for_snapshot(response.json()), "feed.json")
+        assert serialize_for_snapshot(response.json()) == snapshot
 
     def test_disable_feed(self, logged_in_sync_client):
         response = logged_in_sync_client.patch(
@@ -603,7 +596,7 @@ class TestUpdateFeedView:
             "New tag",
             "Tag to keep",
         ]
-        snapshot.assert_match(serialize_for_snapshot(response.json()), "feed.json")
+        assert serialize_for_snapshot(response.json()) == snapshot
 
 
 @pytest.mark.django_db

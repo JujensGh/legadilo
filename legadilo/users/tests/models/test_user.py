@@ -332,7 +332,7 @@ class TestUserManager:
         )
         for call in send_mail_mock.call_args_list:
             email = call.kwargs["recipient_list"][0]
-            snapshot.assert_match(call.kwargs["message"], f"message_body_{slugify(email)}.txt")
+            assert call.kwargs["message"] == snapshot(name=f"message_body_{slugify(email)}")
 
     def test_cleanup_inactive_users(self):
         user_active = UserFactory(email="active@example.com", last_login=utcnow())

@@ -1,6 +1,0 @@
-Hello user_to_notify_7_days@example.com,
-
-Your account has been inactive for 723 days and will be deleted automatically in 6 days. To prevent this, please log in to your account.
-
-Regards,
-The Legadilo Team

@@ -1,0 +1,84 @@
+# serializer version: 1
+# name: TestExportArticlesApi.test_dont_export_feeds
+  '''
+  group_id,group_title,group_description,group_tags,category_id,category_title,feed_id,feed_title,feed_url,feed_site_url,article_id,article_title,article_url,article_content,article_content_type,article_date_published,article_date_updated,article_authors,article_tags,article_read_at,article_is_favorite,article_lang,article_comments
+  ,,,[],,,1,Some feed,https://example.com/feeds/1.xml,https://example.com,1,Some article,https://example.com/article/1,,text/html,2024-06-23T12:00:00+00:00,2024-06-23T12:00:00+00:00,,[],,False,,[]
+  ,,,[],,,,,,,2,Recently updated article,https://example.com/article/2,,text/html,2024-06-23T12:00:00+00:00,2025-06-23T12:00:00+00:00,,[],,False,,[]
+  
+  '''
+# ---
+# name: TestExportArticlesApi.test_export_all
+  '''
+  group_id,group_title,group_description,group_tags,category_id,category_title,feed_id,feed_title,feed_url,feed_site_url,article_id,article_title,article_url,article_content,article_content_type,article_date_published,article_date_updated,article_authors,article_tags,article_read_at,article_is_favorite,article_lang,article_comments
+  ,,,,,,1,Some feed,https://example.com/feeds/1.xml,https://example.com,,,,,,,,,,,,,
+  ,,,,,,2,Recently updated feed,https://example.com/feeds/2.xml,https://example.com,,,,,,,,,,,,,
+  ,,,[],,,1,Some feed,https://example.com/feeds/1.xml,https://example.com,1,Some article,https://example.com/article/1,,text/html,2024-06-23T12:00:00+00:00,2024-06-23T12:00:00+00:00,,[],,False,,[]
+  ,,,[],,,,,,,2,Recently updated article,https://example.com/article/2,,text/html,2024-06-23T12:00:00+00:00,2025-06-23T12:00:00+00:00,,[],,False,,[]
+  
+  '''
+# ---
+# name: TestExportArticlesApi.test_export_only_recent_articles
+  '''
+  group_id,group_title,group_description,group_tags,category_id,category_title,feed_id,feed_title,feed_url,feed_site_url,article_id,article_title,article_url,article_content,article_content_type,article_date_published,article_date_updated,article_authors,article_tags,article_read_at,article_is_favorite,article_lang,article_comments
+  ,,,,,,2,Recently updated feed,https://example.com/feeds/2.xml,https://example.com,,,,,,,,,,,,,
+  ,,,[],,,,,,,2,Recently updated article,https://example.com/article/2,,text/html,2024-06-23T12:00:00+00:00,2025-06-23T12:00:00+00:00,,[],,False,,[]
+  
+  '''
+# ---
+# name: TestExportFeedsApi.test_export_as_json
+  '''
+  {
+    "export_date": "2024-06-20T22:00:00Z",
+    "feeds_by_categories": {
+      "My Category": [
+        {
+          "article_retention_time": 0,
+          "category": {
+            "id": 1,
+            "slug": "my-category",
+            "title": "My Category"
+          },
+          "description": "",
+          "details_url": "http://testserver/feeds/articles/3-feed-with-category/",
+          "disabled_at": null,
+          "disabled_reason": "",
+          "enabled": true,
+          "feed_type": "rss",
+          "feed_url": "https://example.com/feeds/2.xml",
+          "id": 3,
+          "open_original_url_by_default": false,
+          "refresh_delay": "DAILY_AT_NOON",
+          "site_url": "https://example.com",
+          "slug": "feed-with-category",
+          "tags": [],
+          "title": "Feed with category"
+        }
+      ]
+    },
+    "feeds_without_category": [
+      {
+        "article_retention_time": 0,
+        "category": null,
+        "description": "",
+        "details_url": "http://testserver/feeds/articles/2-feed-without-a-category/",
+        "disabled_at": null,
+        "disabled_reason": "",
+        "enabled": true,
+        "feed_type": "rss",
+        "feed_url": "https://example.com/feeds/no_cat.xml",
+        "id": 2,
+        "open_original_url_by_default": false,
+        "refresh_delay": "DAILY_AT_NOON",
+        "site_url": "https://example.com",
+        "slug": "feed-without-a-category",
+        "tags": [],
+        "title": "Feed without a category"
+      }
+    ]
+  }
+  
+  '''
+# ---
+# name: TestExportFeedsApi.test_export_as_opml
+  b'<?xml version="1.0" encoding="utf-8"?>\n<opml version="1.0">\n  <head>\n    <dateCreated>Thu, 20 Jun 2024 22:00:00 +0000</dateCreated>\n    <title>Legadilo feeds export</title>\n  </head>\n  <body>\n    \n    <outline type="rss" text="Feed without a category" xmlUrl="https://example.com/feeds/no_cat.xml" htmlUrl="https://example.com" />\n    \n    \n    <outline text="My Category">\n      \n      <outline type="rss" text="Feed with category" xmlUrl="https://example.com/feeds/2.xml" htmlUrl="https://example.com" />\n      \n    </outline>\n    \n  </body>\n</opml>\n'
+# ---

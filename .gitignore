@@ -332,6 +332,8 @@ dump.rdb
 legadilo/media/
 /legadilo.sqlite3
 /legadilo.sqlite3-journal
+/legadilo.sqlite3-shm
+/legadilo.sqlite3-wal
 
 .pytest_cache/
 /mypy.db

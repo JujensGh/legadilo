@@ -1,0 +1,54 @@
+# serializer version: 1
+# name: TestExportArticlesView.test_export_no_data
+  '''
+  group_id,group_title,group_description,group_tags,category_id,category_title,feed_id,feed_title,feed_url,feed_site_url,article_id,article_title,article_url,article_content,article_content_type,article_date_published,article_date_updated,article_authors,article_tags,article_read_at,article_is_favorite,article_lang,article_comments
+  
+  '''
+# ---
+# name: TestExportArticlesView.test_export_some_content
+  '''
+  group_id,group_title,group_description,group_tags,category_id,category_title,feed_id,feed_title,feed_url,feed_site_url,article_id,article_title,article_url,article_content,article_content_type,article_date_published,article_date_updated,article_authors,article_tags,article_read_at,article_is_favorite,article_lang,article_comments
+  ,,,,1,Some category,,,,,,,,,,,,,,,,,
+  ,,,,,,1,Some feed,https://example.com/feeds/0.xml,https://example.com,,,,,,,,,,,,,
+  ,,,[],,,,,,,1,Some article,https://example.com/article/0,,text/html,2024-06-23T12:00:00+00:00,2024-06-23T12:00:00+00:00,,[],,False,,"[""Some comment""]"
+  
+  '''
+# ---
+# name: TestImportWallabag.test_import_valid_file
+  '''
+  [
+    {
+      "annotations": [],
+      "authors": [],
+      "content": "<p>Some data </p>",
+      "content_type": "text/html",
+      "contributors": [],
+      "external_article_id": "wallabag:4947",
+      "external_tags": [],
+      "group": null,
+      "group_order": 0,
+      "is_favorite": false,
+      "is_for_later": false,
+      "is_read": false,
+      "language": "en",
+      "main_feed": null,
+      "main_source_title": "www.thoughtworks.com",
+      "main_source_type": "MANUAL",
+      "opened_at": null,
+      "preview_picture_alt": "",
+      "preview_picture_url": "https://examplec.com/preview.png",
+      "published_at": "2024-04-19T17:18:29Z",
+      "read_at": null,
+      "reading_time": 0,
+      "slug": "refactoring-with-ai",
+      "summary": "<p>Some data </p>",
+      "table_of_content": [],
+      "title": "Refactoring with AI",
+      "updated_at": "2024-04-20T17:17:54Z",
+      "url": "https://www.example.com/article/1-article",
+      "was_opened": false
+    }
+  ]
+  
+  '''
+# ---

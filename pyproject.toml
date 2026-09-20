@@ -49,7 +49,6 @@ dev = [
     "pytest-mock >= 3.14.0", # https://pytest-mock.readthedocs.io/en/latest/
     "pytest-socket >= 0.7.0", # https://github.com/miketheman/pytest-socket
     "pytest-env >= 1.1.5", # https://github.com/pytest-dev/pytest-env
-    "pytest-snapshot >= 0.9.0", # https://github.com/joseph-roitman/pytest-snapshot
     "pytest-cov >= 6.0.0", # https://github.com/pytest-dev/pytest-cov
     "time-machine >= 2.16.0", #  https://github.com/adamchainz/time-machine
     # Code quality
@@ -69,6 +68,7 @@ dev = [
     "mypy >= 1.13.0", # https://github.com/python/mypy
     "django-stubs[compatible-mypy] >= 5.1.1", # https://github.com/typeddjango/django-stubs
     "types-beautifulsoup4 >= 4.12",
+    "syrupy>=6.0.0", # https://github.com/syrupy-project/syrupy
 ]
 prod = [
     "gunicorn>=23.0.0",
@@ -180,7 +180,6 @@ ignore = [
 "config/settings.py" = [
     "ERA001", # Found commented-out code
 ]
-"!**/conftest.py" = ["RUF076"]
 
 [tool.ruff.format]
 preview = true

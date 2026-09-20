@@ -1,0 +1,265 @@
+# serializer version: 1
+# name: TestGetFeedView.test_get
+  '''
+  {
+    "article_retention_time": 0,
+    "category": null,
+    "description": "",
+    "details_url": "http://testserver/feeds/articles/1-some-feed/",
+    "disabled_at": null,
+    "disabled_reason": "",
+    "enabled": true,
+    "feed_type": "rss",
+    "feed_url": "https://example.com/feed",
+    "id": 1,
+    "open_original_url_by_default": false,
+    "refresh_delay": "DAILY_AT_NOON",
+    "site_url": "https://example.com",
+    "slug": "some-feed",
+    "tags": [],
+    "title": "Some feed"
+  }
+  
+  '''
+# ---
+# name: TestListFeedsView.test_list
+  '''
+  {
+    "count": 2,
+    "items": [
+      {
+        "article_retention_time": 0,
+        "category": null,
+        "description": "",
+        "details_url": "http://testserver/feeds/articles/1-some-feed/",
+        "disabled_at": null,
+        "disabled_reason": "",
+        "enabled": true,
+        "feed_type": "rss",
+        "feed_url": "https://example.com/feed.xml",
+        "id": 1,
+        "open_original_url_by_default": false,
+        "refresh_delay": "DAILY_AT_NOON",
+        "site_url": "https://example.com",
+        "slug": "some-feed",
+        "tags": [],
+        "title": "Some feed"
+      },
+      {
+        "article_retention_time": 0,
+        "category": null,
+        "description": "",
+        "details_url": "http://testserver/feeds/articles/2-other-feed/",
+        "disabled_at": "2025-04-01T00:00:00Z",
+        "disabled_reason": "Disabled",
+        "enabled": false,
+        "feed_type": "rss",
+        "feed_url": "https://example.com/other-feed.xml",
+        "id": 2,
+        "open_original_url_by_default": false,
+        "refresh_delay": "DAILY_AT_NOON",
+        "site_url": "https://example.com",
+        "slug": "other-feed",
+        "tags": [],
+        "title": "Other feed"
+      }
+    ]
+  }
+  
+  '''
+# ---
+# name: TestSubscribeToFeedView.test_subscribe_to_already_subscribed_feed
+  '''
+  {
+    "article_retention_time": 0,
+    "category": null,
+    "description": "",
+    "details_url": "https://example.com/feeds/articles/1-feed-slug/",
+    "disabled_at": null,
+    "disabled_reason": "",
+    "enabled": true,
+    "feed_type": "rss",
+    "feed_url": "https://example.com/feed.rss",
+    "id": 1,
+    "open_original_url_by_default": false,
+    "refresh_delay": "DAILY_AT_NOON",
+    "site_url": "https://example.com",
+    "slug": "feed-slug",
+    "tags": [],
+    "title": "Feed title"
+  }
+  
+  '''
+# ---
+# name: TestSubscribeToFeedView.test_subscribe_to_feed
+  '''
+  {
+    "article_retention_time": 100,
+    "category": {
+      "id": 10,
+      "slug": "category-slug",
+      "title": "Category title"
+    },
+    "description": "Some feed description",
+    "details_url": "https://example.com/feeds/articles/1-feed-slug/",
+    "disabled_at": null,
+    "disabled_reason": "",
+    "enabled": true,
+    "feed_type": "rss",
+    "feed_url": "https://example.com/feed.rss",
+    "id": 1,
+    "open_original_url_by_default": true,
+    "refresh_delay": "HOURLY",
+    "site_url": "https://example.com",
+    "slug": "feed-slug",
+    "tags": [
+      {
+        "slug": "some-tag",
+        "title": "Some tag"
+      },
+      {
+        "slug": "tag-0",
+        "title": "Tag 0"
+      }
+    ],
+    "title": "Feed title"
+  }
+  
+  '''
+# ---
+# name: TestSubscribeToFeedView.test_subscribe_to_feed_with_just_url
+  '''
+  {
+    "article_retention_time": 0,
+    "category": null,
+    "description": "Some feed description",
+    "details_url": "https://example.com/feeds/articles/1-feed-slug/",
+    "disabled_at": null,
+    "disabled_reason": "",
+    "enabled": true,
+    "feed_type": "rss",
+    "feed_url": "https://example.com/feed.rss",
+    "id": 1,
+    "open_original_url_by_default": false,
+    "refresh_delay": "DAILY_AT_NOON",
+    "site_url": "https://example.com",
+    "slug": "feed-slug",
+    "tags": [],
+    "title": "Feed title"
+  }
+  
+  '''
+# ---
+# name: TestUpdateFeedView.test_unset_category
+  '''
+  {
+    "article_retention_time": 0,
+    "category": null,
+    "description": "",
+    "details_url": "http://testserver/feeds/articles/1-some-feed/",
+    "disabled_at": null,
+    "disabled_reason": "",
+    "enabled": true,
+    "feed_type": "rss",
+    "feed_url": "https://example.com/feed.xml",
+    "id": 1,
+    "open_original_url_by_default": false,
+    "refresh_delay": "DAILY_AT_NOON",
+    "site_url": "https://example.com",
+    "slug": "some-feed",
+    "tags": [],
+    "title": "Some feed"
+  }
+  
+  '''
+# ---
+# name: TestUpdateFeedView.test_update
+  '''
+  {
+    "article_retention_time": 600,
+    "category": {
+      "id": 1,
+      "slug": "some-category",
+      "title": "Some category"
+    },
+    "description": "",
+    "details_url": "http://testserver/feeds/articles/1-some-feed/",
+    "disabled_at": null,
+    "disabled_reason": "",
+    "enabled": true,
+    "feed_type": "rss",
+    "feed_url": "https://example.com/feed.xml",
+    "id": 1,
+    "open_original_url_by_default": false,
+    "refresh_delay": "TWICE_A_WEEK",
+    "site_url": "https://example.com",
+    "slug": "some-feed",
+    "tags": [],
+    "title": "Some feed"
+  }
+  
+  '''
+# ---
+# name: TestUpdateFeedView.test_update_category
+  '''
+  {
+    "article_retention_time": 0,
+    "category": {
+      "id": 2,
+      "slug": "other-category",
+      "title": "Other category"
+    },
+    "description": "",
+    "details_url": "http://testserver/feeds/articles/1-some-feed/",
+    "disabled_at": null,
+    "disabled_reason": "",
+    "enabled": true,
+    "feed_type": "rss",
+    "feed_url": "https://example.com/feed.xml",
+    "id": 1,
+    "open_original_url_by_default": false,
+    "refresh_delay": "DAILY_AT_NOON",
+    "site_url": "https://example.com",
+    "slug": "some-feed",
+    "tags": [],
+    "title": "Some feed"
+  }
+  
+  '''
+# ---
+# name: TestUpdateFeedView.test_update_tags
+  '''
+  {
+    "article_retention_time": 0,
+    "category": {
+      "id": 1,
+      "slug": "some-category",
+      "title": "Some category"
+    },
+    "description": "",
+    "details_url": "http://testserver/feeds/articles/1-some-feed/",
+    "disabled_at": null,
+    "disabled_reason": "",
+    "enabled": true,
+    "feed_type": "rss",
+    "feed_url": "https://example.com/feed.xml",
+    "id": 1,
+    "open_original_url_by_default": false,
+    "refresh_delay": "DAILY_AT_NOON",
+    "site_url": "https://example.com",
+    "slug": "some-feed",
+    "tags": [
+      {
+        "slug": "new-tag",
+        "title": "New tag"
+      },
+      {
+        "slug": "tag-to-keep",
+        "title": "Tag to keep"
+      }
+    ],
+    "title": "Some feed"
+  }
+  
+  '''
+# ---

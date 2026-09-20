@@ -1,3 +1,0 @@
-group_id,group_title,group_description,group_tags,category_id,category_title,feed_id,feed_title,feed_url,feed_site_url,article_id,article_title,article_url,article_content,article_content_type,article_date_published,article_date_updated,article_authors,article_tags,article_read_at,article_is_favorite,article_lang,article_comments
-,,,[],,,1,Some feed,https://example.com/feeds/1.xml,https://example.com,1,Some article,https://example.com/article/1,,text/html,2024-06-23T12:00:00+00:00,2024-06-23T12:00:00+00:00,,[],,False,,[]
-,,,[],,,,,,,2,Recently updated article,https://example.com/article/2,,text/html,2024-06-23T12:00:00+00:00,2025-06-23T12:00:00+00:00,,[],,False,,[]
