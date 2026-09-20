@@ -10,6 +10,7 @@ Summary of main functional changes.
 
 ## Unreleased
 
+- Add a statistics page that displays stats about the number of articles and feeds.
 - Display the remaining reading of articles groups.
 - Update deps.
 

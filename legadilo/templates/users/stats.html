@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block title %}
+    {% translate "Statistics" %}
+{% endblock title %}
+
+{% block content %}
+    <h1>{% translate "Statistics" %}</h1>
+
+    <div class="row">
+        <div class="col col-md-9">
+            <section class="mb-5">
+                <h2>{% translate "All Time" %}</h2>
+                <div class="row">
+                    <div class="col-md-6 col-12">
+                        <h3 class="h5">{% translate "Articles" %}</h3>
+                        <dl class="row mb-0">
+                            <dt class="col-sm-8">{% translate "Total articles" %}</dt>
+                            <dd class="col-sm-4 text-end">{{ stats.nb_articles }}</dd>
+                            <dt class="col-sm-8">{% translate "Opened articles" %}</dt>
+                            <dd class="col-sm-4 text-end">{{ stats.nb_opened_articles }}</dd>
+                            <dt class="col-sm-8">{% translate "Manually added articles" %}</dt>
+                            <dd class="col-sm-4 text-end">{{ stats.nb_manually_added_articles }}</dd>
+                            <dt class="col-sm-8">{% translate "Articles from feeds" %}</dt>
+                            <dd class="col-sm-4 text-end">{{ stats.nb_articles_from_feeds }}</dd>
+                        </dl>
+                    </div>
+                    <div class="col-md-6 col-12">
+                        <h3 class="h5">{% translate "Feeds" %}</h3>
+                        <dl class="row mb-0">
+                            <dt class="col-sm-8">{% translate "Total feeds" %}</dt>
+                            <dd class="col-sm-4 text-end">{{ stats.nb_feeds }}</dd>
+                            <dt class="col-sm-8">{% translate "Active feeds" %}</dt>
+                            <dd class="col-sm-4 text-end">{{ stats.nb_active_feeds }}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mb-5">
+                <h2>{% translate "Yearly" %}</h2>
+                <div class="row">
+                    <div class="col-md-6 col-12">
+                        <h3>{% translate "This Year" %}</h3>
+                        <dl class="row mb-0">
+                            <dt class="col-sm-8">{% translate "Articles added" %}</dt>
+                            <dd class="col-sm-4 text-end">{{ stats.nb_articles_added_this_year }}</dd>
+                            <dt class="col-sm-8">{% translate "Articles opened" %}</dt>
+                            <dd class="col-sm-4 text-end">{{ stats.nb_articles_opened_this_year }}</dd>
+                            <dt class="col-sm-8">{% translate "Manually added articles" %}</dt>
+                            <dd class="col-sm-4 text-end">{{ stats.nb_manually_added_articles_this_year }}</dd>
+                            <dt class="col-sm-8">{% translate "Articles from feeds" %}</dt>
+                            <dd class="col-sm-4 text-end">{{ stats.nb_articles_from_feeds_this_year }}</dd>
+                        </dl>
+                    </div>
+                    <div class="col-md-6 col-12">
+                        <h3 class="h4 mb-3">{% translate "Last Year" %}</h3>
+                        <dl class="row mb-0">
+                            <dt class="col-sm-8">{% translate "Articles added" %}</dt>
+                            <dd class="col-sm-4 text-end">{{ stats.nb_articles_added_last_year }}</dd>
+                            <dt class="col-sm-8">{% translate "Articles opened" %}</dt>
+                            <dd class="col-sm-4 text-end">{{ stats.nb_articles_opened_last_year }}</dd>
+                            <dt class="col-sm-8">{% translate "Manually added articles" %}</dt>
+                            <dd class="col-sm-4 text-end">{{ stats.nb_manually_added_articles_last_year }}</dd>
+                            <dt class="col-sm-8">{% translate "Articles from feeds" %}</dt>
+                            <dd class="col-sm-4 text-end">{{ stats.nb_articles_from_feeds_last_year }}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+{% endblock content %}

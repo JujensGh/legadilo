@@ -1,12 +1,13 @@
 # SPDX-FileCopyrightText: 2023-2025 Legadilo contributors
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
-from datetime import timedelta
+from datetime import datetime, timedelta
 from io import StringIO
 
 import pytest
 import time_machine
 from allauth.account.models import EmailAddress
+from dateutil.tz import UTC
 from django.core.exceptions import ValidationError
 from django.core.management import call_command
 from django.db import IntegrityError, connection
@@ -15,6 +16,7 @@ from slugify import slugify
 from legadilo.core.utils.testing import AnyOfType
 from legadilo.core.utils.time_utils import utcnow
 from legadilo.feeds.tests.factories import FeedFactory
+from legadilo.reading.tests.factories import ArticleFactory
 from legadilo.users import constants
 from legadilo.users.models import User, UserSession
 from legadilo.users.tests.factories import UserFactory
@@ -373,3 +375,129 @@ def test_createsuperuser_command():
 
 def test_user_get_absolute_url(user: User):
     assert user.get_absolute_url() == "/users/~update/"
+
+
+@pytest.mark.django_db
+class TestUser:
+    def test_stats_property_all_values(self):
+        user = UserFactory()
+
+        # Create feeds: 5 total, 4 active (enabled=True, i.e., disabled_at=None)
+        # Need 4 active feeds to avoid duplicate with other counts
+        with time_machine.travel("2025-01-15"):
+            active_feed1 = FeedFactory(user=user, disabled_at=None)
+            active_feed2 = FeedFactory(user=user, disabled_at=None)
+            active_feed3 = FeedFactory(user=user, disabled_at=None)
+            active_feed4 = FeedFactory(user=user, disabled_at=None)
+            FeedFactory(user=user, disabled_at=utcnow())
+
+        # Create articles for this year (2025)
+        # 6 articles added this year
+        # 4 opened this year
+        # 3 manually added this year (main_feed=None)
+        # 3 from feeds this year (main_feed != None)
+        with time_machine.travel("2025-01-15"):
+            ArticleFactory(
+                user=user,
+                title="Manually added this year, opened this year",
+                main_feed=None,
+                obj_created_at=datetime(2025, 1, 10, tzinfo=UTC),
+                opened_at=datetime(2025, 1, 12, tzinfo=UTC),
+            )
+            ArticleFactory(
+                user=user,
+                title="Manually added this year, opened this year",
+                main_feed=None,
+                obj_created_at=datetime(2025, 1, 11, tzinfo=UTC),
+                opened_at=datetime(2025, 1, 13, tzinfo=UTC),
+            )
+            ArticleFactory(
+                user=user,
+                title="Manually added this year, not opened",
+                main_feed=None,
+                obj_created_at=datetime(2025, 1, 12, tzinfo=UTC),
+                opened_at=None,
+            )
+
+            ArticleFactory(
+                user=user,
+                title="From feed this year, opened this year",
+                main_feed=active_feed1,
+                obj_created_at=datetime(2025, 1, 10, tzinfo=UTC),
+                opened_at=datetime(2025, 1, 12, tzinfo=UTC),
+            )
+            ArticleFactory(
+                user=user,
+                title="From feed this year, opened this year",
+                main_feed=active_feed2,
+                obj_created_at=datetime(2025, 1, 11, tzinfo=UTC),
+                opened_at=datetime(2025, 1, 13, tzinfo=UTC),
+            )
+
+            ArticleFactory(
+                user=user,
+                title="From feed this year, not opened",
+                main_feed=active_feed3,
+                obj_created_at=datetime(2025, 1, 10, tzinfo=UTC),
+                opened_at=None,
+            )
+
+        # Create articles for last year (2024)
+        # 5 articles added last year
+        with time_machine.travel("2024-12-01"):
+            ArticleFactory(
+                user=user,
+                title="Manually added last year, opened last year",
+                main_feed=None,
+                obj_created_at=datetime(2024, 12, 1, tzinfo=UTC),
+                opened_at=datetime(2024, 12, 2, tzinfo=UTC),
+            )
+
+            ArticleFactory(
+                user=user,
+                title="From feed last year, opened last year",
+                main_feed=active_feed1,
+                obj_created_at=datetime(2024, 12, 1, tzinfo=UTC),
+                opened_at=datetime(2024, 12, 2, tzinfo=UTC),
+            )
+            ArticleFactory(
+                user=user,
+                title="From feed last year, opened last year",
+                main_feed=active_feed2,
+                obj_created_at=datetime(2024, 12, 3, tzinfo=UTC),
+                opened_at=datetime(2024, 12, 4, tzinfo=UTC),
+            )
+            ArticleFactory(
+                user=user,
+                title="From feed last year, not opened",
+                main_feed=active_feed3,
+                obj_created_at=datetime(2024, 12, 5, tzinfo=UTC),
+                opened_at=None,
+            )
+            ArticleFactory(
+                user=user,
+                title="From feed last year, opened last year",
+                main_feed=active_feed4,
+                obj_created_at=datetime(2024, 12, 6, tzinfo=UTC),
+                opened_at=datetime(2024, 12, 7, tzinfo=UTC),
+            )
+
+        with time_machine.travel("2025-01-15"):
+            stats = user.stats
+
+        assert stats == {
+            "nb_articles": 11,
+            "nb_opened_articles": 8,
+            "nb_manually_added_articles": 4,
+            "nb_articles_from_feeds": 7,
+            "nb_feeds": 5,
+            "nb_active_feeds": 4,
+            "nb_articles_added_this_year": 6,
+            "nb_articles_opened_this_year": 4,
+            "nb_manually_added_articles_this_year": 3,
+            "nb_articles_from_feeds_this_year": 3,
+            "nb_articles_added_last_year": 5,
+            "nb_articles_opened_last_year": 4,
+            "nb_manually_added_articles_last_year": 1,
+            "nb_articles_from_feeds_last_year": 4,
+        }

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-31 18:11+0000\n"
+"POT-Creation-Date: 2026-09-20 19:09+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Julien Enselme\n"
 "Language-Team: \n"
@@ -1010,6 +1010,9 @@ msgstr[1] "%(nb_unread_notifications)s notifications non lues"
 msgid "Profile menu"
 msgstr "Mon Profil"
 
+msgid "Statistics"
+msgstr "Statistiques"
+
 msgid "User settings"
 msgstr "Mes paramètres"
 
@@ -1702,6 +1705,48 @@ msgstr "Créer"
 msgid "Notifications"
 msgstr "Notifications"
 
+msgid "All Time"
+msgstr "Depuis toujours"
+
+msgid "Articles"
+msgstr "Articles"
+
+msgid "Total articles"
+msgstr "Total des articles"
+
+msgid "Opened articles"
+msgstr "Articles ouverts"
+
+msgid "Manually added articles"
+msgstr "Articles ajoutés manuellement"
+
+msgid "Articles from feeds"
+msgstr "Articles liés à un flux"
+
+msgid "Feeds"
+msgstr "Flux"
+
+msgid "Total feeds"
+msgstr "Total des flux"
+
+msgid "Active feeds"
+msgstr "Flux actifs"
+
+msgid "Yearly"
+msgstr "Annuelles"
+
+msgid "This Year"
+msgstr "Cette année"
+
+msgid "Articles added"
+msgstr "Articles ajoutés"
+
+msgid "Articles opened"
+msgstr "Articles ouverts"
+
+msgid "Last Year"
+msgstr "L’année dernière"
+
 msgid "Update"
 msgstr "Mettre à jour"
 
@@ -1743,9 +1788,6 @@ msgstr ""
 "Legadilo est un projet pour vous aider à suivre des flux RSS, sauvegarder "
 "des articles et les organiser avec des étiquettes et des listes de lecture "
 "complètement personnalisables !"
-
-msgid "Feeds"
-msgstr "Flux"
 
 msgid ""
 "You can subscribe to feeds, organize them in categories and tag all articles "

@@ -202,3 +202,42 @@ class User(AbstractUser):
     @cached_property
     def tzinfo(self) -> ZoneInfo:
         return self.settings.timezone.zone_info
+
+    @cached_property
+    def stats(self) -> dict[str, int]:
+        return {
+            "nb_articles": self.articles.count(),
+            "nb_opened_articles": self.articles.filter(was_opened=True).count(),
+            "nb_manually_added_articles": self.articles.filter(main_feed__isnull=True).count(),
+            "nb_articles_from_feeds": self.articles.filter(main_feed__isnull=False).count(),
+            "nb_feeds": self.feeds.count(),
+            "nb_active_feeds": self.feeds.filter(enabled=True).count(),
+            "nb_articles_added_this_year": self.articles.filter(
+                obj_created_at__year=utcnow().year
+            ).count(),
+            "nb_articles_opened_this_year": self.articles.filter(
+                opened_at__year=utcnow().year
+            ).count(),
+            "nb_manually_added_articles_this_year": self.articles.filter(
+                obj_created_at__year=utcnow().year,
+                main_feed__isnull=True,
+            ).count(),
+            "nb_articles_from_feeds_this_year": self.articles.filter(
+                obj_created_at__year=utcnow().year,
+                main_feed__isnull=False,
+            ).count(),
+            "nb_articles_added_last_year": self.articles.filter(
+                obj_created_at__year=utcnow().year - 1
+            ).count(),
+            "nb_articles_opened_last_year": self.articles.filter(
+                opened_at__year=utcnow().year - 1
+            ).count(),
+            "nb_manually_added_articles_last_year": self.articles.filter(
+                obj_created_at__year=utcnow().year - 1,
+                main_feed__isnull=True,
+            ).count(),
+            "nb_articles_from_feeds_last_year": self.articles.filter(
+                obj_created_at__year=utcnow().year - 1,
+                main_feed__isnull=False,
+            ).count(),
+        }

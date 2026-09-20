@@ -4,6 +4,7 @@
 
 from .manage_tokens_views import delete_token_view, manage_tokens_view
 from .notifications_views import list_notifications_view
+from .stats_views import stats_view
 from .user_views import (
     delete_account_view,
     logout_view,
@@ -21,6 +22,7 @@ __all__ = [
     "logout_view",
     "manage_tokens_view",
     "signup_view",
+    "stats_view",
     "user_login_view",
     "user_redirect_view",
     "user_update_settings_view",
