@@ -54,6 +54,7 @@ class TestArticlesGroupQuerySet:
         assert group.annot_unread_articles_count == 1
         assert group.annot_has_unread_articles is True
         assert group.annot_total_reading_time == 15
+        assert group.annot_remaining_reading_time == 5
 
     def test_with_articles(self, user):
         group = ArticlesGroupFactory(user=user)

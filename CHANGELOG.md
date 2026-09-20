@@ -10,6 +10,7 @@ Summary of main functional changes.
 
 ## Unreleased
 
+- Display the remaining reading of articles groups.
 - Update deps.
 
 ## 26.07.1

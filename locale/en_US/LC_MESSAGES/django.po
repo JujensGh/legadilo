@@ -1396,6 +1396,12 @@ msgid_plural "%(nb_articles)s articles in group"
 msgstr[0] ""
 msgstr[1] ""
 
+#, python-format
+msgid "(Remaining: %(remaining_reading_time)s minute)"
+msgid_plural "(Remaining: %(remaining_reading_time)s minutes)"
+msgstr[0] ""
+msgstr[1] ""
+
 msgctxt "action"
 msgid "Comment"
 msgstr ""
