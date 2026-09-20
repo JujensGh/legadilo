@@ -78,6 +78,7 @@ test-production-images: build-production-images
       --env IS_PRODUCTION=true \
       --env DJANGO_SECRET_KEY=ci \
       --env DJANGO_ADMIN_URL=/admin/ \
+      --env DATABASE_URL="sqlite://:memory:" \
       legadilo_production_django:latest \
       python manage.py check
 
