@@ -70,7 +70,7 @@ compile-po:
     uv run python manage.py compilemessages
 
 build-production-images:
-    docker compose -f production.yml build --pull newer django
+    docker compose -f production.yml build django --pull
 
 test-production-images: build-production-images
     docker run --rm \
