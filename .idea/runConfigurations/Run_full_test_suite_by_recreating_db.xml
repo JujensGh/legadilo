@@ -16,10 +16,10 @@
       <option name="DIRENV_ENABLED" value="true" />
       <option name="DIRENV_TRUSTED" value="false" />
     </EXTENSION>
-    <option name="RUN_TOOL" value="" />
+    <option name="RUN_TOOL" value="true" />
     <option name="_new_keywords" value="&quot;&quot;" />
     <option name="_new_parameters" value="&quot;&quot;" />
-    <option name="_new_additionalArguments" value="&quot;--create-db&quot;" />
+    <option name="_new_additionalArguments" value="&quot;--create-db --snapshot-patch-pycharm-diff&quot;" />
     <option name="_new_target" value="&quot;&quot;" />
     <option name="_new_targetType" value="&quot;PATH&quot;" />
     <method v="2" />

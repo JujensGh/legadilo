@@ -29,9 +29,7 @@ SPDX-License-Identifier = "AGPL-3.0-or-later"
 # Snapshot files
 [[annotations]]
 path = [
-    "legadilo/*/tests/**/snapshots/**/*.json",
-    "legadilo/*/tests/**/snapshots/**/*.html",
-    "legadilo/*/tests/**/snapshots/**/*.txt",
+    "legadilo/*/tests/**/__snapshots__/**/*.ambr",
 ]
 SPDX-FileCopyrightText = "NONE"
 SPDX-License-Identifier = "CC0-1.0"

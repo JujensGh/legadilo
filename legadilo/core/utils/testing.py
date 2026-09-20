@@ -42,13 +42,13 @@ def all_model_fields_except(model: type[models.Model], excluded_fields: set[str]
     return [field.name for field in model._meta.fields if field.name not in excluded_fields]
 
 
-def read_streamable_response(response) -> bytes:
+def read_streamable_response(response) -> str:
     content = b""
     for partial_content in response.streaming_content:
         # Correct line ending because we will loose the initial one with git.
         content += partial_content.replace(b"\r\n", b"\n")
 
-    return content
+    return content.decode(encoding="utf-8")
 
 
 def extract_htmx_headers(response):

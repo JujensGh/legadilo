@@ -71,7 +71,7 @@ class TestUserRegistration:
         assert len(mail.outbox) == 1
         email_message = mail.outbox[0]
         assert email_message.subject == "[Legadilo] Please Confirm Your Email Address"
-        self.snapshot.assert_match(email_message.body, "registration_email_body.html")
+        assert email_message.body == self.snapshot(name="registration_email_body")
         assert email_message.from_email == "Legadilo <noreply@legadilo.eu>"
         assert email_message.reply_to == []
         assert email_message.to == [self.user_email]
@@ -86,7 +86,7 @@ class TestUserRegistration:
         )
 
         assert response.status_code == HTTPStatus.OK
-        self.snapshot.assert_match(response.content, "login_failure_response.html")
+        assert response.text.strip() == self.snapshot(name="login_failure_response")
 
     def _test_confirm_email(self):
         email_address = EmailAddress.objects.get()
@@ -97,7 +97,7 @@ class TestUserRegistration:
         confirm_page = self.client.get("http://testserver/accounts/confirm-email/mockkey/")
 
         assert confirm_page.status_code == HTTPStatus.OK
-        self.snapshot.assert_match(confirm_page.content, "confirm_email_page.html")
+        assert confirm_page.text.strip() == self.snapshot(name="confirm_email_page")
 
         submit_confirmation_response = self.client.post(
             "http://testserver/accounts/confirm-email/mockkey/"
@@ -108,7 +108,7 @@ class TestUserRegistration:
     def _test_login(self):
         response = self.client.get("/~login/")
         assert response.status_code == HTTPStatus.OK
-        self.snapshot.assert_match(response.content, "login_page.html")
+        assert response.text.strip() == self.snapshot(name="login_page")
 
         login_response = self.client.post(
             "/~login/", {"login": self.user_email, "password": self.password}
@@ -122,4 +122,4 @@ class TestUserRegistration:
 
         page_response = self.client.get(login_redirect_response["Location"])
         assert page_response.status_code == HTTPStatus.OK
-        self.snapshot.assert_match(page_response.content, "page_response.html")
+        assert page_response.text.strip() == self.snapshot(name="page_response")

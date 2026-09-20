@@ -1271,7 +1271,7 @@ class TestArticleManager:
         assert articles[1][0]["article_id"] == article_no_feed.id
         assert articles[1][1]["article_id"] == first_article_of_group.id
         assert articles[2][0]["article_id"] == second_article_of_group.id
-        snapshot.assert_match(serialize_for_snapshot(articles), "articles.json")
+        assert serialize_for_snapshot(articles) == snapshot
 
     @patch.object(constants, "MAX_EXPORT_ARTICLES_PER_PAGE", 2)
     def test_export_updated_since(self, user, other_user):

@@ -36,7 +36,7 @@ class TestExportFeeds:
 
         assert response.status_code == HTTPStatus.OK
         assert response.headers.get("Content-Type") == "text/x-opml"
-        snapshot.assert_match(response.content, "feeds.opml")
+        assert response.text == snapshot
 
     def test_export(self, snapshot, logged_in_sync_client, user):
         category = FeedCategoryFactory(user=user, title="My Category")
@@ -58,7 +58,7 @@ class TestExportFeeds:
 
         assert response.status_code == HTTPStatus.OK
         assert response.headers.get("Content-Type") == "text/x-opml"
-        snapshot.assert_match(response.content, "feeds.opml")
+        assert response.text == snapshot
 
 
 @pytest.mark.django_db

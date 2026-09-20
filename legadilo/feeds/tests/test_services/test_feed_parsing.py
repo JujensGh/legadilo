@@ -186,7 +186,7 @@ class TestGetFeedData:
 
         assert feed_data.feed_url == feed_url
         assert feed_data.feed_type == feed_type
-        snapshot.assert_match(serialize_for_snapshot(feed_data), "feed_data.json")
+        assert serialize_for_snapshot(feed_data) == snapshot
 
     @pytest.mark.parametrize(
         ("user_entered_url", "expected_url"),
@@ -236,7 +236,7 @@ class TestGetFeedData:
             feed_data = get_feed_data(page_url, client=client)
 
         assert feed_data.feed_type == SupportedFeedType.atom10
-        snapshot.assert_match(serialize_for_snapshot(feed_data), "feed_data.json")
+        assert serialize_for_snapshot(feed_data) == snapshot
 
     def test_feed_file_too_big(self, httpx2_mock, mocker):
         mocker.patch(
@@ -257,7 +257,7 @@ class TestGetFeedData:
         with httpx2.Client() as client:
             feed_data = get_feed_data(feed_url, client=client)
 
-        snapshot.assert_match(serialize_for_snapshot(feed_data), "feed_data.json")
+        assert serialize_for_snapshot(feed_data) == snapshot
 
 
 class TestParseArticlesInFeed:
@@ -303,7 +303,7 @@ class TestParseArticlesInFeed:
             "https://example.com/feeds/feed.xml", "Some feed", feed_data
         )
 
-        snapshot.assert_match(serialize_for_snapshot(articles), "articles.json")
+        assert serialize_for_snapshot(articles) == snapshot
 
 
 class TestGetFeedSiteUrl:
@@ -362,7 +362,7 @@ class TestGetFeedSiteUrl:
 def test_build_feed_data(parameters: dict[str, Any], snapshot):
     feed_data = FeedData(**parameters)
 
-    snapshot.assert_match(serialize_for_snapshot(feed_data), "feed_data.json")
+    assert serialize_for_snapshot(feed_data) == snapshot
 
 
 @pytest.mark.parametrize(

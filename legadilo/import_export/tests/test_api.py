@@ -47,7 +47,7 @@ class TestExportFeedsApi:
 
         assert response.status_code == HTTPStatus.OK
         assert response.headers.get("Content-Type") == "text/x-opml"
-        snapshot.assert_match(response.content, "feeds.opml")
+        assert response.content == snapshot
 
     def test_export_as_json(self, logged_in_sync_client, snapshot):
         with time_machine.travel("2024-06-20 22:00:00", tick=False):
@@ -55,7 +55,7 @@ class TestExportFeedsApi:
 
         assert response.status_code == HTTPStatus.OK
         assert response.headers.get("Content-Type") == "application/json; charset=utf-8"
-        snapshot.assert_match(serialize_for_snapshot(response.json()), "feeds.json")
+        assert serialize_for_snapshot(response.json()) == snapshot
 
 
 @pytest.mark.django_db
@@ -104,14 +104,14 @@ class TestExportArticlesApi:
     def test_export_all(self, logged_in_sync_client, snapshot):
         response = logged_in_sync_client.get(self.url)
 
-        snapshot.assert_match(read_streamable_response(response), "articles.csv")
+        assert read_streamable_response(response) == snapshot
 
     def test_dont_export_feeds(self, logged_in_sync_client, snapshot):
         response = logged_in_sync_client.get(self.url, data={"include_feeds": False})
 
-        snapshot.assert_match(read_streamable_response(response), "articles.csv")
+        assert read_streamable_response(response) == snapshot
 
     def test_export_only_recent_articles(self, logged_in_sync_client, snapshot):
         response = logged_in_sync_client.get(self.url, data={"updated_since": utcdt(2025, 6, 1)})
 
-        snapshot.assert_match(read_streamable_response(response), "articles.csv")
+        assert read_streamable_response(response) == snapshot

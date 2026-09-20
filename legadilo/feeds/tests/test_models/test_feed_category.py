@@ -61,7 +61,7 @@ class TestFeedCategoryManager:
 
         assert len(exports) == 1
         assert exports[0]["category_id"] == feed_category_user.id
-        snapshot.assert_match(serialize_for_snapshot(exports), "categories.json")
+        assert serialize_for_snapshot(exports) == snapshot
 
     def test_export_recently_updated(self, user):
         with time_machine.travel("2024-01-01"):

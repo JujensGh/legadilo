@@ -1,4 +1,4 @@
-exclude: "^docs/|.idea|devcontainer.json|tests/fixtures|tests/.*snapshots/.*\\.(json|html|xml|opml|txt)|manifest.json"
+exclude: "^docs/|.idea|devcontainer.json|tests/fixtures|__snapshots__/.*\\.ambr|manifest.json"
 default_stages: [pre-commit]
 
 default_language_version:

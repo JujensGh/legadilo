@@ -19,9 +19,7 @@ def test_fetch_article_data(httpx2_mock, snapshot):
 
     fetch_article_result = fetch_article_data(url)
 
-    snapshot.assert_match(
-        serialize_for_snapshot(fetch_article_result.article_data), "article_data.json"
-    )
+    assert serialize_for_snapshot(fetch_article_result.article_data) == snapshot
 
 
 def test_get_text_article_from_url(httpx2_mock, snapshot):
@@ -30,9 +28,7 @@ def test_get_text_article_from_url(httpx2_mock, snapshot):
 
     fetch_article_result = fetch_article_data(url)
 
-    snapshot.assert_match(
-        serialize_for_snapshot(fetch_article_result.article_data), "article_data.json"
-    )
+    assert serialize_for_snapshot(fetch_article_result.article_data) == snapshot
 
 
 def test_fetch_article_data_with_http_errors(httpx2_mock, snapshot):
@@ -42,9 +38,7 @@ def test_fetch_article_data_with_http_errors(httpx2_mock, snapshot):
     fetch_article_result = fetch_article_data(url)
 
     assert not fetch_article_result.is_success
-    snapshot.assert_match(
-        serialize_for_snapshot(fetch_article_result.article_data), "article_data.json"
-    )
+    assert serialize_for_snapshot(fetch_article_result.article_data) == snapshot
 
 
 @pytest.mark.parametrize(
@@ -110,9 +104,7 @@ def test_fetch_article_data_process_fixture(
 
     fetch_article_result = fetch_article_data(url)
 
-    snapshot.assert_match(
-        serialize_for_snapshot(fetch_article_result.article_data), "article_data.json"
-    )
+    assert serialize_for_snapshot(fetch_article_result.article_data) == snapshot
 
 
 @pytest.mark.parametrize(
@@ -422,4 +414,4 @@ def test_fetch_article_data_process_fixture(
 def test_build_article_data(parameters: dict[str, Any], snapshot):
     article_data = ArticleData(**parameters)
 
-    snapshot.assert_match(serialize_for_snapshot(article_data), "article_data.json")
+    assert serialize_for_snapshot(article_data) == snapshot

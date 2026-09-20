@@ -1,0 +1,536 @@
+# serializer version: 1
+# name: test_build_article_data[async-images]
+  '''
+  {
+    "annotations": [],
+    "authors": [
+      "me"
+    ],
+    "content": "\n<p><img src=\"https://example.com/profile.png\"/></p>\n",
+    "content_type": "text/html",
+    "contributors": [
+      "me"
+    ],
+    "external_article_id": "external article id",
+    "is_favorite": false,
+    "language": "en",
+    "preview_picture_alt": "Hi there!",
+    "preview_picture_url": "https://example.com/articles/1.png",
+    "published_at": null,
+    "read_at": null,
+    "source_title": "source article title",
+    "summary": "\n<p></p>\n",
+    "table_of_content": [],
+    "tags": [
+      "tag"
+    ],
+    "title": "Title",
+    "updated_at": null,
+    "url": "https://example.com/articles/1"
+  }
+  
+  '''
+# ---
+# name: test_build_article_data[full-with-required-escaping]
+  '''
+  {
+    "annotations": [],
+    "authors": [
+      "me"
+    ],
+    "content": "<p>C <span>?</span> <img src=\"https://example.com/t\"/> </p>",
+    "content_type": "text/html",
+    "contributors": [
+      "me"
+    ],
+    "external_article_id": "external article id",
+    "is_favorite": false,
+    "language": "en",
+    "preview_picture_alt": "Hi there!",
+    "preview_picture_url": "https://example.com/articles/1.png",
+    "published_at": null,
+    "read_at": null,
+    "source_title": "source article title",
+    "summary": "<p>Summary <span>?</span>  </p>",
+    "table_of_content": [],
+    "tags": [
+      "tag"
+    ],
+    "title": "Title",
+    "updated_at": null,
+    "url": "https://example.com/articles/1"
+  }
+  
+  '''
+# ---
+# name: test_build_article_data[link-correction]
+  '''
+  {
+    "annotations": [],
+    "authors": [
+      "me"
+    ],
+    "content": "<p><a href=\"https://example.com/relative\" rel=\"noopener noreferrer\">Link 1</a><a href=\"https://example.com/abs\" rel=\"noopener noreferrer\">Link 1</a><img src=\"https://example.com/relative.png\"/><img src=\"https://example.com/image.png\"/></p>",
+    "content_type": "text/html",
+    "contributors": [
+      "me"
+    ],
+    "external_article_id": "external article id",
+    "is_favorite": false,
+    "language": "en",
+    "preview_picture_alt": "Hi there!",
+    "preview_picture_url": "https://example.com/articles/1.png",
+    "published_at": null,
+    "read_at": null,
+    "source_title": "source article title",
+    "summary": "<p><a href=\"https://example.com/relative\" rel=\"noopener noreferrer\">Link 1</a><a href=\"https://example.com/abs\" rel=\"noopener noreferrer\">Link 1</a></p>",
+    "table_of_content": [],
+    "tags": [
+      "tag"
+    ],
+    "title": "Title",
+    "updated_at": null,
+    "url": "https://example.com/articles/1"
+  }
+  
+  '''
+# ---
+# name: test_build_article_data[multiple-h1]
+  '''
+  {
+    "annotations": [],
+    "authors": [
+      "me"
+    ],
+    "content": "\n<h1 id=\"1st-h1\">1st h1</h1>\n<h1 id=\"2nd-h1\">2nd h1</h1>\n",
+    "content_type": "text/html",
+    "contributors": [
+      "me"
+    ],
+    "external_article_id": "external article id",
+    "is_favorite": false,
+    "language": "en",
+    "preview_picture_alt": "Hi there!",
+    "preview_picture_url": "https://example.com/articles/1.png",
+    "published_at": null,
+    "read_at": null,
+    "source_title": "source article title",
+    "summary": "<p><a href=\"https://example.com/relative\" rel=\"noopener noreferrer\">Link 1</a><a href=\"https://example.com/abs\" rel=\"noopener noreferrer\">Link 1</a></p>",
+    "table_of_content": [
+      {
+        "children": [],
+        "id": "1st-h1",
+        "level": 1,
+        "text": "1st h1"
+      },
+      {
+        "children": [],
+        "id": "2nd-h1",
+        "level": 1,
+        "text": "2nd h1"
+      }
+    ],
+    "tags": [
+      "tag"
+    ],
+    "title": "Title",
+    "updated_at": null,
+    "url": "https://example.com/articles/1"
+  }
+  
+  '''
+# ---
+# name: test_build_article_data[plain-text-with-html]
+  '''
+  {
+    "annotations": [],
+    "authors": [],
+    "content": "Some <p>content</p> <script>alert()</script>",
+    "content_type": "text/plain",
+    "contributors": [],
+    "external_article_id": "external article id",
+    "is_favorite": false,
+    "language": "",
+    "preview_picture_alt": "",
+    "preview_picture_url": "https://example.com/articles/1.png",
+    "published_at": null,
+    "read_at": null,
+    "source_title": "source article title",
+    "summary": "Summary",
+    "table_of_content": [],
+    "tags": [],
+    "title": "Title",
+    "updated_at": null,
+    "url": "https://example.com/articles/1"
+  }
+  
+  '''
+# ---
+# name: test_build_article_data[plain-text]
+  '''
+  {
+    "annotations": [],
+    "authors": [],
+    "content": "Some content",
+    "content_type": "text/plain",
+    "contributors": [],
+    "external_article_id": "external article id",
+    "is_favorite": false,
+    "language": "",
+    "preview_picture_alt": "",
+    "preview_picture_url": "https://example.com/articles/1.png",
+    "published_at": null,
+    "read_at": null,
+    "source_title": "example.com",
+    "summary": "Summary",
+    "table_of_content": [],
+    "tags": [],
+    "title": "Title",
+    "updated_at": null,
+    "url": "https://example.com/articles/1"
+  }
+  
+  '''
+# ---
+# name: test_build_article_data[summary-missing]
+  '''
+  {
+    "annotations": [],
+    "authors": [
+      "me"
+    ],
+    "content": "<p>C <span>?</span> <img src=\"https://example.com/t\"/> </p>",
+    "content_type": "text/html",
+    "contributors": [
+      "me"
+    ],
+    "external_article_id": "external article id",
+    "is_favorite": false,
+    "language": "en",
+    "preview_picture_alt": "Hi there!",
+    "preview_picture_url": "https://example.com/articles/1.png",
+    "published_at": null,
+    "read_at": null,
+    "source_title": "source article title",
+    "summary": "<p>C <span>?</span>  </p>",
+    "table_of_content": [],
+    "tags": [
+      "tag"
+    ],
+    "title": "Title",
+    "updated_at": null,
+    "url": "https://example.com/articles/1"
+  }
+  
+  '''
+# ---
+# name: test_build_article_data[title-missing]
+  '''
+  {
+    "annotations": [],
+    "authors": [
+      "me"
+    ],
+    "content": "<p>C <span>?</span> <img src=\"https://example.com/t\"/> </p>",
+    "content_type": "text/html",
+    "contributors": [
+      "me"
+    ],
+    "external_article_id": "external article id",
+    "is_favorite": false,
+    "language": "en",
+    "preview_picture_alt": "Hi there!",
+    "preview_picture_url": "https://example.com/articles/1.png",
+    "published_at": null,
+    "read_at": null,
+    "source_title": "example.com",
+    "summary": "<p>Summary <span>?</span>  </p>",
+    "table_of_content": [],
+    "tags": [
+      "tag"
+    ],
+    "title": "example.com",
+    "updated_at": null,
+    "url": "https://example.com/articles/1"
+  }
+  
+  '''
+# ---
+# name: test_build_article_data[unslugifiable-title]
+  '''
+  {
+    "annotations": [],
+    "authors": [],
+    "content": "Some <p>content</p> <script>alert()</script>",
+    "content_type": "text/plain",
+    "contributors": [],
+    "external_article_id": "external article id",
+    "is_favorite": false,
+    "language": "",
+    "preview_picture_alt": "",
+    "preview_picture_url": "https://example.com/articles/1.png",
+    "published_at": null,
+    "read_at": null,
+    "source_title": "source article title",
+    "summary": "Summary",
+    "table_of_content": [],
+    "tags": [],
+    "title": "example.com",
+    "updated_at": null,
+    "url": "https://example.com/articles/1?toto=1"
+  }
+  
+  '''
+# ---
+# name: test_build_article_data[with-base64-image]
+  '''
+  {
+    "annotations": [],
+    "authors": [
+      "me"
+    ],
+    "content": "\n<img src=\"data:image/png;base64\"/>\n",
+    "content_type": "text/html",
+    "contributors": [
+      "me"
+    ],
+    "external_article_id": "external article id",
+    "is_favorite": false,
+    "language": "en",
+    "preview_picture_alt": "Hi there!",
+    "preview_picture_url": "https://example.com/articles/1.png",
+    "published_at": null,
+    "read_at": null,
+    "source_title": "source article title",
+    "summary": "<p><a href=\"https://example.com/relative\" rel=\"noopener noreferrer\">Link 1</a><a href=\"https://example.com/abs\" rel=\"noopener noreferrer\">Link 1</a></p>",
+    "table_of_content": [],
+    "tags": [
+      "tag"
+    ],
+    "title": "Title",
+    "updated_at": null,
+    "url": "https://example.com/articles/1"
+  }
+  
+  '''
+# ---
+# name: test_build_article_data[with-fragment-after-path]
+  '''
+  {
+    "annotations": [],
+    "authors": [],
+    "content": "Some <p>content</p> <script>alert()</script>",
+    "content_type": "text/plain",
+    "contributors": [],
+    "external_article_id": "external article id",
+    "is_favorite": false,
+    "language": "",
+    "preview_picture_alt": "",
+    "preview_picture_url": "https://example.com/articles/1.png",
+    "published_at": null,
+    "read_at": null,
+    "source_title": "source article title",
+    "summary": "Summary",
+    "table_of_content": [],
+    "tags": [],
+    "title": "Title",
+    "updated_at": null,
+    "url": "https://example.com/articles/1"
+  }
+  
+  '''
+# ---
+# name: test_build_article_data[with-fragment-after-qs]
+  '''
+  {
+    "annotations": [],
+    "authors": [],
+    "content": "Some <p>content</p> <script>alert()</script>",
+    "content_type": "text/plain",
+    "contributors": [],
+    "external_article_id": "external article id",
+    "is_favorite": false,
+    "language": "",
+    "preview_picture_alt": "",
+    "preview_picture_url": "https://example.com/articles/1.png",
+    "published_at": null,
+    "read_at": null,
+    "source_title": "source article title",
+    "summary": "Summary",
+    "table_of_content": [],
+    "tags": [],
+    "title": "Title",
+    "updated_at": null,
+    "url": "https://example.com/articles/1?toto=1"
+  }
+  
+  '''
+# ---
+# name: test_build_article_data[with-headers]
+  '''
+  {
+    "annotations": [],
+    "authors": [
+      "me"
+    ],
+    "content": "\n<h1 id=\"some-header\">Some header</h1>\n<h2 id=\"test\">This one has an id</h2>\n<p>Some text</p>\n<h2 id=\"this-one-has-html-in\">This one <em>has HTML</em> in </h2>\n<h1 id=\"another-root-title\">Another root title</h1>\n",
+    "content_type": "text/html",
+    "contributors": [
+      "me"
+    ],
+    "external_article_id": "external article id",
+    "is_favorite": false,
+    "language": "en",
+    "preview_picture_alt": "Hi there!",
+    "preview_picture_url": "https://example.com/articles/1.png",
+    "published_at": null,
+    "read_at": null,
+    "source_title": "source article title",
+    "summary": "<p><a href=\"https://example.com/relative\" rel=\"noopener noreferrer\">Link 1</a><a href=\"https://example.com/abs\" rel=\"noopener noreferrer\">Link 1</a></p>",
+    "table_of_content": [
+      {
+        "children": [
+          {
+            "id": "test",
+            "level": 2,
+            "text": "This one has an id"
+          },
+          {
+            "id": "this-one-has-html-in",
+            "level": 2,
+            "text": "This one has HTML in"
+          }
+        ],
+        "id": "some-header",
+        "level": 1,
+        "text": "Some header"
+      },
+      {
+        "children": [],
+        "id": "another-root-title",
+        "level": 1,
+        "text": "Another root title"
+      }
+    ],
+    "tags": [
+      "tag"
+    ],
+    "title": "Title",
+    "updated_at": null,
+    "url": "https://example.com/articles/1"
+  }
+  
+  '''
+# ---
+# name: test_fetch_article_data
+  '''
+  {
+    "annotations": [],
+    "authors": [
+      "Alexandre Dumas"
+    ],
+    "content": "<article>\n<div>\n<p>\n                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc porttitor dolor in justo pharetra suscipit. Vestibulum hendrerit felis id ex gravida egestas. Sed tempus placerat nibh. Proin faucibus bibendum magna in ultricies. Fusce feugiat sagittis odio a gravida. Pellentesque dignissim lorem quis eros placerat ullamcorper nec ut quam. Curabitur non tortor a justo hendrerit vehicula in a neque. Mauris vitae mi ante. Aenean et efficitur massa. Donec nec scelerisque lectus, eu malesuada urna. Aenean at dignissim purus. Praesent et tellus non ligula mollis commodo id sed felis. Phasellus fringilla non libero vitae efficitur.\n                    </p>\n<p>\n                        Vivamus eu ornare ligula. Sed ac justo eget metus tempus venenatis. Aenean ante arcu, dignissim sed bibendum nec, commodo ut tellus. Donec rhoncus leo a enim volutpat, ut porttitor risus sodales. Proin sit amet sapien vitae felis mollis luctus. Morbi malesuada nec quam sed facilisis. Vivamus urna quam, sagittis at eros vitae, porta eleifend orci. Aliquam nec velit enim. Suspendisse egestas pulvinar volutpat. Pellentesque nec sem eget nunc facilisis porta. Ut eleifend mi sed laoreet sollicitudin. Sed sagittis nibh eget quam luctus facilisis.\n                    </p>\n<p>\n                        Vestibulum eu nibh ullamcorper, luctus tortor eget, semper arcu. Curabitur id cursus urna, eu accumsan mi. Curabitur ornare elit vitae quam tempor egestas. Maecenas viverra malesuada sapien non blandit. Sed luctus pellentesque nulla eu pretium. Cras iaculis interdum interdum. Ut in metus purus. Aliquam id pretium velit, eu tempus tellus.\n                    </p>\n<div>\n<p>Opinion</p>\n<p>You may disagree</p>\n</div>\n</div>\n<div>\n<p>\n<a href=\"https://www.example.com/tag/Musketeers.html\" rel=\"noopener noreferrer\">Musketeers</a>\n</p>\n</div>\n</article>",
+    "content_type": "text/html",
+    "contributors": [],
+    "external_article_id": "",
+    "is_favorite": false,
+    "language": "fr",
+    "preview_picture_alt": "",
+    "preview_picture_url": "https://www.example.com/images/profile.png",
+    "published_at": "2024-02-26T23:00:00Z",
+    "read_at": null,
+    "source_title": "Super blog",
+    "summary": "I just wrote a new book, I\u2019ll hope you will like it! Here are some thoughts on it.",
+    "table_of_content": [],
+    "tags": [
+      "Musketeers"
+    ],
+    "title": "On the 3 musketeers",
+    "updated_at": "2024-03-08T23:00:00Z",
+    "url": "https://www.example.com/posts/en/1-super-article/"
+  }
+  
+  '''
+# ---
+# name: test_fetch_article_data_process_fixture[no-article-tag]
+  '''
+  {
+    "annotations": [],
+    "authors": [
+      "Alexandre Dumas"
+    ],
+    "content": "<article>\n<div>\n<p>\n                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc porttitor dolor in justo pharetra suscipit. Vestibulum hendrerit felis id ex gravida egestas. Sed tempus placerat nibh. Proin faucibus bibendum magna in ultricies. Fusce feugiat sagittis odio a gravida. Pellentesque dignissim lorem quis eros placerat ullamcorper nec ut quam. Curabitur non tortor a justo hendrerit vehicula in a neque. Mauris vitae mi ante. Aenean et efficitur massa. Donec nec scelerisque lectus, eu malesuada urna. Aenean at dignissim purus. Praesent et tellus non ligula mollis commodo id sed felis. Phasellus fringilla non libero vitae efficitur.\n                    </p>\n<p>\n                        Vivamus eu ornare ligula. Sed ac justo eget metus tempus venenatis. Aenean ante arcu, dignissim sed bibendum nec, commodo ut tellus. Donec rhoncus leo a enim volutpat, ut porttitor risus sodales. Proin sit amet sapien vitae felis mollis luctus. Morbi malesuada nec quam sed facilisis. Vivamus urna quam, sagittis at eros vitae, porta eleifend orci. Aliquam nec velit enim. Suspendisse egestas pulvinar volutpat. Pellentesque nec sem eget nunc facilisis porta. Ut eleifend mi sed laoreet sollicitudin. Sed sagittis nibh eget quam luctus facilisis.\n                    </p>\n<p>\n                        Vestibulum eu nibh ullamcorper, luctus tortor eget, semper arcu. Curabitur id cursus urna, eu accumsan mi. Curabitur ornare elit vitae quam tempor egestas. Maecenas viverra malesuada sapien non blandit. Sed luctus pellentesque nulla eu pretium. Cras iaculis interdum interdum. Ut in metus purus. Aliquam id pretium velit, eu tempus tellus.\n                    </p>\n<div>\n<p>Opinion</p>\n<p>You may disagree</p>\n</div>\n</div>\n<div>\n<p>\n<a href=\"https://www.example.com/tag/Musketeers.html\" rel=\"noopener noreferrer\">Musketeers</a>\n</p>\n</div>\n</article>",
+    "content_type": "text/html",
+    "contributors": [],
+    "external_article_id": "",
+    "is_favorite": false,
+    "language": "fr",
+    "preview_picture_alt": "",
+    "preview_picture_url": "https://www.example.com/images/profile.png",
+    "published_at": "2024-02-26T23:00:00Z",
+    "read_at": null,
+    "source_title": "Super blog",
+    "summary": "I just wrote a new book, I\u2019ll hope you will like it! Here are some thoughts on it.",
+    "table_of_content": [],
+    "tags": [
+      "Musketeers"
+    ],
+    "title": "On the 3 musketeers",
+    "updated_at": "2024-03-08T23:00:00Z",
+    "url": "https://www.example.com/posts/en/1-super-article/"
+  }
+  
+  '''
+# ---
+# name: test_fetch_article_data_with_http_errors
+  '''
+  {
+    "annotations": [],
+    "authors": [],
+    "content": "",
+    "content_type": "text/plain",
+    "contributors": [],
+    "external_article_id": "",
+    "is_favorite": false,
+    "language": "",
+    "preview_picture_alt": "",
+    "preview_picture_url": "",
+    "published_at": null,
+    "read_at": null,
+    "source_title": "www.example.com",
+    "summary": "",
+    "table_of_content": [],
+    "tags": [],
+    "title": "www.example.com/posts/en/1-super-article/",
+    "updated_at": null,
+    "url": "https://www.example.com/posts/en/1-super-article/"
+  }
+  
+  '''
+# ---
+# name: test_get_text_article_from_url
+  '''
+  {
+    "annotations": [],
+    "authors": [],
+    "content": "Just some raw text!",
+    "content_type": "text/plain",
+    "contributors": [],
+    "external_article_id": "",
+    "is_favorite": false,
+    "language": "",
+    "preview_picture_alt": "",
+    "preview_picture_url": "",
+    "published_at": null,
+    "read_at": null,
+    "source_title": "www.example.com",
+    "summary": "Just some raw text!",
+    "table_of_content": [],
+    "tags": [],
+    "title": "https://www.example.com/posts/en/1-super-article/",
+    "updated_at": null,
+    "url": "https://www.example.com/posts/en/1-super-article/"
+  }
+  
+  '''
+# ---

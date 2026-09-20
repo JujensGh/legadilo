@@ -96,41 +96,30 @@ def test_import_custom_csv(user, httpx2_mock, snapshot):
     assert FeedCategory.objects.count() == 3
     assert FeedArticle.objects.count() == 5
 
-    snapshot.assert_match(
-        serialize_for_snapshot(
-            list(
-                Article.objects.order_by("id").values(
-                    *all_model_fields_except(
-                        Article,
-                        {"id", "user", "obj_created_at", "obj_updated_at", "main_feed", "group"},
-                    )
+    assert serialize_for_snapshot(
+        list(
+            Article.objects.order_by("id").values(
+                *all_model_fields_except(
+                    Article,
+                    {"id", "user", "obj_created_at", "obj_updated_at", "main_feed", "group"},
                 )
             )
-        ),
-        "articles.json",
-    )
-    snapshot.assert_match(
-        serialize_for_snapshot(
-            list(
-                Feed.objects.order_by("id").values(
-                    *all_model_fields_except(
-                        Feed, {"id", "user", "category", "created_at", "updated_at"}
-                    ),
-                    "category__title",
-                )
+        )
+    ) == snapshot(name="articles")
+    assert serialize_for_snapshot(
+        list(
+            Feed.objects.order_by("id").values(
+                *all_model_fields_except(
+                    Feed, {"id", "user", "category", "created_at", "updated_at"}
+                ),
+                "category__title",
             )
-        ),
-        "feeds.json",
-    )
-    snapshot.assert_match(
-        serialize_for_snapshot(
-            list(
-                FeedCategory.objects.order_by("id").values(
-                    *all_model_fields_except(
-                        FeedCategory, {"id", "user", "created_at", "updated_at"}
-                    )
-                )
+        )
+    ) == snapshot(name="feeds")
+    assert serialize_for_snapshot(
+        list(
+            FeedCategory.objects.order_by("id").values(
+                *all_model_fields_except(FeedCategory, {"id", "user", "created_at", "updated_at"})
             )
-        ),
-        "feed_categories.json",
-    )
+        )
+    ) == snapshot(name="feed_categories")

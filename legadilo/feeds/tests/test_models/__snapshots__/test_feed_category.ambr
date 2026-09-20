@@ -1,0 +1,12 @@
+# serializer version: 1
+# name: TestFeedCategoryManager.test_export
+  '''
+  [
+    {
+      "category_id": 1,
+      "category_title": "Slug"
+    }
+  ]
+  
+  '''
+# ---

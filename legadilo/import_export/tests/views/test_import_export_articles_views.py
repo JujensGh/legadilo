@@ -42,7 +42,7 @@ class TestExportArticlesView:
 
         assert response.status_code == HTTPStatus.OK
         assert response.headers["Content-Type"] == "text/csv"
-        snapshot.assert_match(read_streamable_response(response), "no_content.csv")
+        assert read_streamable_response(response) == snapshot
 
     def test_export_some_content(self, logged_in_sync_client, user, snapshot):
         FeedCategoryFactory(user=user, id=1, title="Some category")
@@ -61,7 +61,7 @@ class TestExportArticlesView:
 
         assert response.status_code == HTTPStatus.OK
         assert response.headers["Content-Type"] == "text/csv"
-        snapshot.assert_match(read_streamable_response(response), "export_all.csv")
+        assert read_streamable_response(response) == snapshot
 
 
 class TestImportExportArticlesView:
@@ -322,7 +322,7 @@ class TestImportWallabag:
                 message="Successfully imported 1 articles",
             )
         ]
-        snapshot.assert_match(
+        assert (
             serialize_for_snapshot(
                 list(
                     Article.objects.order_by("url").values(
@@ -331,6 +331,6 @@ class TestImportWallabag:
                         )
                     )
                 )
-            ),
-            "walabag_articles.json",
+            )
+            == snapshot
         )

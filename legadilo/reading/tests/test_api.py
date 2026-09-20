@@ -153,9 +153,9 @@ class TestCreateArticleView:
         article = Article.objects.get()
         assert article.url == self.article_url
         mocked_fetch_article_data.assert_called_once_with(self.article_url)
-        snapshot.assert_match(
-            serialize_for_snapshot(_prepare_article_for_serialization(response.json(), article)),
-            "article.json",
+        assert (
+            serialize_for_snapshot(_prepare_article_for_serialization(response.json(), article))
+            == snapshot
         )
 
     def test_create_article_with_tags(
@@ -181,9 +181,9 @@ class TestCreateArticleView:
         assert article.url == self.article_url
         assert list(article.tags.all().values_list("title", flat=True)) == ["Some tag"]
         mocked_fetch_article_data.assert_called_once_with(self.article_url)
-        snapshot.assert_match(
-            serialize_for_snapshot(_prepare_article_for_serialization(response.json(), article)),
-            "article.json",
+        assert (
+            serialize_for_snapshot(_prepare_article_for_serialization(response.json(), article))
+            == snapshot
         )
 
     def test_create_article_from_data(
@@ -210,9 +210,9 @@ class TestCreateArticleView:
         assert article.table_of_content == []
         assert not mocked_fetch_article_data.called
         assert article.content_type == "text/html"
-        snapshot.assert_match(
-            serialize_for_snapshot(_prepare_article_for_serialization(response.json(), article)),
-            "article.json",
+        assert (
+            serialize_for_snapshot(_prepare_article_for_serialization(response.json(), article))
+            == snapshot
         )
 
     def test_create_article_from_data_without_content_extraction(
@@ -234,9 +234,9 @@ class TestCreateArticleView:
         article = Article.objects.get()
         assert article.url == self.article_url
         assert article.content_type == "text/html"
-        snapshot.assert_match(
-            serialize_for_snapshot(_prepare_article_for_serialization(response.json(), article)),
-            "article.json",
+        assert (
+            serialize_for_snapshot(_prepare_article_for_serialization(response.json(), article))
+            == snapshot
         )
 
     def test_create_article_from_data_with_content_extraction_and_partial_payload(
@@ -288,10 +288,7 @@ class TestCreateArticleView:
         # Keep other fields since they shouldn't change for text data.
         data["id"] = 1
         data["details_url"] = "http://testserver/reading/articles/1-my-article/"
-        snapshot.assert_match(
-            serialize_for_snapshot(data),
-            "article.json",
-        )
+        assert serialize_for_snapshot(data) == snapshot
 
     def test_try_to_create_existing_article(
         self, user, django_assert_num_queries, logged_in_sync_client, mocker
@@ -495,7 +492,7 @@ class TestGetArticleView:
             response = logged_in_sync_client.get(self.url)
 
         assert response.status_code == HTTPStatus.OK
-        snapshot.assert_match(serialize_for_snapshot(response.json()), "article.json")
+        assert serialize_for_snapshot(response.json()) == snapshot
 
 
 @pytest.mark.django_db
@@ -530,7 +527,7 @@ class TestUpdateArticleView:
             response = logged_in_sync_client.patch(self.url, {}, content_type="application/json")
 
         assert response.status_code == HTTPStatus.OK
-        snapshot.assert_match(serialize_for_snapshot(response.json()), "article.json")
+        assert serialize_for_snapshot(response.json()) == snapshot
 
     def test_update(self, logged_in_sync_client, django_assert_num_queries, snapshot):
         with django_assert_num_queries(12):
@@ -548,7 +545,7 @@ class TestUpdateArticleView:
         assert self.article.title == "New title"
         assert self.article.read_at == utcdt(2024, 11, 24, 18)
         assert self.article.reading_time == 10
-        snapshot.assert_match(serialize_for_snapshot(response.json()), "article.json")
+        assert serialize_for_snapshot(response.json()) == snapshot
 
     def test_update_tags(self, logged_in_sync_client, user, django_assert_num_queries, snapshot):
         existing_tag = TagFactory(user=user, title="Tag to keep")
@@ -569,7 +566,7 @@ class TestUpdateArticleView:
             "New tag",
             "Tag to keep",
         ]
-        snapshot.assert_match(serialize_for_snapshot(response.json()), "article.json")
+        assert serialize_for_snapshot(response.json()) == snapshot
 
     @pytest.mark.parametrize(
         ("group_id_attr", "nb_requests"),
@@ -694,7 +691,7 @@ class TestListTagsView:
             response = logged_in_sync_client.get(self.url)
 
         assert response.status_code == HTTPStatus.OK
-        snapshot.assert_match(serialize_for_snapshot(response.json()), "tags.json")
+        assert serialize_for_snapshot(response.json()) == snapshot
 
 
 @pytest.mark.django_db
@@ -718,7 +715,7 @@ class TestListArticlesGroup:
             response = logged_in_sync_client.get(self.url)
 
         assert response.status_code == HTTPStatus.OK
-        snapshot.assert_match(serialize_for_snapshot(response.json()), "articles_groups.json")
+        assert serialize_for_snapshot(response.json()) == snapshot
 
 
 @pytest.mark.django_db

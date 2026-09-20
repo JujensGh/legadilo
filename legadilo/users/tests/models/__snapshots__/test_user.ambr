@@ -1,0 +1,21 @@
+# serializer version: 1
+# name: TestUserManager.test_notify_inactive_accounts[message_body_user-to-notify-14-days-example-com]
+  '''
+  Hello user_to_notify_14_days@example.com,
+  
+  Your account has been inactive for 716 days and will be deleted automatically in 13 days. To prevent this, please log in to your account.
+  
+  Regards,
+  The Legadilo Team
+  '''
+# ---
+# name: TestUserManager.test_notify_inactive_accounts[message_body_user-to-notify-7-days-example-com]
+  '''
+  Hello user_to_notify_7_days@example.com,
+  
+  Your account has been inactive for 723 days and will be deleted automatically in 6 days. To prevent this, please log in to your account.
+  
+  Regards,
+  The Legadilo Team
+  '''
+# ---
