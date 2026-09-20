@@ -67,7 +67,7 @@ update-po:
     uv run python manage.py makemessages --all --no-location
 
 compile-po:
-    uv run python manage.py compilemessages
+    uv run python manage.py compilemessages --verbosity 0
 
 build-production-images:
     docker compose -f production.yml build django --pull

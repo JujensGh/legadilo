@@ -15,7 +15,7 @@ else
       DJANGO_SETTINGS_MODULE="config.settings" \
       DJANGO_SECRET_KEY="test" \
       DJANGO_ADMIN_URL="/admin" \
-      python manage.py compilemessages
+      python manage.py compilemessages --verbosity 0
 
     DATABASE_URL="sqlite://:memory:" \
       DJANGO_SETTINGS_MODULE="config.settings" \
