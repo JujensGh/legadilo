@@ -222,7 +222,7 @@
                                            href="{% url 'users:stats' %}">{% translate "Statistics" %}</a>
                                         <a class="dropdown-item {% if IS_USER_SETTINGS_VIEW %}active{% endif %}"
                                            {% if IS_USER_SETTINGS_VIEW %}aria-current="true"{% endif %}
-                                           href="{% url 'users:update' %}">{% translate "User settings" %}</a>
+                                           href="{% url 'users:update_settings' %}">{% translate "User settings" %}</a>
                                         {% if request.user.is_staff %}
                                             <a class="dropdown-item {% if ACTIVE_VIEW_NAME == 'admin:index' %}active{% endif %}"
                                                {% if ACTIVE_VIEW_NAME == 'admin:index' %}aria-current="true"{% endif %}

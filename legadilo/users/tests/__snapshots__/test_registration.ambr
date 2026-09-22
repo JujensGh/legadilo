@@ -838,7 +838,21 @@
                 href="/static/css/base.css"
                 nonce="None"/>
           
-          
+      <style nonce="None">
+      :root {
+          --legadilo-article-details-font-family: system-ui;
+          --legadilo-article-details-font-size-desktop: medium;
+          --legadilo-article-details-font-size-tablet: medium;
+          --legadilo-article-details-font-size-mobile: medium;
+          --legadilo-article-details-max-width-desktop: 900px;
+          --legadilo-article-details-max-width-tablet: 900px;
+      }
+  </style>
+  
+      <link rel="stylesheet"
+            href="/static/css/list_of_articles.css"
+            nonce="None"/>
+  
       
       
       
@@ -1141,7 +1155,7 @@
                                              href="/users/stats/">Statistics</a>
                                           <a class="dropdown-item "
                                              
-                                             href="/users/~update/">User settings</a>
+                                             href="/users/~settings/">User settings</a>
                                           
                                           
                                           <a class="dropdown-item"
@@ -1233,7 +1247,7 @@
   
                   </nav>
               </div>
-              <div class="col col-12 col-md-8 px-1 px-md-3 mx-0">
+              <div class="list-of-articles-container col col-12 col-md-8 px-1 px-md-3 mx-0">
                   <div id="reading-list-actions-container" class="row px-0 mx-0 bg-body z-1">
                       
                       
