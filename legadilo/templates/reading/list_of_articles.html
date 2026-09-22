@@ -23,10 +23,14 @@
                {% if displayed_reading_list.id == reading_list.id %}aria-current="true"{% endif %}
             >
                 <span>{{ reading_list.title }}</span>
-                {% if count_unread_articles_of_reading_lists|get_item:reading_list.slug > 0 %}
+                {% if count_unread_articles_of_reading_lists|get_item:reading_list.slug > 0 and reading_list.show_unread_count == 'COUNT' %}
                     <span>
                         <span
                             class="badge text-bg-info">{{ count_unread_articles_of_reading_lists|get_item:reading_list.slug }}</span>
+                    </span>
+                {% elif count_unread_articles_of_reading_lists|get_item:reading_list.slug > 0 and reading_list.show_unread_count == 'INDICATOR' %}
+                    <span>
+                        <span class="badge text-bg-info">+</span>
                     </span>
                 {% endif %}
             </a>
@@ -44,9 +48,11 @@
                 {% if displayed_reading_list %}
                     <span
                         class="text-truncate d-inline-block">{{ displayed_reading_list.title }}</span>
-                    {% if count_unread_articles_of_reading_lists|get_item:displayed_reading_list.slug > 0 %}
+                    {% if count_unread_articles_of_reading_lists|get_item:displayed_reading_list.slug > 0 and displayed_reading_list.show_unread_count == 'COUNT' %}
                         <span
                             class="badge text-bg-info mx-1">{{ count_unread_articles_of_reading_lists|get_item:displayed_reading_list.slug }}</span>
+                    {% elif count_unread_articles_of_reading_lists|get_item:displayed_reading_list.slug > 0 and displayed_reading_list.show_unread_count == 'INDICATOR' %}
+                        <span class="badge text-bg-info">+</span>
                     {% endif %}
                 {% else %}
                     {% translate "Reading lists" %}

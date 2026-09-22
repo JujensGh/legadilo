@@ -39,6 +39,12 @@ class ArticlesReadingTimeOperator(TextChoices):
     LESS_THAN = "LESS_THAN", _("Less than than")
 
 
+class ReadingListShowUnreadCount(TextChoices):
+    COUNT = "COUNT", _("Count")
+    INDICATOR = "INDICATOR", _("Indicator")
+    NOTHING = "NOTHING", _("Nothing")
+
+
 class ReadingListTagFilterType(TextChoices):
     INCLUDE = "INCLUDE", _("Include")
     EXCLUDE = "EXCLUDE", _("Exclude")

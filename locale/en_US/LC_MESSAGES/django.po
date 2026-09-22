@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-20 17:08+0000\n"
+"POT-Creation-Date: 2026-09-22 18:52+0000\n"
 "Language: en-US\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -264,6 +264,15 @@ msgstr ""
 msgid "Less than than"
 msgstr ""
 
+msgid "Count"
+msgstr ""
+
+msgid "Indicator"
+msgstr ""
+
+msgid "Nothing"
+msgstr ""
+
 msgid "Include"
 msgstr ""
 
@@ -401,6 +410,11 @@ msgstr ""
 msgid ""
 "Number of hours after which to refresh reading lists automatically. 0 will "
 "disable the feature."
+msgstr ""
+
+msgid ""
+"How to show the count of unread articles in the reading list: either the "
+"count, an indicator or nothing."
 msgstr ""
 
 msgid ""
@@ -544,6 +558,9 @@ msgid "Enable reading on scroll"
 msgstr ""
 
 msgid "Auto refresh interval"
+msgstr ""
+
+msgid "How to show unread count?"
 msgstr ""
 
 msgid "Read status"

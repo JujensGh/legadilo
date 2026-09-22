@@ -93,6 +93,7 @@ class ReadingListForm(forms.ModelForm):
             "title",
             "enable_reading_on_scroll",
             "auto_refresh_interval",
+            "show_unread_count",
             "read_status",
             "favorite_status",
             "for_later_status",
@@ -109,6 +110,7 @@ class ReadingListForm(forms.ModelForm):
         labels = {
             "enable_reading_on_scroll": _("Enable reading on scroll"),
             "auto_refresh_interval": _("Auto refresh interval"),
+            "show_unread_count": _("How to show unread count?"),
             "read_status": _("Read status"),
             "favorite_status": _("Favorite status"),
             "for_later_status": _("For later status"),

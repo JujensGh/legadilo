@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-20 19:09+0200\n"
+"POT-Creation-Date: 2026-09-22 18:52+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Julien Enselme\n"
 "Language-Team: \n"
@@ -287,6 +287,15 @@ msgstr "Plus que"
 msgid "Less than than"
 msgstr "Moins que"
 
+msgid "Count"
+msgstr "Nombre exact"
+
+msgid "Indicator"
+msgstr "Indicateur"
+
+msgid "Nothing"
+msgstr "Rien"
+
 msgid "Include"
 msgstr "Inclus"
 
@@ -433,6 +442,13 @@ msgid ""
 msgstr ""
 "Temps en heure après lequel les listes de lecture sont rafraichies "
 "automatiquement. 0 désactive la fonctionnalité."
+
+msgid ""
+"How to show the count of unread articles in the reading list: either the "
+"count, an indicator or nothing."
+msgstr ""
+"Comment montrer le nombre d’articles non-lus: le nombre exact, un indicateur "
+"ou rien."
 
 msgid ""
 "Articles published before today minus this number will be excluded from the "
@@ -604,6 +620,9 @@ msgstr "Activer la lecture au défilement"
 
 msgid "Auto refresh interval"
 msgstr "Intervalle de mise à jour"
+
+msgid "How to show unread count?"
+msgstr "Comment montrer le nombre d’articles non lus ?"
 
 msgid "Read status"
 msgstr "Statut lu"
