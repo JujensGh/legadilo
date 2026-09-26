@@ -23,6 +23,7 @@ from legadilo.reading.tests.factories import (
     ReadingListFactory,
     TagFactory,
 )
+from legadilo.users import constants
 from legadilo.users.forms import UserAdminChangeForm
 from legadilo.users.models import User, UserSession, UserSettings
 from legadilo.users.views.user_views import UserRedirectView, UserUpdateView
@@ -87,6 +88,14 @@ class TestUserUpdateSettingsView:
     def setup_method(self):
         self.url = reverse("users:update_settings")
         self.new_tz, _ = Timezone.objects.get_or_create(name="Europe/Paris")
+        self.extra_form_values = {
+            "article_details_font_family": constants.UserSettingsArticleDetailsFontFamilyChoices.SYSTEM_UI,  # ruff: ignore[line-too-long]
+            "article_details_font_size_desktop": constants.UserSettingsArticleDetailsFontSizeChoices.MEDIUM,  # ruff: ignore[line-too-long]
+            "article_details_font_size_tablet": constants.UserSettingsArticleDetailsFontSizeChoices.MEDIUM,  # ruff: ignore[line-too-long]
+            "article_details_font_size_mobile": constants.UserSettingsArticleDetailsFontSizeChoices.MEDIUM,  # ruff: ignore[line-too-long]
+            "article_details_max_width_desktop": constants.UserSettingsArticleDetailsMaxWidthChoices.MEDIUM,  # ruff: ignore[line-too-long]
+            "article_details_max_width_tablet": constants.UserSettingsArticleDetailsMaxWidthChoices.MEDIUM,  # ruff: ignore[line-too-long]
+        }
 
     def test_get_for_current_user(self, logged_in_sync_client):
         response = logged_in_sync_client.get(self.url)
@@ -95,7 +104,8 @@ class TestUserUpdateSettingsView:
 
     def test_update(self, user, logged_in_sync_client):
         response = logged_in_sync_client.post(
-            self.url, data={"default_reading_time": 0, "timezone": self.new_tz.id}
+            self.url,
+            data={**self.extra_form_values, "default_reading_time": 0, "timezone": self.new_tz.id},
         )
 
         assert response.status_code == HTTPStatus.OK

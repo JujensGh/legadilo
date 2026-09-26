@@ -4,9 +4,11 @@
 
 from allauth.account.forms import LoginForm, SignupForm
 from allauth.socialaccount.forms import SignupForm as SocialSignupForm
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import HTML, Fieldset, Layout, Submit
+from django import forms
 from django.contrib.auth import forms as admin_forms
 from django.contrib.auth import get_user_model
-from django.forms import ChoiceField, EmailField, ModelChoiceField, ModelForm
 from django.utils.translation import gettext_lazy as _
 
 from legadilo.core.forms.widgets import SelectAutocompleteWidget
@@ -20,7 +22,7 @@ User = get_user_model()
 class UserAdminChangeForm(admin_forms.UserChangeForm):
     class Meta(admin_forms.UserChangeForm.Meta):
         model = User
-        field_classes = {"email": EmailField}
+        field_classes = {"email": forms.EmailField}
 
 
 class UserAdminCreationForm(admin_forms.UserCreationForm):
@@ -32,7 +34,7 @@ class UserAdminCreationForm(admin_forms.UserCreationForm):
     class Meta(admin_forms.UserCreationForm.Meta):
         model = User
         fields = ("email",)
-        field_classes = {"email": EmailField}
+        field_classes = {"email": forms.EmailField}
         error_messages = {
             "email": {"unique": _("This email has already been taken.")},
         }
@@ -48,13 +50,13 @@ class UserSignupForm(SignupForm):
     Check UserSocialSignupForm for accounts created from social.
     """
 
-    timezone = ModelChoiceField(
+    timezone = forms.ModelChoiceField(
         Timezone.objects.all(),
         required=True,
         widget=SelectAutocompleteWidget(allow_new=False),
         help_text=_("Used to display times and updated feeds at a convenient time."),
     )
-    language = ChoiceField(
+    language = forms.ChoiceField(
         label=_("Language"),
         required=False,
         choices=constants.LANGUAGE_CHOICES,
@@ -79,8 +81,8 @@ class UserSocialSignupForm(SocialSignupForm):
     """
 
 
-class UserSettingsForm(ModelForm):
-    timezone = ModelChoiceField(
+class UserSettingsForm(forms.ModelForm):
+    timezone = forms.ModelChoiceField(
         Timezone.objects.all(),
         label=_("Timezone"),
         required=True,
@@ -88,10 +90,54 @@ class UserSettingsForm(ModelForm):
         help_text=_("Used to display times and updated feeds at a convenient time."),
     )
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Fieldset(_("Generic settings"), "default_reading_time", "timezone", "language"),
+            Fieldset(
+                _("Reading settings"),
+                HTML(
+                    _(
+                        """<p class="text-body-secondary">
+The change of these options can be previewed at the bottom of the page.
+They impact the fonts and max width for articles details and articles lists.
+                        </p>"""
+                    )
+                ),
+                "article_details_font_family",
+                "article_details_font_size_desktop",
+                "article_details_font_size_tablet",
+                "article_details_font_size_mobile",
+                "article_details_max_width_desktop",
+                "article_details_max_width_tablet",
+            ),
+            Submit("submit", _("Update")),
+        )
+
     class Meta:
         model = UserSettings
-        fields = ("default_reading_time", "timezone", "language")
-        labels = {"default_reading_time": _("Default reading time"), "language": _("Language")}
+        fields = (
+            "default_reading_time",
+            "timezone",
+            "language",
+            "article_details_font_family",
+            "article_details_font_size_desktop",
+            "article_details_font_size_tablet",
+            "article_details_font_size_mobile",
+            "article_details_max_width_desktop",
+            "article_details_max_width_tablet",
+        )
+        labels = {
+            "default_reading_time": _("Default reading time"),
+            "language": _("Language"),
+            "article_details_font_family": _("Articles details font"),
+            "article_details_font_size_desktop": _("Articles details font size desktop"),
+            "article_details_font_size_tablet": _("Articles details font size tablet"),
+            "article_details_font_size_mobile": _("Articles details font size mobile"),
+            "article_details_max_width_desktop": _("Articles details max width desktop"),
+            "article_details_max_width_tablet": _("Articles details max width tablet"),
+        }
         help_texts = {
             "language": _(
                 "Set this to force the language of the app. "

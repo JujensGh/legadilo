@@ -12,6 +12,7 @@
 {% endblock page_js %}
 
 {% block page_css %}
+    {% include "users/partials/user_settings_css_variables.html" %}
     <link rel="stylesheet"
           href="{% static 'css/article_details.css' %}"
           nonce="{{ csp_nonce }}"/>

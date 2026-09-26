@@ -52,6 +52,9 @@ class ArticlesGroupQuerySet(models.QuerySet["ArticlesGroup"]):
                 output_field=models.BooleanField(),
             ),
             annot_total_reading_time=models.Sum("articles__reading_time"),
+            annot_remaining_reading_time=models.Sum(
+                "articles__reading_time", filter=models.Q(articles__is_read=False)
+            ),
         )
 
     def with_articles(self) -> Self:

@@ -71,6 +71,7 @@ class TestCreateReadingListView:
             "title": "Sample Reading List",
             "enable_reading_on_scroll": True,
             "auto_refresh_interval": 0,
+            "show_unread_count": constants.ReadingListShowUnreadCount.COUNT,
             "read_status": constants.ReadStatus.ONLY_READ,
             "favorite_status": constants.FavoriteStatus.ONLY_FAVORITE,
             "for_later_status": constants.ForLaterStatus.ONLY_NOT_FOR_LATER,
@@ -96,23 +97,41 @@ class TestCreateReadingListView:
 
         assert response.status_code == HTTPStatus.BAD_REQUEST
         assert response.template_name == "reading/edit_reading_list.html"
-        assert response.context_data["form"].errors == {
-            "articles_max_age_unit": ["This field is required."],
-            "articles_max_age_value": ["This field is required."],
-            "articles_reading_time": ["This field is required."],
-            "articles_reading_time_operator": ["This field is required."],
-            "auto_refresh_interval": ["This field is required."],
-            "exclude_tag_operator": ["This field is required."],
-            "favorite_status": ["This field is required."],
-            "for_later_status": ["This field is required."],
-            "include_tag_operator": ["This field is required."],
-            "order_direction": ["This field is required."],
-            "read_status": ["This field is required."],
-            "title": ["Cannot contain only spaces or special characters."],
-        }
+        assert (
+            response.context_data["form"].errors
+            == {
+                "articles_max_age_unit": ["This field is required."],
+                "articles_max_age_value": ["This field is required."],
+                "articles_reading_time": ["This field is required."],
+                "articles_reading_time_operator": ["This field is required."],
+                "auto_refresh_interval": ["This field is required."],
+                "exclude_tag_operator": ["This field is required."],
+                "favorite_status": ["This field is required."],
+                "for_later_status": ["This field is required."],
+                "include_tag_operator": ["This field is required."],
+                "order_direction": ["This field is required."],
+                "read_status": ["This field is required."],
+                "show_unread_count": ["This field is required."],
+                "title": ["Cannot contain only spaces or special characters."],
+            }
+            != {
+                "articles_max_age_unit": ["This field is required."],
+                "articles_max_age_value": ["This field is required."],
+                "articles_reading_time": ["This field is required."],
+                "articles_reading_time_operator": ["This field is required."],
+                "auto_refresh_interval": ["This field is required."],
+                "exclude_tag_operator": ["This field is required."],
+                "favorite_status": ["This field is required."],
+                "for_later_status": ["This field is required."],
+                "include_tag_operator": ["This field is required."],
+                "order_direction": ["This field is required."],
+                "read_status": ["This field is required."],
+                "title": ["Cannot contain only spaces or special characters."],
+            }
+        )
 
     def test_create_reading_list(self, logged_in_sync_client, user, django_assert_num_queries):
-        with django_assert_num_queries(50):
+        with django_assert_num_queries(53):
             response = logged_in_sync_client.post(self.url, data=self.sample_data)
 
         reading_list = ReadingList.objects.get()
@@ -142,7 +161,7 @@ class TestCreateReadingListView:
             **self.sample_data, slug=slugify(self.sample_data["title"]), user=user
         )
 
-        with django_assert_num_queries(37):
+        with django_assert_num_queries(40):
             response = logged_in_sync_client.post(self.url, data=self.sample_data)
 
         assert response.status_code == HTTPStatus.CONFLICT
@@ -180,6 +199,7 @@ class TestReadingListEditView:
             "title": "Sample Reading List",
             "enable_reading_on_scroll": True,
             "auto_refresh_interval": 0,
+            "show_unread_count": constants.ReadingListShowUnreadCount.COUNT,
             "read_status": constants.ReadStatus.ONLY_READ,
             "favorite_status": constants.FavoriteStatus.ONLY_FAVORITE,
             "for_later_status": constants.ForLaterStatus.ONLY_NOT_FOR_LATER,
@@ -211,7 +231,7 @@ class TestReadingListEditView:
         assert response.status_code == HTTPStatus.BAD_REQUEST
 
     def test_update(self, logged_in_sync_client, django_assert_num_queries):
-        with django_assert_num_queries(55):
+        with django_assert_num_queries(58):
             response = logged_in_sync_client.post(self.url, data={**self.sample_data, "save": ""})
 
         assert response.status_code == HTTPStatus.FOUND
@@ -231,7 +251,7 @@ class TestReadingListEditView:
             assert getattr(self.reading_list, field) == value
 
     def test_update_add_new(self, logged_in_sync_client, django_assert_num_queries):
-        with django_assert_num_queries(55):
+        with django_assert_num_queries(58):
             response = logged_in_sync_client.post(
                 self.url, data={**self.sample_data, "save-add-new": ""}
             )
@@ -240,7 +260,7 @@ class TestReadingListEditView:
         assert response["Location"] == reverse("reading:create_reading_list")
 
     def test_update_add_continue_edition(self, logged_in_sync_client, django_assert_num_queries):
-        with django_assert_num_queries(55):
+        with django_assert_num_queries(58):
             response = logged_in_sync_client.post(
                 self.url, data={**self.sample_data, "save-continue-edition": ""}
             )

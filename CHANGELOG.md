@@ -10,6 +10,10 @@ Summary of main functional changes.
 
 ## Unreleased
 
+- Can select the font family, font size and max width of article details.
+- Can hide the unread count on reading lists.
+- Add a statistics page that displays stats about the number of articles and feeds.
+- Display the remaining reading of articles groups.
 - Update deps.
 
 ## 26.07.1

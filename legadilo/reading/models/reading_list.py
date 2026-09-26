@@ -124,6 +124,14 @@ class ReadingList(models.Model):
             "0 will disable the feature."
         ),
     )
+    show_unread_count = models.CharField(
+        choices=constants.ReadingListShowUnreadCount,
+        default=constants.ReadingListShowUnreadCount.COUNT,
+        help_text=_(
+            "How to show the count of unread articles in the reading list: either the count, an "
+            "indicator or nothing."
+        ),
+    )
     order = models.IntegerField(default=0)
 
     read_status = models.CharField(
@@ -241,6 +249,10 @@ class ReadingList(models.Model):
             models.CheckConstraint(
                 name="%(app_label)s_%(class)s_order_direction_valid",
                 condition=models.Q(order_direction__in=constants.ReadingListOrderDirection.names),
+            ),
+            models.CheckConstraint(
+                name="%(app_label)s_%(class)s_show_unread_count_valid",
+                condition=models.Q(show_unread_count__in=["COUNT", "INDICATOR", "NOTHING"]),
             ),
         ]
 

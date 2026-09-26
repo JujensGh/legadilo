@@ -15,6 +15,13 @@
             {% plural %}
                 {{ reading_time }} minutes
             {% endblocktranslate %}
+            {% if group.annot_total_reading_time != group.annot_remaining_reading_time and group.annot_remaining_reading_time > 0 %}
+                {% blocktranslate trimmed count remaining_reading_time=group.annot_remaining_reading_time %}
+                    (Remaining: {{ remaining_reading_time }} minute)
+                {% plural %}
+                    (Remaining: {{ remaining_reading_time }} minutes)
+                {% endblocktranslate %}
+            {% endif %}
         </span>
     {% endif %}
 </p>
