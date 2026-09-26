@@ -1033,7 +1033,7 @@ wheels = [
 
 [[package]]
 name = "legadilo"
-version = "26.7.1"
+version = "26.9.1"
 source = { virtual = "." }
 dependencies = [
     { name = "argon2-cffi" },
