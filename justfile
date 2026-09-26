@@ -105,7 +105,7 @@ ci:
 ci-run:
     bash ./devops/scripts/local-ci.sh
 
-bump-version: ci-run
+bump-version: ci
     bash ./devops/scripts/bumb-version.sh
 
 release: build-production-images
