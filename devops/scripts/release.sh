@@ -15,6 +15,8 @@ if [[ $(git branch --show-current) != "main" ]]; then
     exit 1
 fi
 
+git pull
+
 docker login rg.fr-par.scw.cloud/legadilo -u nologin --password-stdin < ~/.private/scw-registry-password
 
 release_tag=$(git tag --list  | sort -r | head -n 1)
