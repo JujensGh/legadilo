@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-22 18:52+0000\n"
+"POT-Creation-Date: 2026-09-26 14:23+0000\n"
 "Language: en-US\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1628,6 +1628,16 @@ msgstr ""
 msgid "Edit your settings"
 msgstr ""
 
+msgid "Example article details"
+msgstr ""
+
+msgid ""
+"This preview shows how article text will look with the selected font, size, "
+"and maximum width settings. You can change the settings above and "
+"immediately see the result here. This makes it easier to compare "
+"combinations before saving."
+msgstr ""
+
 msgid "Go to the default reading list"
 msgstr ""
 
@@ -1727,6 +1737,9 @@ msgstr ""
 msgid "Users"
 msgstr ""
 
+msgid "My settings"
+msgstr ""
+
 msgid "My Infos"
 msgstr ""
 
@@ -1736,10 +1749,28 @@ msgstr ""
 msgid "Change password"
 msgstr ""
 
-msgid "My settings"
+msgid "Import/Export Articles"
 msgstr ""
 
-msgid "Import/Export Articles"
+msgid "System UI"
+msgstr ""
+
+msgid "Browser Serif"
+msgstr ""
+
+msgid "Browser Sans Serif"
+msgstr ""
+
+msgid "Small"
+msgstr ""
+
+msgid "Medium"
+msgstr ""
+
+msgid "Large"
+msgstr ""
+
+msgid "Larger"
 msgstr ""
 
 msgid "This email has already been taken."
@@ -1760,7 +1791,39 @@ msgstr ""
 msgid "Timezone"
 msgstr ""
 
+msgid "Generic settings"
+msgstr ""
+
+msgid "Reading settings"
+msgstr ""
+
+msgid ""
+"<p class=\"text-body-secondary\">\n"
+"The change of these options can be previewed at the bottom of the page.\n"
+"They impact the fonts and max width for articles details and articles "
+"lists.\n"
+"                        </p>"
+msgstr ""
+
 msgid "Default reading time"
+msgstr ""
+
+msgid "Articles details font"
+msgstr ""
+
+msgid "Articles details font size desktop"
+msgstr ""
+
+msgid "Articles details font size tablet"
+msgstr ""
+
+msgid "Articles details font size mobile"
+msgstr ""
+
+msgid "Articles details max width desktop"
+msgstr ""
+
+msgid "Articles details max width tablet"
 msgstr ""
 
 msgid "Give the token a nice name to identify its usage more easily."
@@ -1787,6 +1850,29 @@ msgstr ""
 msgid ""
 "Number of words you read in minutes. Used to calculate the reading time of "
 "articles."
+msgstr ""
+
+msgid ""
+"'System UI' is the font used by your desktop environment, 'browser serif' and "
+"'browser sans-serif' are the default fonts defined in your browser settings."
+msgstr ""
+
+msgid "Font size in pixels for desktop devices (>= 992px wide)."
+msgstr ""
+
+msgid ""
+"Font size in pixels for tablet devices (>= 768px wide and < 992px wide)."
+msgstr ""
+
+msgid "Font size in pixels for mobile devices (< 768px wide)."
+msgstr ""
+
+msgid "Maximum width of article details for desktop devices (>= 992px wide)."
+msgstr ""
+
+msgid ""
+"Maximum width of article details for tablet devices (>= 768px wide and < "
+"992px wide)."
 msgstr ""
 
 msgid "Information successfully updated"

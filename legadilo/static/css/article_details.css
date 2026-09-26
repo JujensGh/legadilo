@@ -76,7 +76,53 @@ td {
 }
 
 .article-container {
-  max-width: 900px;
+  font-family: var(--legadilo-article-details-font-family), sans-serif;
+  font-size: var(--legadilo-article-details-font-size-desktop);
+  max-width: var(--legadilo-article-details-max-width-desktop, 900px);
+}
+
+@media (width < 992px) {
+  .article-container {
+    font-size: var(--legadilo-article-details-font-size-tablet);
+    max-width: var(--legadilo-article-details-max-width-tablet, 900px);
+  }
+}
+
+@media (width < 768px) {
+  .article-container {
+    font-size: var(--legadilo-article-details-font-size-mobile);
+  }
+}
+
+/* Must override the title font-size so they scale with the selected font size */
+.article-container h1,
+.article-container .h1 {
+  font-size: 2.5em;
+}
+
+.article-container h2,
+.article-container .h2 {
+  font-size: 2em;
+}
+
+.article-container h3,
+.article-container .h3 {
+  font-size: 1.75em;
+}
+
+.article-container h4,
+.article-container .h4 {
+  font-size: 1.5em;
+}
+
+.article-container h5,
+.article-container .h5 {
+  font-size: 1.25em;
+}
+
+.article-container h6,
+.article-container .h6 {
+  font-size: 1em;
 }
 
 .article-aside {

@@ -80,6 +80,9 @@ def user_update_settings_view(request):
             user_settings = form.save()
             translation.activate(user_settings.language)
             messages.success(request, _("Settings correctly updated"))
+            # To update current settings and display the article details preview correctly
+            # after a save.
+            request.user.settings = user_settings
         else:
             messages.error(request, _("Failed to update settings"))
 

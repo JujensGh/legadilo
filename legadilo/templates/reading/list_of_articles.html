@@ -15,6 +15,14 @@
             nonce="{{ csp_nonce }}"
             type="module"></script>
 {% endblock page_js %}
+
+{% block page_css %}
+    {% include "users/partials/user_settings_css_variables.html" %}
+    <link rel="stylesheet"
+          href="{% static 'css/list_of_articles.css' %}"
+          nonce="{{ csp_nonce }}"/>
+{% endblock page_css %}
+
 {% partialdef reading-list-group %}
     <div class="list-group">
         {% for reading_list in reading_lists %}
@@ -81,7 +89,7 @@
                     {% partial reading-list-group %}
                 </nav>
             </div>
-            <div class="col col-12 col-md-8 px-1 px-md-3 mx-0">
+            <div class="list-of-articles-container col col-12 col-md-8 px-1 px-md-3 mx-0">
                 <div id="reading-list-actions-container" class="row px-0 mx-0 bg-body z-1">
                     {% if count_articles_of_current_reading_list > 0 %}
                         <h2 class="fs-6 col-6 col-md-2 align-middle d-flex align-items-center px-0 mx-0">

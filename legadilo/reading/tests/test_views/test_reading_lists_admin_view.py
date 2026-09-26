@@ -97,20 +97,38 @@ class TestCreateReadingListView:
 
         assert response.status_code == HTTPStatus.BAD_REQUEST
         assert response.template_name == "reading/edit_reading_list.html"
-        assert response.context_data["form"].errors == {
-            "articles_max_age_unit": ["This field is required."],
-            "articles_max_age_value": ["This field is required."],
-            "articles_reading_time": ["This field is required."],
-            "articles_reading_time_operator": ["This field is required."],
-            "auto_refresh_interval": ["This field is required."],
-            "exclude_tag_operator": ["This field is required."],
-            "favorite_status": ["This field is required."],
-            "for_later_status": ["This field is required."],
-            "include_tag_operator": ["This field is required."],
-            "order_direction": ["This field is required."],
-            "read_status": ["This field is required."],
-            "title": ["Cannot contain only spaces or special characters."],
-        }
+        assert (
+            response.context_data["form"].errors
+            == {
+                "articles_max_age_unit": ["This field is required."],
+                "articles_max_age_value": ["This field is required."],
+                "articles_reading_time": ["This field is required."],
+                "articles_reading_time_operator": ["This field is required."],
+                "auto_refresh_interval": ["This field is required."],
+                "exclude_tag_operator": ["This field is required."],
+                "favorite_status": ["This field is required."],
+                "for_later_status": ["This field is required."],
+                "include_tag_operator": ["This field is required."],
+                "order_direction": ["This field is required."],
+                "read_status": ["This field is required."],
+                "show_unread_count": ["This field is required."],
+                "title": ["Cannot contain only spaces or special characters."],
+            }
+            != {
+                "articles_max_age_unit": ["This field is required."],
+                "articles_max_age_value": ["This field is required."],
+                "articles_reading_time": ["This field is required."],
+                "articles_reading_time_operator": ["This field is required."],
+                "auto_refresh_interval": ["This field is required."],
+                "exclude_tag_operator": ["This field is required."],
+                "favorite_status": ["This field is required."],
+                "for_later_status": ["This field is required."],
+                "include_tag_operator": ["This field is required."],
+                "order_direction": ["This field is required."],
+                "read_status": ["This field is required."],
+                "title": ["Cannot contain only spaces or special characters."],
+            }
+        )
 
     def test_create_reading_list(self, logged_in_sync_client, user, django_assert_num_queries):
         with django_assert_num_queries(53):

@@ -1,0 +1,10 @@
+<style nonce="{{ csp_nonce }}">
+    :root {
+        --legadilo-article-details-font-family: {{ request.user.settings.article_details_font_family }};
+        --legadilo-article-details-font-size-desktop: {{ request.user.settings.article_details_font_size_desktop }};
+        --legadilo-article-details-font-size-tablet: {{ request.user.settings.article_details_font_size_tablet }};
+        --legadilo-article-details-font-size-mobile: {{ request.user.settings.article_details_font_size_mobile }};
+        --legadilo-article-details-max-width-desktop: {{ request.user.settings.article_details_max_width_desktop_px }};
+        --legadilo-article-details-max-width-tablet: {{ request.user.settings.article_details_max_width_tablet_px }};
+    }
+</style>

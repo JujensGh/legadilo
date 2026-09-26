@@ -1,0 +1,28 @@
+/*
+ * SPDX-FileCopyrightText: 2026 Legadilo contributors
+ *
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+.list-of-articles-container {
+  font-family: var(--legadilo-article-details-font-family), sans-serif;
+  font-size: var(--legadilo-article-details-font-size-desktop);
+  max-width: var(--legadilo-article-details-max-width-desktop, 100vw);
+}
+
+.list-of-articles-container h2 {
+  font-size: 2em;
+}
+
+@media (width < 992px) {
+  .list-of-articles-container {
+    font-size: var(--legadilo-article-details-font-size-tablet);
+    max-width: var(--legadilo-article-details-max-width-tablet, 100vw);
+  }
+}
+
+@media (width < 768px) {
+  .list-of-articles-container {
+    font-size: var(--legadilo-article-details-font-size-mobile);
+  }
+}

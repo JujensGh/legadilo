@@ -7,10 +7,20 @@
 {% endblock title %}
 
 {% block page_js %}
+    <script src="{% static 'js/user_settings.js' %}"
+            nonce="{{ csp_nonce }}"
+            type="module"></script>
     <script src="{% static 'js/tag_edition.js' %}"
             nonce="{{ csp_nonce }}"
             type="module"></script>
 {% endblock page_js %}
+
+{% block page_css %}
+    {% include "users/partials/user_settings_css_variables.html" %}
+    <link rel="stylesheet"
+          href="{% static 'css/article_details.css' %}"
+          nonce="{{ csp_nonce }}"/>
+{% endblock page_css %}
 
 {% block content %}
     <div class="row">
@@ -21,13 +31,21 @@
                   method="post"
                   action="{% url 'users:update_settings' %}">
                 {% csrf_token %}
-                {{ form|crispy }}
-                <div class="control-group">
-                    <div class="controls">
-                        <button type="submit" class="btn btn-primary">{% translate "Update" %}</button>
-                    </div>
-                </div>
+                {% crispy form %}
             </form>
+        </div>
+    </div>
+    <div class="article-container mt-4">
+        <h2>{% translate "Example article details" %}</h2>
+        <div class="article-content">
+            <p>
+                {% blocktranslate trimmed %}
+                    This preview shows how article text will look with the selected font,
+                    size, and maximum width settings.
+                    You can change the settings above and immediately see the result here.
+                    This makes it easier to compare combinations before saving.
+                {% endblocktranslate %}
+            </p>
         </div>
     </div>
 {% endblock content %}
