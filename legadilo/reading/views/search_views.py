@@ -46,6 +46,7 @@ class SearchForm(forms.Form):
         required=False,
         choices=constants.ArticleSearchType.choices,
         initial=constants.ArticleSearchType.PLAIN,
+        label=_("Search type"),
     )
     # Dates
     order = forms.ChoiceField(

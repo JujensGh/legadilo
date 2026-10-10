@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-10 15:09+0000\n"
+"POT-Creation-Date: 2026-10-10 15:39+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Julien Enselme\n"
 "Language-Team: \n"
@@ -668,6 +668,9 @@ msgstr "Une liste de lecture avec le titre '%s' existe déjà."
 
 msgid "Search query"
 msgstr "Requête de recherche"
+
+msgid "Search type"
+msgstr "Type de recherche"
 
 msgid "Articles to include must have all or any of the supplied tags."
 msgstr ""
