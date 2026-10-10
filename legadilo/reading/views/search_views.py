@@ -300,7 +300,7 @@ def search_view(request: AuthenticatedHttpRequest) -> TemplateResponse:
     if request.method == "POST":
         # We update the articles of the current search.
         articles_qs = _search(request.user, search_form)
-        # articles_qs is based on a union, so we can't rely on filter or paginators. Since we need
+        # articles_qs has annotations (like the rank) we can't use with update. Since we need
         # these features, we extract the ids of the articles to update and build a new QS.
         article_ids_to_update = set(articles_qs.values_list("id", flat=True))
         status, update_articles_form = update_list_of_articles(

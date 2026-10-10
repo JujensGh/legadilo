@@ -16,7 +16,7 @@ from django.contrib.postgres.indexes import GinIndex
 from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
 from django.core.paginator import Paginator
 from django.db import connection, models, transaction
-from django.db.models.functions import Coalesce, Lower
+from django.db.models.functions import Coalesce
 from django.utils.translation import gettext_lazy as _
 from ninja.schema import Schema
 from pydantic import ConfigDict
@@ -61,6 +61,15 @@ SEARCH_VECTOR = (
     + SearchVector("content", config="english", weight="C")
     + SearchVector("authors", config="english", weight="C")
     + SearchVector("main_source_title", config="english", weight="D")
+)
+# Used to rank the search results when we can't use the full text search of PostgreSQL. The weights
+# mirror the ones of SEARCH_VECTOR.
+FALLBACK_SEARCH_WEIGHTS = (
+    ("title", 1.0),
+    ("summary", 0.4),
+    ("authors", 0.25),
+    ("content", 0.2),
+    ("main_source_title", 0.1),
 )
 DEFAULT_INDEXES = [
     models.Index(
@@ -131,9 +140,9 @@ class ArticleFullTextSearchQuery(ArticleSearchQuery):
             case constants.ArticleSearchOrderBy.RANK_ASC:
                 return "rank"
             case constants.ArticleSearchOrderBy.ARTICLE_SAVE_DATE_DESC:
-                return "-obj_updated_at"
+                return "-obj_created_at"
             case constants.ArticleSearchOrderBy.ARTICLE_SAVE_DATE_ASC:
-                return "obj_updated_at"
+                return "obj_created_at"
             case constants.ArticleSearchOrderBy.ARTICLE_DATE_DESC:
                 return "-published_at"
             case constants.ArticleSearchOrderBy.ARTICLE_DATE_ASC:
@@ -144,6 +153,28 @@ class ArticleFullTextSearchQuery(ArticleSearchQuery):
                 return "read_at"
             case _:
                 assert_never(self.order)
+
+
+def _build_order_by(order_by: str) -> tuple[models.OrderBy, models.OrderBy]:
+    if order_by.startswith("-"):
+        return (
+            models.F(order_by.removeprefix("-")).desc(nulls_last=True),
+            models.F("id").desc(),
+        )
+
+    return models.F(order_by).asc(nulls_last=True), models.F("id").desc()
+
+
+def _build_fallback_rank(query: str) -> models.Expression:
+    cases = [
+        models.When(models.Q(**{f"{field}__icontains": query}), then=models.Value(weight))
+        for field, weight in FALLBACK_SEARCH_WEIGHTS
+    ]
+    return models.Case(
+        *cases,
+        default=models.Value(0.0),
+        output_field=models.FloatField(),
+    )
 
 
 def _build_basic_filters_from_reading_list(search_query: ArticleSearchQuery) -> models.Q:  # ruff:ignore[complex-structure, too-many-branches]
@@ -377,7 +408,7 @@ class ArticleQuerySet(models.QuerySet["Article"]):
 
         return self.alias(
             alias_date_field_order=Coalesce(models.F("updated_at"), models.F("published_at"))
-        ).order_by(order)
+        ).order_by(order, models.F("id").desc())
 
     def for_deletion(self) -> Self:
         return self.prefetch_related("feed_articles", "feed_articles__feed")
@@ -432,21 +463,10 @@ class ArticleQuerySet(models.QuerySet["Article"]):
                 .filter(search=full_text_search_query)
             )
 
-        return self.alias(rank=models.F("obj_updated_at")).filter(
-            models.Q(title__icontains=search_query.q)
-            | models.Q(summary__icontains=search_query.q)
-            | models.Q(content__icontains=search_query.q)
-            | models.Q(authors__icontains=search_query.q)
-            | models.Q(main_source_title__icontains=search_query.q)
-        )
+        return self.annotate(rank=_build_fallback_rank(search_query.q)).filter(rank__gt=0)
 
-    def for_tags_search(self, search_query: ArticleFullTextSearchQuery) -> Self:
-        return (
-            self
-            .alias(lower_tags_title=Lower("tags__title"))
-            .annotate(rank=models.Value(0))
-            .filter(lower_tags_title=search_query.q.lower())
-        )
+    def with_placeholder_rank(self):
+        return self.annotate(rank=models.Value(0.0))
 
     def for_url_search(self, urls: list[str]) -> Self:
         filters = models.Q()
@@ -797,18 +817,13 @@ class ArticleManager(models.Manager["Article"]):
             )
 
         if search_query.search_type == constants.ArticleSearchType.URL:
-            articles_qs = articles_qs.for_url_search([search_query.q])
+            articles_qs = articles_qs.for_url_search([search_query.q]).with_placeholder_rank()
         elif search_query.q:
-            full_text_articles_qs = articles_qs.for_search(search_query)
-            if connection.vendor == "postgresql":
-                tags_articles_qs = articles_qs.for_tags_search(search_query)
-                articles_qs = tags_articles_qs.union(full_text_articles_qs)
-            else:
-                articles_qs = full_text_articles_qs
+            articles_qs = articles_qs.for_search(search_query)
+        else:
+            articles_qs = articles_qs.with_placeholder_rank()
 
-            articles_qs = articles_qs.order_by(search_query.order_by, "id")
-
-        return articles_qs
+        return articles_qs.order_by(*_build_order_by(search_query.order_by))
 
     def cleanup_articles(self):
         return self.get_queryset().for_cleanup().delete()
