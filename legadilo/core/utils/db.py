@@ -31,3 +31,31 @@ class ExtractEpoch(models.Func):
             template=r"%(function)s('%%%%s', %(expressions)s)",
             **extra_context,
         )
+
+
+class StripHtmlTags(models.Func):
+    function = "REGEXP_REPLACE"
+    output_field = models.TextField()
+
+    def __init__(self, expression, *args, **kwargs):
+        super().__init__(
+            expression,
+            models.Value(r"</?[a-zA-Z0-9]+[^>]*>"),
+            models.Value(" "),
+            models.Value("g"),
+            **kwargs,
+        )
+
+
+class RemoveExtraSpaces(models.Func):
+    function = "REGEXP_REPLACE"
+    output_field = models.TextField()
+
+    def __init__(self, expression, *args, **kwargs):
+        super().__init__(
+            expression,
+            models.Value(r"\s+"),
+            models.Value(" "),
+            models.Value("g"),
+            **kwargs,
+        )

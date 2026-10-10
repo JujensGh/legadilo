@@ -2,7 +2,10 @@
 
 import django.contrib.postgres.indexes
 import django.contrib.postgres.search
+import django.db.models.functions.text
 from django.db import connection, migrations, models
+
+import legadilo.core.utils.db
 
 
 class Migration(migrations.Migration):
@@ -34,19 +37,40 @@ class Migration(migrations.Migration):
                                     ),
                                     "||",
                                     django.contrib.postgres.search.SearchVector(
-                                        "summary", config="english", weight="B"
+                                        django.db.models.functions.text.Left(
+                                            legadilo.core.utils.db.RemoveExtraSpaces(
+                                                legadilo.core.utils.db.StripHtmlTags("summary")
+                                            ),
+                                            20000,
+                                        ),
+                                        config="english",
+                                        weight="B",
                                     ),
                                     django.contrib.postgres.search.SearchConfig("english"),
                                 ),
                                 "||",
                                 django.contrib.postgres.search.SearchVector(
-                                    "content", config="english", weight="C"
+                                    django.db.models.functions.text.Left(
+                                        legadilo.core.utils.db.RemoveExtraSpaces(
+                                            legadilo.core.utils.db.StripHtmlTags("content")
+                                        ),
+                                        200000,
+                                    ),
+                                    config="english",
+                                    weight="C",
                                 ),
                                 django.contrib.postgres.search.SearchConfig("english"),
                             ),
                             "||",
                             django.contrib.postgres.search.SearchVector(
-                                "authors", config="english", weight="C"
+                                django.db.models.functions.text.Left(
+                                    django.db.models.functions.Cast(
+                                        "authors", output_field=django.db.models.TextField()
+                                    ),
+                                    5000,
+                                ),
+                                config="english",
+                                weight="C",
                             ),
                             django.contrib.postgres.search.SearchConfig("english"),
                         ),

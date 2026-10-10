@@ -21,7 +21,7 @@ from django.contrib.postgres.search import (
 )
 from django.core.paginator import Paginator
 from django.db import connection, models, transaction
-from django.db.models.functions import Coalesce
+from django.db.models.functions import Cast, Coalesce, Left
 from django.utils.translation import gettext_lazy as _
 from ninja.schema import Schema
 from pydantic import ConfigDict
@@ -39,7 +39,7 @@ from legadilo.core.utils.validators import (
 from legadilo.reading import constants
 from legadilo.reading.models.tag import ArticleTag
 
-from ...core.utils.db import ExtractEpoch
+from ...core.utils.db import ExtractEpoch, RemoveExtraSpaces, StripHtmlTags
 from .article_fetch_error import ArticleFetchError
 
 if TYPE_CHECKING:
@@ -60,11 +60,30 @@ else:
 logger = logging.getLogger(__name__)
 
 
+# The search vector cannot be too big or it won't be indexed. It must be under 1MB with all its
+# data. According to my tests, these values are fine and allow for very long articles (over 2h of
+# reading time) to be indexed. If articles are cut, what's indexed should be enough to find the
+# article.
+SEARCH_CONTENT_MAX_LENGTH = 200_000
+SEARCH_SUMMARY_MAX_LENGTH = 20_000
+SEARCH_AUTHORS_MAX_LENGTH = 5_000
 SEARCH_VECTOR = (
     SearchVector("title", config="english", weight="A")
-    + SearchVector("summary", config="english", weight="B")
-    + SearchVector("content", config="english", weight="C")
-    + SearchVector("authors", config="english", weight="C")
+    + SearchVector(
+        Left(RemoveExtraSpaces(StripHtmlTags("summary")), SEARCH_SUMMARY_MAX_LENGTH),
+        config="english",
+        weight="B",
+    )
+    + SearchVector(
+        Left(RemoveExtraSpaces(StripHtmlTags("content")), SEARCH_CONTENT_MAX_LENGTH),
+        config="english",
+        weight="C",
+    )
+    + SearchVector(
+        Left(Cast("authors", output_field=models.TextField()), SEARCH_AUTHORS_MAX_LENGTH),
+        config="english",
+        weight="C",
+    )
     + SearchVector("main_source_title", config="english", weight="D")
 )
 # Used to rank the search results when we can't use the full text search of PostgreSQL. The weights
