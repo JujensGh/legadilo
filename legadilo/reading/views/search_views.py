@@ -313,7 +313,8 @@ def search_view(request: AuthenticatedHttpRequest) -> TemplateResponse:
     # Articles have been updated. Some may not be part of the search anymore. Rerun it.
     articles_qs = _search(request.user, search_form)
     articles = list(articles_qs[: constants.MAX_OBJECTS_PER_PAGE])
-    total_results = articles_qs.count()
+    # Strip what is useless to count articles to make the query faster.
+    total_results = articles_qs.order_by().values("id").count()
 
     return TemplateResponse(
         request,

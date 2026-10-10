@@ -22,6 +22,7 @@ Summary of main functional changes.
 - Only update visible articles of a search.
     - Done to prevent side effects.
     - May require multiple searches to update lots of article (should be very rare).
+- Make full text search faster on PostgreSQL.
 
 ## 26.09.1
 

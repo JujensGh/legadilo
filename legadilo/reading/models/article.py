@@ -13,7 +13,12 @@ from typing import TYPE_CHECKING, Self, assert_never
 
 from dateutil.relativedelta import relativedelta
 from django.contrib.postgres.indexes import GinIndex
-from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
+from django.contrib.postgres.search import (
+    SearchQuery,
+    SearchRank,
+    SearchVector,
+    SearchVectorField,
+)
 from django.core.paginator import Paginator
 from django.db import connection, models, transaction
 from django.db.models.functions import Coalesce
@@ -258,8 +263,13 @@ def _build_filter_by_tag_ids(
     qs: ArticleQuerySet, tags_search: ArticlesTagsSearch
 ) -> tuple[ArticleQuerySet, models.Q]:
     filters = models.Q()
+    # Only count tags when needed: counting requires a join on tags and a GROUP BY on articles.
+    aliases = {}
 
     if tags_search.tag_ids_to_include:
+        aliases[tags_search.count_tags_to_include_alias] = models.Count(
+            "tags", filter=models.Q(tags__id__in=tags_search.tag_ids_to_include)
+        )
         match tags_search.include_tag_operator:
             case constants.ReadingListTagOperator.ALL:
                 filters &= models.Q(**{
@@ -271,6 +281,9 @@ def _build_filter_by_tag_ids(
                 assert_never(tags_search.include_tag_operator)
 
     if tags_search.tag_ids_to_exclude:
+        aliases[tags_search.count_tags_to_exclude_alias] = models.Count(
+            "tags", filter=models.Q(tags__id__in=tags_search.tag_ids_to_exclude)
+        )
         match tags_search.exclude_tag_operator:
             case constants.ReadingListTagOperator.ALL:
                 filters &= ~models.Q(**{
@@ -281,14 +294,10 @@ def _build_filter_by_tag_ids(
             case _:
                 assert_never(tags_search.exclude_tag_operator)
 
-    return qs.alias(**{
-        tags_search.count_tags_to_include_alias: models.Count(
-            "tags", filter=models.Q(tags__id__in=tags_search.tag_ids_to_include)
-        ),
-        tags_search.count_tags_to_exclude_alias: models.Count(
-            "tags", filter=models.Q(tags__id__in=tags_search.tag_ids_to_exclude)
-        ),
-    }), filters
+    if aliases:
+        qs = qs.alias(**aliases)
+
+    return qs, filters
 
 
 class ArticleQuerySet(models.QuerySet["Article"]):
@@ -456,12 +465,9 @@ class ArticleQuerySet(models.QuerySet["Article"]):
                 search_type=search_query.search_type.value,
                 config="english",
             )
-            return (
-                self
-                .alias(search=SEARCH_VECTOR)
-                .annotate(rank=SearchRank(SEARCH_VECTOR, full_text_search_query))
-                .filter(search=full_text_search_query)
-            )
+            return self.annotate(
+                rank=SearchRank(models.F("search_vector"), full_text_search_query)
+            ).filter(search_vector=full_text_search_query)
 
         return self.annotate(rank=_build_fallback_rank(search_query.q)).filter(rank__gt=0)
 
@@ -483,7 +489,11 @@ class ArticleManager(models.Manager["Article"]):
     _hints: dict
 
     def get_queryset(self) -> ArticleQuerySet:
-        return ArticleQuerySet(model=self.model, using=self._db, hints=self._hints)
+        qs = ArticleQuerySet(model=self.model, using=self._db, hints=self._hints)
+        if connection.vendor == "postgresql":
+            # The search vector is only used to search articles. Don't load it otherwise.
+            qs = qs.defer("search_vector")  # type: ignore[misc]
+        return qs
 
     @transaction.atomic()
     def save_from_list_of_data(
@@ -1011,6 +1021,13 @@ class Article(models.Model):
         auto_now=True,
         help_text=_("Technical date for the last update of the article in the database."),
     )
+    if connection.vendor == "postgresql":
+        # Stored to avoid computing the vector of each article on each search.
+        search_vector = models.GeneratedField(
+            expression=SEARCH_VECTOR,
+            output_field=SearchVectorField(),
+            db_persist=True,
+        )
 
     objects = ArticleManager()
 
@@ -1040,7 +1057,7 @@ class Article(models.Model):
             indexes = [
                 *DEFAULT_INDEXES,
                 GinIndex(
-                    SEARCH_VECTOR,
+                    fields=["search_vector"],
                     name="%(app_label)s_%(class)s_search_vector",
                 ),
             ]

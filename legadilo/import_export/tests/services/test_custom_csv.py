@@ -101,7 +101,15 @@ def test_import_custom_csv(user, httpx2_mock, snapshot):
             Article.objects.order_by("id").values(
                 *all_model_fields_except(
                     Article,
-                    {"id", "user", "obj_created_at", "obj_updated_at", "main_feed", "group"},
+                    {
+                        "id",
+                        "user",
+                        "obj_created_at",
+                        "obj_updated_at",
+                        "main_feed",
+                        "group",
+                        "search_vector",
+                    },
                 )
             )
         )

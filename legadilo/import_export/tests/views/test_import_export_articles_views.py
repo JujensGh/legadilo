@@ -327,7 +327,8 @@ class TestImportWallabag:
                 list(
                     Article.objects.order_by("url").values(
                         *all_model_fields_except(
-                            Article, {"id", "user", "obj_created_at", "obj_updated_at"}
+                            Article,
+                            {"id", "user", "obj_created_at", "obj_updated_at", "search_vector"},
                         )
                     )
                 )
