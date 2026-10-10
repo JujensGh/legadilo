@@ -19,6 +19,9 @@ Summary of main functional changes.
     - It was complex.
     - Tags can be searched with thanks to the proper tags search fields.
     - Search on external tags remains possible.
+- Only update visible articles of a search.
+    - Done to prevent side effects.
+    - May require multiple searches to update lots of article (should be very rare).
 
 ## 26.09.1
 

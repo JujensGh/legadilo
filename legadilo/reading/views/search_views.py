@@ -302,7 +302,9 @@ def search_view(request: AuthenticatedHttpRequest) -> TemplateResponse:
         articles_qs = _search(request.user, search_form)
         # articles_qs has annotations (like the rank) we can't use with update. Since we need
         # these features, we extract the ids of the articles to update and build a new QS.
-        article_ids_to_update = set(articles_qs.values_list("id", flat=True))
+        article_ids_to_update = set(
+            articles_qs[: constants.MAX_OBJECTS_PER_PAGE].values_list("id", flat=True)
+        )
         status, update_articles_form = update_list_of_articles(
             request, Article.objects.get_queryset().filter(id__in=article_ids_to_update)
         )
