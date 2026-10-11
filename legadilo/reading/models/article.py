@@ -344,7 +344,7 @@ class ArticleQuerySet(models.QuerySet["Article"]):
                 )
             )
             ._filter_by_reading_list_tags(reading_list)
-            .select_related("main_feed")
+            .select_related("main_feed", "group")
             .prefetch_related("tags")
             .default_order_by(reading_list.order_direction)
         )
@@ -353,7 +353,7 @@ class ArticleQuerySet(models.QuerySet["Article"]):
         return (
             self
             .filter(tags__id=tag.id)
-            .select_related("main_feed")
+            .select_related("main_feed", "group")
             .prefetch_related("tags")
             .default_order_by()
         )
@@ -363,7 +363,7 @@ class ArticleQuerySet(models.QuerySet["Article"]):
             self
             .filter(external_tags__icontains=tag)
             .prefetch_related("tags")
-            .select_related("main_feed")
+            .select_related("main_feed", "group")
             .default_order_by()
         )
 
@@ -375,7 +375,7 @@ class ArticleQuerySet(models.QuerySet["Article"]):
         return self.filter(filters)
 
     def for_feed(self) -> Self:
-        return self.prefetch_related("tags").select_related("main_feed").default_order_by()
+        return self.prefetch_related("tags").select_related("main_feed", "group").default_order_by()
 
     def for_details(self) -> Self:
         return self.prefetch_related("tags", "comments").select_related("main_feed", "group")
@@ -829,7 +829,7 @@ class ArticleManager(models.Manager["Article"]):
             self
             .get_queryset()
             .for_user(user)
-            .select_related("main_feed")
+            .select_related("main_feed", "group")
             .prefetch_related("tags")
             .filter(_build_basic_filters_from_reading_list(search_query))
         )
