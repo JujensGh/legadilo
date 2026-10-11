@@ -10,6 +10,8 @@ Summary of main functional changes.
 
 ## Unreleased
 
+## 26.10.2
+
 - Disable statement timeout for long migration.
 
 ## 26.10.1
