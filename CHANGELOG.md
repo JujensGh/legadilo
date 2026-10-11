@@ -10,6 +10,8 @@ Summary of main functional changes.
 
 ## Unreleased
 
+## 26.10.1
+
 - Fix the order of search results:
     - All order options are applied and really sort in the requested direction, with articles without any date at the end.
     - Articles without dates were always at the start before that, leading to believe the sort order had no impact.
