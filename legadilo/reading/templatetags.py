@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2023-2025 Legadilo contributors
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
+from functools import lru_cache
 
 from django.template.defaultfilters import stringfilter
 from django.template.defaulttags import register
@@ -106,11 +107,21 @@ def update_article_form_id(article: Article) -> str:
 @register.filter
 @stringfilter
 def markdown(value: str) -> str:
-    md = MarkdownIt("gfm-like")
+    md = _get_markdown_it_instance()
     rendered_value = md.render(value)
     cleaned_value = sanitize_keep_safe_tags(rendered_value)
     cleaned_value = cleaned_value.strip()
     return mark_safe(cleaned_value)  # ruff:ignore[suspicious-mark-safe-usage]
+
+
+@lru_cache(maxsize=1)
+def _get_markdown_it_instance():
+    """Get markdown-it instance.
+
+    It's cached because it's slow to create and it's called in a loop when rendering lists of
+    articles.
+    """
+    return MarkdownIt("gfm-like")
 
 
 @register.filter
