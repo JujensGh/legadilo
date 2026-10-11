@@ -8,6 +8,7 @@ from functools import lru_cache
 from django.template.defaulttags import register
 from django.templatetags.static import static
 from django.utils.safestring import mark_safe
+from django.utils.translation import gettext_lazy as _
 
 
 @register.filter
@@ -36,3 +37,10 @@ def _cached_static(path: str):
     according to my local tests.
     """
     return static(path)
+
+
+@register.simple_tag(name="loading_indicator")
+def loading_indicator() -> str:
+    sprite_url = _cached_static("images/loading-indicator.svg")
+    aria_label = _("Loading...")
+    return mark_safe(f"""<img class="indicator" src="{sprite_url}" alt="{aria_label}" />""")  # ruff: ignore[suspicious-mark-safe-usage]

@@ -28,7 +28,7 @@
             type="submit"
             form="{{ article|delete_article_form_id }}">
         <span class="icon-indicator {{ article|article_action_indicator }}">
-            {% include "core/partials/button_loading_indicator.html" %}
+            {% loading_indicator %}
             {% bs_icon "trash" %}
         </span>
         <span class="d-none d-md-inline">{% translate "Delete" %}</span>

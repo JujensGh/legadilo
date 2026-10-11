@@ -73,7 +73,7 @@
                                             type="submit">
                                         <span
                                             class="icon-indicator {{ article|article_action_indicator }}">
-                                            {% include "core/partials/button_loading_indicator.html" %}
+                                            {% loading_indicator %}
                                         </span>
                                         {% translate "Update article" %}
                                     </button>
@@ -92,7 +92,7 @@
                                         class="btn btn-outline-secondary text-start col-12 text-center">
                                         <span
                                             class="icon-indicator {{ article|article_action_indicator }}">
-                                            {% include "core/partials/button_loading_indicator.html" %}
+                                            {% loading_indicator %}
                                             {% bs_icon "arrow-clockwise" %}
                                         </span>
                                         {% translate 'Re-fetch content' %}

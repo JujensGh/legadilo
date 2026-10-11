@@ -46,13 +46,13 @@
                     <button class="secondaryAction btn btn-primary"
                             type="submit"
                             name="action_primary">
-                        <span class="icon-indicator">{% include "core/partials/button_loading_indicator.html" %}</span>
+                        <span class="icon-indicator">{% loading_indicator %}</span>
                         {% translate "Make Primary" %}
                     </button>
                     <button class="secondaryAction btn btn-primary"
                             type="submit"
                             name="action_send">
-                        <span class="icon-indicator">{% include "core/partials/button_loading_indicator.html" %}</span>
+                        <span class="icon-indicator">{% loading_indicator %}</span>
                         {% translate "Re-send Verification" %}
                     </button>
                     <button class="primaryAction btn btn-primary"
@@ -62,7 +62,7 @@
                             data-modal-title="{% translate 'Confirm deletion' %}"
                             data-modal-body="{% translate 'Do you really want to remove the selected e-mail address?' %}"
                             hx-confirm="Delete">
-                        <span class="icon-indicator">{% include "core/partials/button_loading_indicator.html" %}</span>
+                        <span class="icon-indicator">{% loading_indicator %}</span>
                         {% translate "Remove" %}
                     </button>
                 </div>
@@ -78,7 +78,7 @@
         {% csrf_token %}
         {{ form|crispy }}
         <button class="btn btn-primary" name="action_add" type="submit">
-            <span class="icon-indicator">{% include "core/partials/button_loading_indicator.html" %}</span>
+            <span class="icon-indicator">{% loading_indicator %}</span>
             {% translate "Add E-mail" %}
         </button>
     </form>

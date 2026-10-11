@@ -16,14 +16,14 @@
             formaction="{{ article|favorite_action_url }}">
         {% if article.is_favorite %}
             <span class="icon-indicator {{ article|article_action_indicator }}">
-                {% include "core/partials/button_loading_indicator.html" %}
+                {% loading_indicator %}
                 {% bs_icon "star-fill" %}
             </span>
             <span
                 class="d-none d-md-inline">{% translate "Favorite" context "Article actions" %}</span>
         {% else %}
             <span class="icon-indicator {{ article|article_action_indicator }} text-start">
-                {% include "core/partials/button_loading_indicator.html" %}
+                {% loading_indicator %}
                 {% bs_icon "star" %}
             </span>
             <span
@@ -39,14 +39,14 @@
             formaction="{{ article|for_later_action_url }}">
         {% if article.is_for_later %}
             <span class="icon-indicator {{ article|article_action_indicator }}">
-                {% include "core/partials/button_loading_indicator.html" %}
+                {% loading_indicator %}
                 {% bs_icon "bookmark-fill" %}
             </span>
             <span
                 class="d-none d-md-inline">{% translate "For later" context "Article actions" %}</span>
         {% else %}
             <span class="icon-indicator {{ article|article_action_indicator }}">
-                {% include "core/partials/button_loading_indicator.html" %}
+                {% loading_indicator %}
                 {% bs_icon "bookmark" %}
             </span>
             <span
@@ -82,13 +82,13 @@
             formaction="{{ article|read_action_url }}">
         {% if article.is_read %}
             <span class="icon-indicator {{ article|article_action_indicator }}">
-                {% include "core/partials/button_loading_indicator.html" %}
+                {% loading_indicator %}
                 {% bs_icon "book-fill" %}
             </span>
             <span class="d-none d-md-inline">{% translate 'Read' context "Article actions" %}</span>
         {% else %}
             <span class="icon-indicator {{ article|article_action_indicator }}">
-                {% include "core/partials/button_loading_indicator.html" %}
+                {% loading_indicator %}
                 {% bs_icon "book" %}
             </span>
             <span
