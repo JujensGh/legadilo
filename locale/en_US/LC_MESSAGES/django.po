@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-10 15:39+0000\n"
+"POT-Creation-Date: 2026-10-11 11:12+0200\n"
 "Language: en-US\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1603,7 +1603,13 @@ msgstr ""
 msgid "Articles added"
 msgstr ""
 
+msgid "Articles added per day"
+msgstr ""
+
 msgid "Articles opened"
+msgstr ""
+
+msgid "Articles opened per day"
 msgstr ""
 
 msgid "Last Year"

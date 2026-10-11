@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-10 15:39+0000\n"
+"POT-Creation-Date: 2026-10-11 11:12+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Julien Enselme\n"
 "Language-Team: \n"
@@ -1765,8 +1765,14 @@ msgstr "Cette année"
 msgid "Articles added"
 msgstr "Articles ajoutés"
 
+msgid "Articles added per day"
+msgstr "Articles ajoutés par jour"
+
 msgid "Articles opened"
 msgstr "Articles ouverts"
+
+msgid "Articles opened per day"
+msgstr "Articles ouverts par jour"
 
 msgid "Last Year"
 msgstr "L’année dernière"

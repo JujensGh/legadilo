@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2023-2025 Legadilo contributors
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
-from datetime import timedelta
+from datetime import date, timedelta
 from functools import cached_property
 from typing import Self
 from zoneinfo import ZoneInfo
@@ -205,6 +205,10 @@ class User(AbstractUser):
 
     @cached_property
     def stats(self) -> dict[str, int]:
+        this_year = utcnow().year
+        last_year = this_year - 1
+        nb_days_this_year = (utcnow().date() - date(this_year, 1, 1)).days + 1
+        nb_days_last_year = (date(last_year, 12, 31) - date(last_year, 1, 1)).days + 1
         return {
             "nb_articles": self.articles.count(),
             "nb_opened_articles": self.articles.filter(was_opened=True).count(),
@@ -213,31 +217,43 @@ class User(AbstractUser):
             "nb_feeds": self.feeds.count(),
             "nb_active_feeds": self.feeds.filter(enabled=True).count(),
             "nb_articles_added_this_year": self.articles.filter(
-                obj_created_at__year=utcnow().year
+                obj_created_at__year=this_year
             ).count(),
-            "nb_articles_opened_this_year": self.articles.filter(
-                opened_at__year=utcnow().year
-            ).count(),
+            "nb_articles_added_this_year_per_day": self.articles.filter(
+                obj_created_at__year=this_year
+            ).count()
+            // nb_days_this_year,
+            "nb_articles_opened_this_year": self.articles.filter(opened_at__year=this_year).count(),
+            "nb_articles_opened_this_year_per_day": self.articles.filter(
+                opened_at__year=this_year
+            ).count()
+            // nb_days_this_year,
             "nb_manually_added_articles_this_year": self.articles.filter(
-                obj_created_at__year=utcnow().year,
+                obj_created_at__year=this_year,
                 main_feed__isnull=True,
             ).count(),
             "nb_articles_from_feeds_this_year": self.articles.filter(
-                obj_created_at__year=utcnow().year,
+                obj_created_at__year=this_year,
                 main_feed__isnull=False,
             ).count(),
             "nb_articles_added_last_year": self.articles.filter(
-                obj_created_at__year=utcnow().year - 1
+                obj_created_at__year=last_year
             ).count(),
-            "nb_articles_opened_last_year": self.articles.filter(
-                opened_at__year=utcnow().year - 1
-            ).count(),
+            "nb_articles_added_last_year_per_day": self.articles.filter(
+                obj_created_at__year=last_year
+            ).count()
+            // nb_days_last_year,
+            "nb_articles_opened_last_year": self.articles.filter(opened_at__year=last_year).count(),
+            "nb_articles_opened_last_year_per_day": self.articles.filter(
+                opened_at__year=last_year
+            ).count()
+            // nb_days_last_year,
             "nb_manually_added_articles_last_year": self.articles.filter(
-                obj_created_at__year=utcnow().year - 1,
+                obj_created_at__year=last_year,
                 main_feed__isnull=True,
             ).count(),
             "nb_articles_from_feeds_last_year": self.articles.filter(
-                obj_created_at__year=utcnow().year - 1,
+                obj_created_at__year=last_year,
                 main_feed__isnull=False,
             ).count(),
         }
