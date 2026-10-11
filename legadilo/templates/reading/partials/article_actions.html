@@ -56,9 +56,11 @@
 {% endpartialdef later-btn %}
 
 {% partialdef open-original-btn %}
-    <a class="btn btn-outline-secondary text-start open-original"
+    <a class="btn btn-outline-secondary text-start mark-as-read"
        role="button"
-       data-article-id="{{ article.id }}"
+        {% if not article.was_opened and not for_article_details %}
+       data-mark-as-read="{{ article|opened_action_url }}"
+        {% endif %}
        target="_blank"
        href="{{ article.url }}">
         {% bs_icon "binoculars" %}
@@ -67,12 +69,16 @@
 {% endpartialdef open-original-btn %}
 
 {% partialdef open-details-btn %}
-<a class="btn btn-outline-secondary text-start"
-           role="button"
-           href="{{ article|article_details_url }}?from_url={{ from_url|urlencode }}">
-    {% bs_icon "eye" %}
-    <span class="d-none d-md-inline">{% translate "Details" context "Article actions" %}</span>
-        </a>
+    <a class="btn btn-outline-secondary text-start mark-as-read"
+       role="button"
+        {% if not article.was_opened and not for_article_details %}
+       data-mark-as-read="{{ article|opened_action_url }}"
+        {% endif %}
+       target="_blank"
+       href="{{ article|article_details_url }}?from_url={{ from_url|urlencode }}">
+        {% bs_icon "eye" %}
+        <span class="d-none d-md-inline">{% translate "Details" context "Article actions" %}</span>
+    </a>
 {% endpartialdef open-details-btn %}
 
 {% partialdef read-btn %}
@@ -114,24 +120,6 @@
                value="{{ displayed_reading_list.id }}" />
     {% endif %}
 </form>
-{% if not article.was_opened and not for_article_details %}
-    <form id="mark-article-as-opened-form-{{ article.id }}"
-          class="visually-hidden"
-          aria-hidden="true"
-          method="post"
-          action="{{ article|opened_action_url }}"
-          hx-trigger="submit"
-          hx-boost="true"
-          hx-swap="outerHTML show:none"
-          hx-target="#{{ article|article_card_id }}"
-          hx-push-url="false">
-        {% csrf_token %}
-        <input type="hidden"
-               name="displayed_reading_list_id"
-               value="{{ displayed_reading_list.id }}" />
-        <input type="hidden" name="from_url" value="{{ from_url }}" />
-    </form>
-{% endif %}
 <div class="{% if vertical_group %}btn-group-vertical w-100{% else %}btn-group{% endif %}"
      role="group">
     {% if for_article_details and vertical_group %}

@@ -24,20 +24,19 @@
   };
 
   const setupReadAction = () => {
-    for (const openOriginalButton of document.querySelectorAll(".open-original")) {
+    for (const openOriginalButton of document.querySelectorAll(".mark-as-read")) {
       openOriginalButton.addEventListener("click", openAndMarkAsRead);
       openOriginalButton.addEventListener("auxclick", openAndMarkAsRead);
     }
   };
 
-  const openAndMarkAsRead = (event) => {
-    const articleId = event.currentTarget.dataset.articleId;
-    const htmxForm = document.querySelector(`#mark-article-as-opened-form-${articleId}`);
-    if (htmxForm) {
-      htmx.trigger(htmxForm, "submit");
-      event.currentTarget.removeEventListener("click", openAndMarkAsRead);
-      event.currentTarget.removeEventListener("auxclick", openAndMarkAsRead);
-    }
+  const openAndMarkAsRead = async (event) => {
+    const actionUrl = event.currentTarget.dataset.markAsRead;
+    if (!actionUrl) return;
+
+    const htmxDefaultHeaders = JSON.parse(document.body.getAttribute("hx-headers:inherited"));
+    // The keepalive option should help to do the request on PWA when the other tab is opened.
+    await fetch(actionUrl, { method: "POST", headers: htmxDefaultHeaders, keepalive: true });
   };
 
   const setupReadOnScroll = () => {

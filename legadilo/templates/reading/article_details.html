@@ -23,15 +23,6 @@
 {% endblock title %}
 
 {% block content %}
-    {% if not article.was_opened %}
-        <form class="visually-hidden"
-              aria-hidden="true"
-              hx-trigger="load"
-              hx-post="{{ article|opened_action_url }}"
-              hx-swap="none">
-            {% csrf_token %}
-        </form>
-    {% endif %}
     <div class="container-fluid px-0">
         <div class="mt-1 mt-md-2 row px-0 mx-0 justify-content-center">
             <aside class="col col-2 d-none d-md-block article-aside">
