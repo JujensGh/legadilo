@@ -84,7 +84,7 @@
                             form="delete-group-and-all-articles">
                         <span class="icon-indicator">
                             {% include "core/partials/button_loading_indicator.html" %}
-                            {% include "core/partials/bs-icon.html" with name="trash" %}
+                            {% bs_icon "trash" %}
                         </span>
                         {% translate "Delete group and all its articles" %}
                     </button>
@@ -92,7 +92,7 @@
                             form="delete-group">
                         <span class="icon-indicator">
                             {% include "core/partials/button_loading_indicator.html" %}
-                            {% include "core/partials/bs-icon.html" with name="trash" %}
+                            {% bs_icon "trash" %}
                         </span>
                         {% translate "Delete group" %}
                     </button>

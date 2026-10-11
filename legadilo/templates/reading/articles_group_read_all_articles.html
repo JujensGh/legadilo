@@ -23,13 +23,13 @@
                 <div id="article-side-actions" class="btn-group-vertical w-100">
                     <button type="submit" class="btn btn-primary text-start"
                             form="mark-all-articles-as-read">
-                        {% include "core/partials/bs-icon.html" with name="book" %}
+                        {% bs_icon "book" %}
                         <span
                             class="d-none d-md-inline">{% translate "Mark all as read" %}</span>
                     </button>
                     <a class="btn btn-outline-secondary text-start"
                        href="{{ group|articles_group_details_url }}">
-                        {% include "core/partials/bs-icon.html" with name="arrow-left" %}
+                        {% bs_icon "arrow-left" %}
                         <span class="d-none d-md-inline">{% translate "Back" %}</span>
                     </a>
                 </div>
@@ -61,11 +61,11 @@
                     <div class="btn-group">
                         <a class="btn btn-outline-secondary"
                            href="{{ group|articles_group_details_url }}">
-                            {% include "core/partials/bs-icon.html" with name="arrow-left" %}
+                            {% bs_icon "arrow-left" %}
                             <span class="d-none d-md-inline">{% translate "Back" %}</span>
                         </a>
                         <button type="button" class="btn btn-primary">
-                            {% include "core/partials/bs-icon.html" with name="book" %}
+                            {% bs_icon "book" %}
                             <span class="d-none d-md-inline">
                                 {% translate "Mark all as read" %}
                             </span>
@@ -83,7 +83,7 @@
                     </nav>
                     <div class="text-center mt-2">
                         <a href="#legadilo-group-title">
-                            {% include "core/partials/bs-icon.html" with name="arrow-up-circle" %}
+                            {% bs_icon "arrow-up-circle" %}
                             {% translate "Back to top" %}
                         </a>
                     </div>

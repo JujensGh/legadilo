@@ -29,7 +29,7 @@
             form="{{ article|delete_article_form_id }}">
         <span class="icon-indicator {{ article|article_action_indicator }}">
             {% include "core/partials/button_loading_indicator.html" %}
-            {% include "core/partials/bs-icon.html" with name="trash" %}
+            {% bs_icon "trash" %}
         </span>
         <span class="d-none d-md-inline">{% translate "Delete" %}</span>
     </button>

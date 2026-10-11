@@ -143,7 +143,7 @@
                                     <form action="{% url 'reading:search' %}" method="get">
                                         <div class="input-group">
                                             <span id="articles-search-glass"
-                                                  class="input-group-text">{% include "core/partials/bs-icon.html" with name="search" %}</span>
+                                                  class="input-group-text">{% bs_icon "search" %}</span>
                                             <input type="text"
                                                    class="form-control"
                                                    name="q"
@@ -161,7 +161,7 @@
                                     <a class="nav-link {% if ACTIVE_VIEW_NAME == 'reading:add_article' %}active{% endif %}"
                                        {% if ACTIVE_VIEW_NAME == 'reading:add_article' %}aria-current="page"{% endif %}
                                        href="{% url 'reading:add_article' %}">
-                                        {% include "core/partials/bs-icon.html" with name="file-earmark-plus" %}
+                                        {% bs_icon "file-earmark-plus" %}
                                         {% translate "Add an article" %}
                                     </a>
                                 </li>
@@ -171,7 +171,7 @@
                                        href="{% url 'users:list_notifications' %}">
                                                 <span class="position-relative">
                                                     {% if user.count_unread_notifications > 0 %}
-                                                        {% include "core/partials/bs-icon.html" with name="bell-fill" %}
+                                                        {% bs_icon "bell-fill" %}
                                                         <span
                                                             class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                                                             <span
@@ -187,7 +187,7 @@
                                                             </span>
                                                         </span>
                                                     {% else %}
-                                                        {% include "core/partials/bs-icon.html" with name="bell" %}
+                                                        {% bs_icon "bell" %}
                                                     {% endif %}
                                                 </span>
                                     </a>
@@ -200,7 +200,7 @@
                                        data-bs-toggle="dropdown"
                                        data-bs-reference="parent"
                                        aria-expanded="false">
-                                        {% include "core/partials/bs-icon.html" with name="person-circle" %}
+                                        {% bs_icon "person-circle" %}
                                         <span
                                             class="visually-hidden">{% translate "Profile menu" %}</span>
                                     </a>

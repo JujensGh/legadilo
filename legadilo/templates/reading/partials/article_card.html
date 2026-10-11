@@ -11,7 +11,7 @@
                        href="{{ article.url }}"
                        target="_blank">
                         {{ article.title }}
-                        <span>{% include "core/partials/bs-icon.html" with name="box-arrow-up-right" %}</span>
+                        <span>{% bs_icon "box-arrow-up-right" %}</span>
                     </a>
                 {% else %}
                     <a href="{{ article|article_details_url }}?from_url={{ from_url|urlencode }}">{{ article.title }}</a>
