@@ -98,7 +98,7 @@ class TestUpdateArticleView:
         assert response.template_name == "reading/update_article_action.html"
         assert response.context_data["articles"] == [self.article]
         assert response.context_data["delete_article_card"]
-        assert response["HX-Reswap"] == "outerHTML show:none swap:1s"
+        assert response["HX-Reswap"] == "delete swap:1s"
         assert response["HX-Retarget"] == f"#article-card-{self.article.id}"
         self.article.refresh_from_db()
         assert self.article.is_for_later
@@ -128,7 +128,7 @@ class TestUpdateArticleView:
         assert response.template_name == "reading/update_article_action.html"
         assert response.context_data["articles"] == [self.article]
         assert response.context_data["delete_article_card"]
-        assert response["HX-Reswap"] == "outerHTML show:none swap:1s"
+        assert response["HX-Reswap"] == "delete swap:1s"
         assert response["HX-Retarget"] == f"#article-card-{self.article.id}"
         self.article.refresh_from_db()
         assert not self.article.is_for_later

@@ -89,6 +89,11 @@ html {
     max-height 1s ease-out;
 }
 
+.htmx-swapping:not(.article-card-container) {
+  opacity: 0;
+  transition: opacity 300ms ease-out;
+}
+
 .refresh-btn {
   right: 0.5rem;
   bottom: 0.5rem;

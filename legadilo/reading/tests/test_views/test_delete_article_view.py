@@ -45,7 +45,7 @@ class TestDeleteArticleView:
             response = logged_in_sync_client.post(self.url, {"from_url": self.reading_list_url})
 
         assert response.status_code == HTTPStatus.OK
-        assert response["HX-Reswap"] == "outerHTML show:none swap:1s"
+        assert response["HX-Reswap"] == "delete swap:1s"
         assert response["HX-Retarget"] == f"#article-card-{self.article.id}"
         assert Article.objects.count() == 0
 
@@ -69,7 +69,7 @@ class TestDeleteArticleView:
             "is_reading_on_scroll_enabled": False,
             "auto_refresh_interval": 0,
         }
-        assert response["HX-Reswap"] == "outerHTML show:none swap:1s"
+        assert response["HX-Reswap"] == "delete swap:1s"
         assert response["HX-Retarget"] == f"#article-card-{self.article.id}"
         assert Article.objects.count() == 0
         assert b"<article" not in response.content

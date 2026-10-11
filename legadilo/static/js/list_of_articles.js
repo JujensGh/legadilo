@@ -119,17 +119,18 @@
       const waitForRequestEnd = (event) => {
         if (
           event.detail &&
-          event.detail.pathInfo &&
-          event.detail.pathInfo.requestPath === formToSubmit.getAttribute("action")
+          event.detail.ctx &&
+          event.detail.ctx.request &&
+          event.detail.ctx.request.action === formToSubmit.getAttribute("action")
         ) {
           console.log(`Done for ${articleIdsToMarkAsRead}, resolving promise.`);
-          htmx.off("htmx:afterRequest", waitForRequestEnd);
+          document.removeEventListener("htmx:after:request", waitForRequestEnd);
           clearTimeout(forceResolutionTimer);
           resolve();
         }
       };
       document.getElementById("bulk-mark-as-read-data").value = articleIdsToMarkAsRead.join(",");
-      htmx.on("htmx:afterRequest", waitForRequestEnd);
+      htmx.on("htmx:after:request", waitForRequestEnd);
       htmx.trigger("#bulk-mark-as-read-form", "submit");
     });
   };

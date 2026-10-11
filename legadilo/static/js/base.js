@@ -27,11 +27,11 @@
       const cancelButton = dialogElt.querySelector("#danger-modal-cancel-btn");
 
       const handleClose = () => {
-        dialogElt.removeEventListener("close", closeWithAnimation);
-        dialogElt.removeEventListener("click", closeOnClickAway);
+        dialogElt.removeEventListener("close", handleCancel);
+        dialogElt.removeEventListener("click", handleCloseOnClickAway);
         proceedButton.removeEventListener("click", handleProceed);
-        closeButton.removeEventListener("click", closeWithAnimation);
-        cancelButton.removeEventListener("click", closeWithAnimation);
+        closeButton.removeEventListener("click", handleCancelWithAnimation);
+        cancelButton.removeEventListener("click", handleCancelWithAnimation);
       };
 
       const closeWithAnimation = () => {
@@ -47,10 +47,21 @@
         );
       };
 
-      const closeOnClickAway = (event) => {
+      const handleCloseOnClickAway = (event) => {
         if (event.target === dialogElt) {
+          htmxEvent.detail.dropRequest();
           closeWithAnimation();
         }
+      };
+
+      const handleCancel = () => {
+        handleClose();
+        htmxEvent.detail.dropRequest();
+      };
+
+      const handleCancelWithAnimation = () => {
+        closeWithAnimation();
+        htmxEvent.detail.dropRequest();
       };
 
       const handleProceed = () => {
@@ -66,18 +77,18 @@
           const buttonName = htmxEvent.explicitOriginalTarget.getAttribute("name");
           htmxEvent.target.setAttribute("hx-vals", JSON.stringify({ [buttonName]: "" }));
         }
-        htmxEvent.detail.issueRequest(true);
+        htmxEvent.detail.issueRequest();
         htmxEvent.target.removeAttribute("hx-vals");
       };
 
       // In this case, the browser will close the dialog with a non-cancellable event. If the
       // animation is set up, the dialog will close automatically due to our handler on the next
       // open as part of the animation that didn't run previously.
-      dialogElt.addEventListener("close", handleClose);
-      dialogElt.addEventListener("click", closeOnClickAway);
+      dialogElt.addEventListener("close", handleCancel);
+      dialogElt.addEventListener("click", handleCloseOnClickAway);
       proceedButton.addEventListener("click", handleProceed);
-      closeButton.addEventListener("click", closeWithAnimation);
-      cancelButton.addEventListener("click", closeWithAnimation);
+      closeButton.addEventListener("click", handleCancelWithAnimation);
+      cancelButton.addEventListener("click", handleCancelWithAnimation);
       dialogElt.showModal();
     });
   };

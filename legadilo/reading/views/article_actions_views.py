@@ -58,7 +58,7 @@ def update_article_view(
     hx_target = f"#{article_card_id(article)}"
     headers = (
         {
-            "HX-Reswap": "outerHTML show:none swap:1s",
+            "HX-Reswap": "delete swap:1s",
             "HX-Retarget": hx_target,
         }
         if ctx["delete_article_card"]
