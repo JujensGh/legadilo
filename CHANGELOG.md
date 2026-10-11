@@ -10,6 +10,8 @@ Summary of main functional changes.
 
 ## Unreleased
 
+- Disable statement timeout for long migration.
+
 ## 26.10.1
 
 - Fix the order of search results:

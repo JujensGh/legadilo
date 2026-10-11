@@ -13,6 +13,10 @@ class Migration(migrations.Migration):
     if connection.vendor == "postgresql":
         operations = [
             migrations.RunSQL(
+                sql="SET LOCAL statement_timeout = 0",
+                reverse_sql="",
+            ),
+            migrations.RunSQL(
                 "VACUUM FULL",
                 reverse_sql="",
             ),
