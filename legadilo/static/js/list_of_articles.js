@@ -80,7 +80,7 @@
       return;
     }
 
-    // To make sure counters are correct at the end, we run the requests on after the other so the
+    // To make sure counters are correct at the end, we run the requests one after the other, so the
     // last one to complete has the correct count.
     console.log(`Adding ${articleIdsToMarkAsRead} to the promise chain.`);
     readOnScrollSequence = readOnScrollSequence.then(() =>
