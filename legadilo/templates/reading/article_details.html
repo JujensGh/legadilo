@@ -130,9 +130,10 @@
                                 {% if article.next_article_of_group %}
                                     <button class="btn btn-outline-primary"
                                             name="read_and_go_to_next"
-                                            type="submit"
-                                            form="{{ article|update_article_form_id }}"
-                                            formaction="{{ article|read_action_url }}">
+                                            type="button"
+                                            hx-indicator=".{{ article|article_action_indicator }}"
+                                            hx-post="{{ article|read_action_url }}"
+                                            hx-vals='{"for_article_details": true }'>
                                         {% translate "Read and go to next" %}
                                     </button>
                                 {% endif %}

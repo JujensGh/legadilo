@@ -28,7 +28,7 @@ def delete_article_view(request: AuthenticatedHttpRequest, article_id: int) -> H
 
     article.delete()
 
-    for_article_details = request.POST.get("for_article_details", "")
+    for_article_details = request.POST.get("for_article_details", "").lower() == "true"
     if for_article_details:
         return redirect_to_reading_list(request)
 

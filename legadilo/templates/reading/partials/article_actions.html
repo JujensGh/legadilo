@@ -11,9 +11,9 @@
 
 {% partialdef favorite-btn %}
     <button class="btn btn-outline-secondary text-start"
-            type="submit"
-            form="{{ article|update_article_form_id }}"
-            formaction="{{ article|favorite_action_url }}">
+            type="button"
+            hx-indicator=".{{ article|article_action_indicator }}"
+            hx-post="{{ article|favorite_action_url }}">
         {% if article.is_favorite %}
             <span class="icon-indicator {{ article|article_action_indicator }}">
                 {% loading_indicator %}
@@ -34,9 +34,9 @@
 
 {% partialdef later-btn %}
     <button class="btn btn-outline-secondary text-start"
-            type="submit"
-            form="{{ article|update_article_form_id }}"
-            formaction="{{ article|for_later_action_url }}">
+            type="button"
+            hx-indicator=".{{ article|article_action_indicator }}"
+            hx-post="{{ article|for_later_action_url }}">
         {% if article.is_for_later %}
             <span class="icon-indicator {{ article|article_action_indicator }}">
                 {% loading_indicator %}
@@ -83,9 +83,9 @@
 
 {% partialdef read-btn %}
     <button class="btn btn-primary text-start"
-            type="submit"
-            form="{{ article|update_article_form_id }}"
-            formaction="{{ article|read_action_url }}">
+            type="button"
+            hx-indicator=".{{ article|article_action_indicator }}"
+            hx-post="{{ article|read_action_url }}">
         {% if article.is_read %}
             <span class="icon-indicator {{ article|article_action_indicator }}">
                 {% loading_indicator %}
@@ -103,25 +103,9 @@
     </button>
 {% endpartialdef read-btn %}
 
-<form id="{{ article|update_article_form_id }}"
-      class="d-none"
-      aria-hidden="true"
-      method="post"
-      hx-indicator=".{{ article|article_action_indicator }}"
-      hx-boost="true"
-      hx-push-url="false">
-    {% csrf_token %}
-    <input type="hidden" name="from_url" value="{{ from_url }}" />
-    {% if for_article_details %}
-        <input type="hidden" name="for_article_details" value="true" />
-    {% else %}
-        <input type="hidden"
-               name="displayed_reading_list_id"
-               value="{{ displayed_reading_list.id }}" />
-    {% endif %}
-</form>
 <div class="{% if vertical_group %}btn-group-vertical w-100{% else %}btn-group{% endif %}"
-     role="group">
+     role="group"
+     hx-vals:inherited='{"displayed_reading_list_id": {{ displayed_reading_list.id|default:"null" }}, "from_url": "{{ from_url|default:"false" }}", "for_article_details": {% if for_article_details %}true{% else %}false{% endif %} }'>
     {% if for_article_details and vertical_group %}
         {% partial read-btn %}
         {% partial open-original-btn %}

@@ -95,16 +95,6 @@ def article_card_id(article: Article) -> str:
 
 
 @register.filter
-def delete_article_form_id(article: Article) -> str:
-    return f"delete-article-{article.id}"
-
-
-@register.filter
-def update_article_form_id(article: Article) -> str:
-    return f"update-article-actions-form-{article.id}"
-
-
-@register.filter
 @stringfilter
 def markdown(value: str) -> str:
     md = _get_markdown_it_instance()

@@ -39,7 +39,7 @@ def update_article_view(
     article = get_object_or_404(article_qs)
 
     is_read_status_update = constants.UpdateArticleActions.is_read_status_update(update_action)
-    for_article_details = request.POST.get("for_article_details", "")
+    for_article_details = request.POST.get("for_article_details", "").lower() == "true"
 
     if for_article_details:
         if is_read_status_update:
