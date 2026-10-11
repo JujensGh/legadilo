@@ -194,7 +194,7 @@ class ReadingList(models.Model):
         default=constants.ReadingListOrderDirection.DESC,
         max_length=10,
         help_text=_(
-            "How to sort the article. ASC will put the most recent articles first. DECS will put the least recent articles first."  # ruff:ignore[line-too-long]
+            "How to sort the articles. DESC will put the most recent articles first. ASC will put the least recent articles first. Articles without any date always come last."  # ruff:ignore[line-too-long]
         ),
     )
 

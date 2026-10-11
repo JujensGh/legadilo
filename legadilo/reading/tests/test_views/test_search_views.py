@@ -11,6 +11,7 @@ from django.urls import reverse
 
 from legadilo.conftest import assert_redirected_to_login_page
 from legadilo.core.utils.testing import AnyOfType, dict_to_query_dict
+from legadilo.core.utils.time_utils import utcdt
 from legadilo.feeds.models import Feed
 from legadilo.feeds.tests.factories import FeedFactory
 from legadilo.reading import constants
@@ -242,6 +243,26 @@ class TestSearchView:
         assert response.context_data["search_form"].is_valid()
         assert response.context_data["articles"] == [feed_article]
         assert response.context_data["total_results"] == 1
+
+    def test_search_with_order(self, user, logged_in_sync_client):
+        oldest_article = ArticleFactory(user=user, title="Claudius", published_at=utcdt(2024, 6, 1))
+        newest_article = ArticleFactory(
+            user=user, title="Claudius", published_at=utcdt(2024, 6, 30)
+        )
+
+        response_asc = logged_in_sync_client.get(
+            self.url,
+            data={"q": "Claudius", "order": constants.ArticleSearchOrderBy.ARTICLE_DATE_ASC},
+        )
+        response_desc = logged_in_sync_client.get(
+            self.url,
+            data={"q": "Claudius", "order": constants.ArticleSearchOrderBy.ARTICLE_DATE_DESC},
+        )
+
+        assert response_asc.status_code == HTTPStatus.OK
+        assert response_asc.context_data["articles"] == [oldest_article, newest_article]
+        assert response_desc.status_code == HTTPStatus.OK
+        assert response_desc.context_data["articles"] == [newest_article, oldest_article]
 
     def test_update_search(self, user, logged_in_sync_client):
         ArticleFactory(user=user, title="Claudius")

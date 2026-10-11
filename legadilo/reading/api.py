@@ -8,7 +8,7 @@ from typing import Annotated, Self
 from urllib.parse import urlparse
 
 from django.conf import settings
-from django.db import transaction
+from django.db import connection, transaction
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from ninja import Field, ModelSchema, Query, Router, Schema, Status
@@ -85,7 +85,13 @@ class OutArticleSchema(ModelSchema):
 
     class Meta:
         model = Article
-        exclude = ("user", "obj_created_at", "obj_updated_at")
+        exclude = (
+            "user",
+            "obj_created_at",
+            "obj_updated_at",
+            # Only exists on PostgreSQL and is only used to search articles.
+            *(("search_vector",) if connection.vendor == "postgresql" else ()),
+        )
 
 
 class ArticleCreation(Schema):

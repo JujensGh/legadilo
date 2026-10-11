@@ -9,7 +9,7 @@ from unittest.mock import patch
 
 import pytest
 import time_machine
-from django.db import connection, models
+from django.db import models
 
 from legadilo.core.utils.testing import serialize_for_snapshot
 from legadilo.core.utils.time_utils import utcdt, utcnow
@@ -577,6 +577,19 @@ class TestArticleQuerySet:
             article_no_dates,
         ]
 
+    def test_default_order_by_with_ties(self):
+        article_1 = ArticleFactory(title="Tied 1", published_at=None, updated_at=utcdt(2024, 5, 28))
+        article_2 = ArticleFactory(title="Tied 2", published_at=None, updated_at=utcdt(2024, 5, 28))
+        article_3 = ArticleFactory(title="No date", published_at=None, updated_at=None)
+
+        articles_order_desc = Article.objects.get_queryset().default_order_by()
+        articles_order_asc = Article.objects.get_queryset().default_order_by(
+            constants.ReadingListOrderDirection.ASC
+        )
+
+        assert list(articles_order_desc) == [article_2, article_1, article_3]
+        assert list(articles_order_asc) == [article_2, article_1, article_3]
+
     def test_for_cleanup(self, user, other_user):
         ArticleFactory(
             title="Unread not linked to a feed (to keep)",
@@ -698,35 +711,13 @@ class TestArticleQuerySet:
             .order_by("-rank")
         )
 
-        expected_searched_articles = [
+        assert searched_articles == [
             search_in_title,
             search_in_summary,
             search_in_authors,
             search_in_content,
             search_in_main_source_title,
         ]
-        if connection.vendor == "postgresql":
-            assert searched_articles == expected_searched_articles
-        else:
-            assert {article.id for article in searched_articles} == {
-                article.id for article in expected_searched_articles
-            }
-
-    def test_for_tags_search(self, user):
-        ArticleFactory(title="Claudius", user=user)
-        article = ArticleFactory(title="Correctly tagged", user=user)
-        tag_that_matches = TagFactory(title="Claudius", user=user)
-        article.tags.add(tag_that_matches)
-        other_article = ArticleFactory(title="Other article", user=user)
-        other_tag = TagFactory(title="Other tag", user=user)
-        other_article.tags.add(other_tag)
-        article.tags.add(other_tag)
-
-        searched_articles = list(
-            Article.objects.get_queryset().for_tags_search(ArticleFullTextSearchQuery(q="claudius"))
-        )
-
-        assert searched_articles == [article]
 
     def test_for_url_search(self, user):
         searched_url = "https://example.com/articles/1"
@@ -1342,19 +1333,6 @@ class TestArticleManager:
 
         assert found_articles == [article]
 
-    @pytest.mark.skipif(connection.vendor != "postgresql", reason="PostgreSQL specific test")
-    def test_search_with_tags_results(self, user, other_user):
-        ArticleFactory(title="Claudius other user", user=other_user)
-        search_in_title = ArticleFactory(user=user, title="Claudius")
-        search_query = ArticleFullTextSearchQuery(q="Claudius")
-        tagged_article = ArticleFactory(title="Tagged article", user=user)
-        tag = TagFactory(title="claudius", user=user)
-        tagged_article.tags.add(tag)
-
-        found_articles = list(Article.objects.search(user, search_query))
-
-        assert found_articles == [search_in_title, tagged_article]
-
     def test_search_with_advanced_filters(self, user, other_user):
         ArticleFactory(user=user, title="Claudius read", read_at=utcnow())
         ArticleFactory(user=user, title="Claudius", read_at=None)
@@ -1374,16 +1352,182 @@ class TestArticleManager:
 
         assert found_articles == [search_in_multiple_fields]
 
-    def test_search_order_by(self, user):
-        article_1 = ArticleFactory(title="Read at", user=user, read_at=utcdt(2024, 6, 1))
-        article_2 = ArticleFactory(title="Read at", user=user, read_at=utcdt(2024, 6, 30))
-        search_query = ArticleFullTextSearchQuery(
-            q="Read at", order=constants.ArticleSearchOrderBy.READ_AT_ASC
-        )
+    @pytest.mark.parametrize(
+        ("order", "expected_articles"),
+        [
+            pytest.param(
+                constants.ArticleSearchOrderBy.RANK_DESC,
+                ["title_match", "summary_match", "content_match"],
+                id="rank-desc",
+            ),
+            pytest.param(
+                constants.ArticleSearchOrderBy.RANK_ASC,
+                ["content_match", "summary_match", "title_match"],
+                id="rank-asc",
+            ),
+            pytest.param(
+                constants.ArticleSearchOrderBy.ARTICLE_SAVE_DATE_DESC,
+                ["summary_match", "content_match", "title_match"],
+                id="article-save-date-desc",
+            ),
+            pytest.param(
+                constants.ArticleSearchOrderBy.ARTICLE_SAVE_DATE_ASC,
+                ["title_match", "content_match", "summary_match"],
+                id="article-save-date-asc",
+            ),
+            pytest.param(
+                constants.ArticleSearchOrderBy.ARTICLE_DATE_DESC,
+                ["summary_match", "title_match", "content_match"],
+                id="article-date-desc",
+            ),
+            pytest.param(
+                constants.ArticleSearchOrderBy.ARTICLE_DATE_ASC,
+                ["title_match", "summary_match", "content_match"],
+                id="article-date-asc",
+            ),
+            pytest.param(
+                constants.ArticleSearchOrderBy.READ_AT_DESC,
+                ["content_match", "summary_match", "title_match"],
+                id="read-at-desc",
+            ),
+            pytest.param(
+                constants.ArticleSearchOrderBy.READ_AT_ASC,
+                ["summary_match", "content_match", "title_match"],
+                id="read-at-asc",
+            ),
+        ],
+    )
+    def test_search_order_by(
+        self, user, order: constants.ArticleSearchOrderBy, expected_articles: list[str]
+    ):
+        # obj_created_at is filled with auto_now_add: we must travel in time to control it.
+        with time_machine.travel("2024-01-01 12:00:00"):
+            title_match = ArticleFactory(
+                title="Claudius", user=user, published_at=utcdt(2024, 6, 1), read_at=None
+            )
+        with time_machine.travel("2024-01-02 12:00:00"):
+            content_match = ArticleFactory(
+                title="First other article",
+                user=user,
+                content="Claudius",
+                published_at=None,
+                read_at=utcdt(2024, 6, 30),
+            )
+        with time_machine.travel("2024-01-03 12:00:00"):
+            summary_match = ArticleFactory(
+                title="Second other article",
+                user=user,
+                summary="Claudius",
+                published_at=utcdt(2024, 6, 20),
+                read_at=utcdt(2024, 6, 10),
+            )
+        articles_by_match = {
+            "title_match": title_match,
+            "content_match": content_match,
+            "summary_match": summary_match,
+        }
+        search_query = ArticleFullTextSearchQuery(q="Claudius", order=order)
 
         articles = list(Article.objects.search(user, search_query))
 
-        assert articles == [article_1, article_2]
+        assert articles == [articles_by_match[key] for key in expected_articles]
+
+    def test_search_order_by_desc_puts_null_values_last(self, user):
+        article_without_dates = ArticleFactory(
+            title="Read at", user=user, read_at=None, published_at=None
+        )
+        article_oldest = ArticleFactory(
+            title="Read at", user=user, read_at=utcdt(2024, 6, 1), published_at=utcdt(2024, 6, 1)
+        )
+        article_newest = ArticleFactory(
+            title="Read at", user=user, read_at=utcdt(2024, 6, 30), published_at=utcdt(2024, 6, 30)
+        )
+
+        articles_by_read_at = list(
+            Article.objects.search(
+                user,
+                ArticleFullTextSearchQuery(
+                    q="Read at", order=constants.ArticleSearchOrderBy.READ_AT_DESC
+                ),
+            )
+        )
+        articles_by_published_at = list(
+            Article.objects.search(
+                user,
+                ArticleFullTextSearchQuery(
+                    q="Read at", order=constants.ArticleSearchOrderBy.ARTICLE_DATE_DESC
+                ),
+            )
+        )
+
+        assert articles_by_read_at == [article_newest, article_oldest, article_without_dates]
+        assert articles_by_published_at == [article_newest, article_oldest, article_without_dates]
+
+    def test_search_url_with_rank_order(self, user):
+        article = ArticleFactory(title="Test", user=user)
+        search_query = ArticleFullTextSearchQuery(
+            q=article.url,
+            search_type=constants.ArticleSearchType.URL,
+            order=constants.ArticleSearchOrderBy.RANK_DESC,
+        )
+
+        found_articles = list(Article.objects.search(user, search_query))
+
+        assert found_articles == [article]
+
+    def test_search_without_query_with_explicit_order(self, user):
+        feed = FeedFactory(user=user)
+        article_oldest = ArticleFactory(user=user, published_at=utcdt(2024, 6, 1))
+        article_newest = ArticleFactory(user=user, published_at=utcdt(2024, 6, 30))
+        FeedArticleFactory(feed=feed, article=article_oldest)
+        FeedArticleFactory(feed=feed, article=article_newest)
+
+        articles_by_rank = list(
+            Article.objects.search(
+                user,
+                ArticleFullTextSearchQuery(
+                    linked_with_feeds=frozenset([feed.id]),
+                    order=constants.ArticleSearchOrderBy.RANK_DESC,
+                ),
+            )
+        )
+        articles_by_published_at = list(
+            Article.objects.search(
+                user,
+                ArticleFullTextSearchQuery(
+                    linked_with_feeds=frozenset([feed.id]),
+                    order=constants.ArticleSearchOrderBy.ARTICLE_DATE_DESC,
+                ),
+            )
+        )
+
+        # All articles have the same neutral rank: only the tiebreak on the id can order them.
+        assert articles_by_rank == [article_newest, article_oldest]
+        assert articles_by_published_at == [article_newest, article_oldest]
+
+    def test_search_rank_order(self, user):
+        match_in_title = ArticleFactory(title="Claudius", user=user)
+        match_in_content = ArticleFactory(title="Other article", user=user, content="Claudius")
+
+        articles_rank_desc = list(
+            Article.objects.search(
+                user,
+                ArticleFullTextSearchQuery(
+                    q="Claudius", order=constants.ArticleSearchOrderBy.RANK_DESC
+                ),
+            )
+        )
+        articles_rank_asc = list(
+            Article.objects.search(
+                user,
+                ArticleFullTextSearchQuery(
+                    q="Claudius", order=constants.ArticleSearchOrderBy.RANK_ASC
+                ),
+            )
+        )
+
+        assert articles_rank_desc == [match_in_title, match_in_content]
+        assert articles_rank_asc == [match_in_content, match_in_title]
 
     def test_cleanup_articles(self, user):
         ArticleFactory(

@@ -43,7 +43,7 @@ services:
       - postgres
       - all
     volumes:
-      - legadilo_local_postgres_data:/var/lib/postgresql/data
+      - legadilo_local_postgres_data:/var/lib/postgresql
       - legadilo_local_postgres_data_backups:/backups
     env_file:
       - ./devops/envs/local/postgres

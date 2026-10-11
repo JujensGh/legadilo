@@ -13,10 +13,15 @@ from typing import TYPE_CHECKING, Self, assert_never
 
 from dateutil.relativedelta import relativedelta
 from django.contrib.postgres.indexes import GinIndex
-from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
+from django.contrib.postgres.search import (
+    SearchQuery,
+    SearchRank,
+    SearchVector,
+    SearchVectorField,
+)
 from django.core.paginator import Paginator
 from django.db import connection, models, transaction
-from django.db.models.functions import Coalesce, Lower
+from django.db.models.functions import Cast, Coalesce, Left
 from django.utils.translation import gettext_lazy as _
 from ninja.schema import Schema
 from pydantic import ConfigDict
@@ -34,7 +39,7 @@ from legadilo.core.utils.validators import (
 from legadilo.reading import constants
 from legadilo.reading.models.tag import ArticleTag
 
-from ...core.utils.db import ExtractEpoch
+from ...core.utils.db import ExtractEpoch, RemoveExtraSpaces, StripHtmlTags
 from .article_fetch_error import ArticleFetchError
 
 if TYPE_CHECKING:
@@ -55,12 +60,40 @@ else:
 logger = logging.getLogger(__name__)
 
 
+# The search vector cannot be too big or it won't be indexed. It must be under 1MB with all its
+# data. According to my tests, these values are fine and allow for very long articles (over 2h of
+# reading time) to be indexed. If articles are cut, what's indexed should be enough to find the
+# article.
+SEARCH_CONTENT_MAX_LENGTH = 200_000
+SEARCH_SUMMARY_MAX_LENGTH = 20_000
+SEARCH_AUTHORS_MAX_LENGTH = 5_000
 SEARCH_VECTOR = (
     SearchVector("title", config="english", weight="A")
-    + SearchVector("summary", config="english", weight="B")
-    + SearchVector("content", config="english", weight="C")
-    + SearchVector("authors", config="english", weight="C")
+    + SearchVector(
+        Left(RemoveExtraSpaces(StripHtmlTags("summary")), SEARCH_SUMMARY_MAX_LENGTH),
+        config="english",
+        weight="B",
+    )
+    + SearchVector(
+        Left(RemoveExtraSpaces(StripHtmlTags("content")), SEARCH_CONTENT_MAX_LENGTH),
+        config="english",
+        weight="C",
+    )
+    + SearchVector(
+        Left(Cast("authors", output_field=models.TextField()), SEARCH_AUTHORS_MAX_LENGTH),
+        config="english",
+        weight="C",
+    )
     + SearchVector("main_source_title", config="english", weight="D")
+)
+# Used to rank the search results when we can't use the full text search of PostgreSQL. The weights
+# mirror the ones of SEARCH_VECTOR.
+FALLBACK_SEARCH_WEIGHTS = (
+    ("title", 1.0),
+    ("summary", 0.4),
+    ("authors", 0.25),
+    ("content", 0.2),
+    ("main_source_title", 0.1),
 )
 DEFAULT_INDEXES = [
     models.Index(
@@ -131,9 +164,9 @@ class ArticleFullTextSearchQuery(ArticleSearchQuery):
             case constants.ArticleSearchOrderBy.RANK_ASC:
                 return "rank"
             case constants.ArticleSearchOrderBy.ARTICLE_SAVE_DATE_DESC:
-                return "-obj_updated_at"
+                return "-obj_created_at"
             case constants.ArticleSearchOrderBy.ARTICLE_SAVE_DATE_ASC:
-                return "obj_updated_at"
+                return "obj_created_at"
             case constants.ArticleSearchOrderBy.ARTICLE_DATE_DESC:
                 return "-published_at"
             case constants.ArticleSearchOrderBy.ARTICLE_DATE_ASC:
@@ -144,6 +177,28 @@ class ArticleFullTextSearchQuery(ArticleSearchQuery):
                 return "read_at"
             case _:
                 assert_never(self.order)
+
+
+def _build_order_by(order_by: str) -> tuple[models.OrderBy, models.OrderBy]:
+    if order_by.startswith("-"):
+        return (
+            models.F(order_by.removeprefix("-")).desc(nulls_last=True),
+            models.F("id").desc(),
+        )
+
+    return models.F(order_by).asc(nulls_last=True), models.F("id").desc()
+
+
+def _build_fallback_rank(query: str) -> models.Expression:
+    cases = [
+        models.When(models.Q(**{f"{field}__icontains": query}), then=models.Value(weight))
+        for field, weight in FALLBACK_SEARCH_WEIGHTS
+    ]
+    return models.Case(
+        *cases,
+        default=models.Value(0.0),
+        output_field=models.FloatField(),
+    )
 
 
 def _build_basic_filters_from_reading_list(search_query: ArticleSearchQuery) -> models.Q:  # ruff:ignore[complex-structure, too-many-branches]
@@ -227,8 +282,13 @@ def _build_filter_by_tag_ids(
     qs: ArticleQuerySet, tags_search: ArticlesTagsSearch
 ) -> tuple[ArticleQuerySet, models.Q]:
     filters = models.Q()
+    # Only count tags when needed: counting requires a join on tags and a GROUP BY on articles.
+    aliases = {}
 
     if tags_search.tag_ids_to_include:
+        aliases[tags_search.count_tags_to_include_alias] = models.Count(
+            "tags", filter=models.Q(tags__id__in=tags_search.tag_ids_to_include)
+        )
         match tags_search.include_tag_operator:
             case constants.ReadingListTagOperator.ALL:
                 filters &= models.Q(**{
@@ -240,6 +300,9 @@ def _build_filter_by_tag_ids(
                 assert_never(tags_search.include_tag_operator)
 
     if tags_search.tag_ids_to_exclude:
+        aliases[tags_search.count_tags_to_exclude_alias] = models.Count(
+            "tags", filter=models.Q(tags__id__in=tags_search.tag_ids_to_exclude)
+        )
         match tags_search.exclude_tag_operator:
             case constants.ReadingListTagOperator.ALL:
                 filters &= ~models.Q(**{
@@ -250,14 +313,10 @@ def _build_filter_by_tag_ids(
             case _:
                 assert_never(tags_search.exclude_tag_operator)
 
-    return qs.alias(**{
-        tags_search.count_tags_to_include_alias: models.Count(
-            "tags", filter=models.Q(tags__id__in=tags_search.tag_ids_to_include)
-        ),
-        tags_search.count_tags_to_exclude_alias: models.Count(
-            "tags", filter=models.Q(tags__id__in=tags_search.tag_ids_to_exclude)
-        ),
-    }), filters
+    if aliases:
+        qs = qs.alias(**aliases)
+
+    return qs, filters
 
 
 class ArticleQuerySet(models.QuerySet["Article"]):
@@ -377,7 +436,7 @@ class ArticleQuerySet(models.QuerySet["Article"]):
 
         return self.alias(
             alias_date_field_order=Coalesce(models.F("updated_at"), models.F("published_at"))
-        ).order_by(order)
+        ).order_by(order, models.F("id").desc())
 
     def for_deletion(self) -> Self:
         return self.prefetch_related("feed_articles", "feed_articles__feed")
@@ -425,28 +484,14 @@ class ArticleQuerySet(models.QuerySet["Article"]):
                 search_type=search_query.search_type.value,
                 config="english",
             )
-            return (
-                self
-                .alias(search=SEARCH_VECTOR)
-                .annotate(rank=SearchRank(SEARCH_VECTOR, full_text_search_query))
-                .filter(search=full_text_search_query)
-            )
+            return self.annotate(
+                rank=SearchRank(models.F("search_vector"), full_text_search_query)
+            ).filter(search_vector=full_text_search_query)
 
-        return self.alias(rank=models.F("obj_updated_at")).filter(
-            models.Q(title__icontains=search_query.q)
-            | models.Q(summary__icontains=search_query.q)
-            | models.Q(content__icontains=search_query.q)
-            | models.Q(authors__icontains=search_query.q)
-            | models.Q(main_source_title__icontains=search_query.q)
-        )
+        return self.annotate(rank=_build_fallback_rank(search_query.q)).filter(rank__gt=0)
 
-    def for_tags_search(self, search_query: ArticleFullTextSearchQuery) -> Self:
-        return (
-            self
-            .alias(lower_tags_title=Lower("tags__title"))
-            .annotate(rank=models.Value(0))
-            .filter(lower_tags_title=search_query.q.lower())
-        )
+    def with_placeholder_rank(self):
+        return self.annotate(rank=models.Value(0.0))
 
     def for_url_search(self, urls: list[str]) -> Self:
         filters = models.Q()
@@ -463,7 +508,11 @@ class ArticleManager(models.Manager["Article"]):
     _hints: dict
 
     def get_queryset(self) -> ArticleQuerySet:
-        return ArticleQuerySet(model=self.model, using=self._db, hints=self._hints)
+        qs = ArticleQuerySet(model=self.model, using=self._db, hints=self._hints)
+        if connection.vendor == "postgresql":
+            # The search vector is only used to search articles. Don't load it otherwise.
+            qs = qs.defer("search_vector")  # type: ignore[misc]
+        return qs
 
     @transaction.atomic()
     def save_from_list_of_data(
@@ -797,18 +846,13 @@ class ArticleManager(models.Manager["Article"]):
             )
 
         if search_query.search_type == constants.ArticleSearchType.URL:
-            articles_qs = articles_qs.for_url_search([search_query.q])
+            articles_qs = articles_qs.for_url_search([search_query.q]).with_placeholder_rank()
         elif search_query.q:
-            full_text_articles_qs = articles_qs.for_search(search_query)
-            if connection.vendor == "postgresql":
-                tags_articles_qs = articles_qs.for_tags_search(search_query)
-                articles_qs = tags_articles_qs.union(full_text_articles_qs)
-            else:
-                articles_qs = full_text_articles_qs
+            articles_qs = articles_qs.for_search(search_query)
+        else:
+            articles_qs = articles_qs.with_placeholder_rank()
 
-            articles_qs = articles_qs.order_by(search_query.order_by, "id")
-
-        return articles_qs
+        return articles_qs.order_by(*_build_order_by(search_query.order_by))
 
     def cleanup_articles(self):
         return self.get_queryset().for_cleanup().delete()
@@ -996,6 +1040,13 @@ class Article(models.Model):
         auto_now=True,
         help_text=_("Technical date for the last update of the article in the database."),
     )
+    if connection.vendor == "postgresql":
+        # Stored to avoid computing the vector of each article on each search.
+        search_vector = models.GeneratedField(
+            expression=SEARCH_VECTOR,
+            output_field=SearchVectorField(),
+            db_persist=True,
+        )
 
     objects = ArticleManager()
 
@@ -1025,7 +1076,7 @@ class Article(models.Model):
             indexes = [
                 *DEFAULT_INDEXES,
                 GinIndex(
-                    SEARCH_VECTOR,
+                    fields=["search_vector"],
                     name="%(app_label)s_%(class)s_search_vector",
                 ),
             ]

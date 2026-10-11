@@ -46,6 +46,7 @@ class SearchForm(forms.Form):
         required=False,
         choices=constants.ArticleSearchType.choices,
         initial=constants.ArticleSearchType.PLAIN,
+        label=_("Search type"),
     )
     # Dates
     order = forms.ChoiceField(
@@ -300,9 +301,11 @@ def search_view(request: AuthenticatedHttpRequest) -> TemplateResponse:
     if request.method == "POST":
         # We update the articles of the current search.
         articles_qs = _search(request.user, search_form)
-        # articles_qs is based on a union, so we can't rely on filter or paginators. Since we need
+        # articles_qs has annotations (like the rank) we can't use with update. Since we need
         # these features, we extract the ids of the articles to update and build a new QS.
-        article_ids_to_update = set(articles_qs.values_list("id", flat=True))
+        article_ids_to_update = set(
+            articles_qs[: constants.MAX_OBJECTS_PER_PAGE].values_list("id", flat=True)
+        )
         status, update_articles_form = update_list_of_articles(
             request, Article.objects.get_queryset().filter(id__in=article_ids_to_update)
         )
@@ -310,7 +313,8 @@ def search_view(request: AuthenticatedHttpRequest) -> TemplateResponse:
     # Articles have been updated. Some may not be part of the search anymore. Rerun it.
     articles_qs = _search(request.user, search_form)
     articles = list(articles_qs[: constants.MAX_OBJECTS_PER_PAGE])
-    total_results = articles_qs.count()
+    # Strip what is useless to count articles to make the query faster.
+    total_results = articles_qs.order_by().values("id").count()
 
     return TemplateResponse(
         request,

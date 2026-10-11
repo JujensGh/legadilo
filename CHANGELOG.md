@@ -10,6 +10,20 @@ Summary of main functional changes.
 
 ## Unreleased
 
+- Fix the order of search results:
+    - All order options are applied and really sort in the requested direction, with articles without any date at the end.
+    - Articles without dates were always at the start before that, leading to believe the sort order had no impact.
+- Correct some translations regarding sorts: they were swapped and confused ascending and descending.
+- Sort search results by relevance even when the full text search of PostgreSQL is not available.
+- Remove search in tags titles.
+    - It was complex.
+    - Tags can be searched with thanks to the proper tags search fields.
+    - Search on external tags remains possible.
+- Only update visible articles of a search.
+    - Done to prevent side effects.
+    - May require multiple searches to update lots of article (should be very rare).
+- Make full text search faster on PostgreSQL.
+
 ## 26.09.1
 
 - Can select the font family, font size and max width of article details.
