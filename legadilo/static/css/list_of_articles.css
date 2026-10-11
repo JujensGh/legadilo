@@ -11,7 +11,7 @@
 }
 
 .list-of-articles-container h2 {
-  font-size: 2em;
+  font-size: min(calc(1.325em + 0.9vw), 2em);
 }
 
 @media (width < 992px) {

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-10 15:39+0000\n"
+"POT-Creation-Date: 2026-10-11 09:29+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Julien Enselme\n"
 "Language-Team: \n"
@@ -1546,14 +1546,37 @@ msgstr "Navigation entre les articles"
 msgid "Refresh current reading list"
 msgstr "Rafraichir la liste de lecture courante"
 
+msgctxt "Article actions"
+msgid "Favorite"
+msgstr "Favori"
+
+msgctxt "Article actions"
+msgid "Not favorite"
+msgstr "Pas favori"
+
+msgctxt "Article actions"
+msgid "For later"
+msgstr "Plus tard"
+
+msgctxt "Article actions"
 msgid "Not for later"
-msgstr "Pas pour plus tard"
+msgstr "Pas plus tard"
 
-msgid "Open original"
-msgstr "Ouvrir l’original"
+msgctxt "Article actions"
+msgid "Original"
+msgstr "Original"
 
-msgid "Open details"
-msgstr "Ouvrir le détail"
+msgctxt "Article actions"
+msgid "Details"
+msgstr "Détail"
+
+msgctxt "Article actions"
+msgid "Read"
+msgstr "Lu"
+
+msgctxt "Article actions"
+msgid "Unread"
+msgstr "Non lu"
 
 msgid "This article has no content."
 msgstr "Cet article n’a pas de contenu."
@@ -1765,8 +1788,14 @@ msgstr "Cette année"
 msgid "Articles added"
 msgstr "Articles ajoutés"
 
+msgid "Articles added per day"
+msgstr "Articles ajoutés par jour"
+
 msgid "Articles opened"
 msgstr "Articles ouverts"
+
+msgid "Articles opened per day"
+msgstr "Articles ouverts par jour"
 
 msgid "Last Year"
 msgstr "L’année dernière"

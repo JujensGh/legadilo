@@ -19,13 +19,15 @@
                 {% include "core/partials/button_loading_indicator.html" %}
                 {% include "core/partials/bs-icon.html" with name="star-fill" %}
             </span>
-            <span class="d-none d-md-inline">{% translate 'Unmark as favorite' %}</span>
+            <span
+                class="d-none d-md-inline">{% translate "Favorite" context "Article actions" %}</span>
         {% else %}
             <span class="icon-indicator {{ article|article_action_indicator }} text-start">
                 {% include "core/partials/button_loading_indicator.html" %}
                 {% include "core/partials/bs-icon.html" with name="star" %}
             </span>
-            <span class="d-none d-md-inline">{% translate 'Mark as favorite' %}</span>
+            <span
+                class="d-none d-md-inline">{% translate "Not favorite" context "Article actions" %}</span>
         {% endif %}
     </button>
 {% endpartialdef favorite-btn %}
@@ -40,13 +42,15 @@
                 {% include "core/partials/button_loading_indicator.html" %}
                 {% include "core/partials/bs-icon.html" with name="bookmark-fill" %}
             </span>
-            <span class="d-none d-md-inline">{% translate 'Not for later' %}</span>
+            <span
+                class="d-none d-md-inline">{% translate "For later" context "Article actions" %}</span>
         {% else %}
             <span class="icon-indicator {{ article|article_action_indicator }}">
                 {% include "core/partials/button_loading_indicator.html" %}
                 {% include "core/partials/bs-icon.html" with name="bookmark" %}
             </span>
-            <span class="d-none d-md-inline">{% translate 'For later' %}</span>
+            <span
+                class="d-none d-md-inline">{% translate "Not for later" context "Article actions" %}</span>
         {% endif %}
     </button>
 {% endpartialdef later-btn %}
@@ -58,7 +62,7 @@
        target="_blank"
        href="{{ article.url }}">
         {% include "core/partials/bs-icon.html" with name="binoculars" %}
-        <span class="d-none d-md-inline">{% translate 'Open original' %}</span>
+        <span class="d-none d-md-inline">{% translate "Original" context "Article actions" %}</span>
     </a>
 {% endpartialdef open-original-btn %}
 
@@ -67,7 +71,7 @@
            role="button"
            href="{{ article|article_details_url }}?from_url={{ from_url|urlencode }}">
             {% include "core/partials/bs-icon.html" with name="eye" %}
-            <span class="d-none d-md-inline">{% translate 'Open details' %}</span>
+    <span class="d-none d-md-inline">{% translate "Details" context "Article actions" %}</span>
         </a>
 {% endpartialdef open-details-btn %}
 
@@ -81,13 +85,14 @@
                 {% include "core/partials/button_loading_indicator.html" %}
                 {% include "core/partials/bs-icon.html" with name="book-fill" %}
             </span>
-            <span class="d-none d-md-inline">{% translate 'Mark as unread' %}</span>
+            <span class="d-none d-md-inline">{% translate 'Read' context "Article actions" %}</span>
         {% else %}
             <span class="icon-indicator {{ article|article_action_indicator }}">
                 {% include "core/partials/button_loading_indicator.html" %}
                 {% include "core/partials/bs-icon.html" with name="book" %}
             </span>
-            <span class="d-none d-md-inline">{% translate 'Mark as read' %}</span>
+            <span
+                class="d-none d-md-inline">{% translate 'Unread' context "Article actions" %}</span>
         {% endif %}
     </button>
 {% endpartialdef read-btn %}

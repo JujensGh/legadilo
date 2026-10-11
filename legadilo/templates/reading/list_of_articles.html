@@ -90,9 +90,10 @@
                 </nav>
             </div>
             <div class="list-of-articles-container col col-12 col-md-8 px-1 px-md-3 mx-0">
-                <div id="reading-list-actions-container" class="row px-0 mx-0 bg-body z-1">
+                <div id="reading-list-actions-container"
+                     class="d-flex justify-content-between gap-2 px-0 mx-0 mb-sm-1 bg-body z-1">
                     {% if count_articles_of_current_reading_list > 0 %}
-                        <h2 class="fs-6 col-6 col-md-2 align-middle d-flex align-items-center px-0 mx-0">
+                        <h2 class="fs-6 align-middle d-flex align-items-center px-0 mx-0">
                             <span id="articles-in-total">
                                 {% partialdef articles-in-total inline %}
                                     {% blocktranslate trimmed with formatted_nb_articles=count_articles_of_current_reading_list|intcomma count count_articles_of_current_reading_list=count_articles_of_current_reading_list %}
@@ -105,7 +106,7 @@
                         </h2>
                     {% endif %}
                     {% if js_cfg.is_reading_on_scroll_enabled %}
-                        <div class="d-flex mb-2 col-6 col-md-2 px-0 mx-0">
+                        <div class="d-flex mb-2 px-0 mx-0">
                             <div class="form-check form-switch">
                                 <input id="read-on-scroll-status"
                                        class="form-check-input"
@@ -118,13 +119,13 @@
                         </div>
                     {% endif %}
                     {% if feed %}
-                        <div class="d-flex mb-2 col-md-2 px-0 mx-0">
+                        <div class="d-flex mb-2 px-0 mx-0">
                             <span class="align-middle d-flex align-items-center"><a
                                 href="{% url 'feeds:edit_feed' feed_id=feed.id %}">{% translate "Edit this feed" %}</a></span>
                         </div>
                     {% endif %}
                     {% if search_query %}
-                        <div class="d-flex mb-2 col-md-2 px-0 mx-0">
+                        <div class="d-flex mb-2 px-0 mx-0">
                             <span class="align-middle d-flex align-items-center">
                                 <a href="{% url 'reading:search' %}?{{ search_query }}">{% translate "Go to advanced search" %}</a>
                             </span>

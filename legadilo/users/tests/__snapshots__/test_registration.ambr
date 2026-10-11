@@ -1248,12 +1248,13 @@
                   </nav>
               </div>
               <div class="list-of-articles-container col col-12 col-md-8 px-1 px-md-3 mx-0">
-                  <div id="reading-list-actions-container" class="row px-0 mx-0 bg-body z-1">
+                  <div id="reading-list-actions-container"
+                       class="d-flex justify-content-between gap-2 px-0 mx-0 mb-sm-1 bg-body z-1">
                       
                       
                       
                       
-                          <div class="d-flex mb-2 col-md-2 px-0 mx-0">
+                          <div class="d-flex mb-2 px-0 mx-0">
                               <span class="align-middle d-flex align-items-center">
                                   <a href="/reading/search/?read_status=ONLY_UNREAD&amp;favorite_status=ALL&amp;for_later_status=ONLY_NOT_FOR_LATER&amp;articles_max_age_value=0&amp;articles_max_age_unit=UNSET&amp;articles_reading_time=0&amp;articles_reading_time_operator=UNSET&amp;include_tag_operator=ALL&amp;exclude_tag_operator=ALL">Go to advanced search</a>
                               </span>
