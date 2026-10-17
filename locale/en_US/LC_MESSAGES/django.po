@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-11 15:43+0200\n"
+"POT-Creation-Date: 2026-10-17 18:07+0200\n"
 "Language: en-US\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1794,16 +1794,25 @@ msgstr ""
 msgid "Browser Sans Serif"
 msgstr ""
 
+msgid "Smallest"
+msgstr ""
+
+msgid "Smaller"
+msgstr ""
+
 msgid "Small"
 msgstr ""
 
 msgid "Medium"
 msgstr ""
 
+msgid "Larger"
+msgstr ""
+
 msgid "Large"
 msgstr ""
 
-msgid "Larger"
+msgid "Largest"
 msgstr ""
 
 msgid "This email has already been taken."

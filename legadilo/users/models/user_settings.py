@@ -92,19 +92,19 @@ class UserSettings(models.Model):
             models.CheckConstraint(
                 name="%(app_label)s_%(class)s_article_details_font_size_desktop_valid",
                 condition=models.Q(
-                    article_details_font_size_desktop__in=["small", "medium", "large", "larger"]
+                    article_details_font_size_desktop__in=constants.UserSettingsArticleDetailsFontSizeChoices.values
                 ),
             ),
             models.CheckConstraint(
                 name="%(app_label)s_%(class)s_article_details_font_size_mobile_valid",
                 condition=models.Q(
-                    article_details_font_size_mobile__in=["small", "medium", "large", "larger"]
+                    article_details_font_size_mobile__in=constants.UserSettingsArticleDetailsFontSizeChoices.values
                 ),
             ),
             models.CheckConstraint(
                 name="%(app_label)s_%(class)s_article_details_font_size_tablet_valid",
                 condition=models.Q(
-                    article_details_font_size_tablet__in=["small", "medium", "large", "larger"]
+                    article_details_font_size_tablet__in=constants.UserSettingsArticleDetailsFontSizeChoices.values
                 ),
             ),
             models.CheckConstraint(

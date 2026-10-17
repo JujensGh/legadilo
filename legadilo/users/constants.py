@@ -31,10 +31,13 @@ class UserSettingsArticleDetailsFontFamilyChoices(TextChoices):
 
 
 class UserSettingsArticleDetailsFontSizeChoices(TextChoices):
+    SMALLEST = ("x-small", _("Smallest"))
+    SMALLER = ("smaller", _("Smaller"))
     SMALL = ("small", _("Small"))
     MEDIUM = ("medium", _("Medium"))
-    LARGE = ("large", _("Large"))
     LARGER = ("larger", _("Larger"))
+    LARGE = ("large", _("Large"))
+    LARGEST = ("xx-large", _("Largest"))
 
 
 class UserSettingsArticleDetailsMaxWidthChoices(TextChoices):

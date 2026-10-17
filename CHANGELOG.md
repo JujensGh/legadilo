@@ -12,6 +12,7 @@ Summary of main functional changes.
 
 - Improve the performance of reading lists.
 - Minify HTML.
+- Add extra font sizes.
 
 ## 26.10.2
 
