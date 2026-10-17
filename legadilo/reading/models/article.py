@@ -334,10 +334,16 @@ class ArticleQuerySet(models.QuerySet["Article"]):
         qs, filters = _build_filter_by_tag_ids(self, tags_search)
         return qs.filter(filters)
 
+    def defer_big_fields(self):
+        return self.defer("content", "table_of_content").annotate(
+            annot_has_content=~models.Q(content="")
+        )
+
     def for_reading_list(self, reading_list: ReadingList) -> Self:
         return (
             self
             .for_user(reading_list.user)
+            .defer_big_fields()
             .filter(
                 _build_basic_filters_from_reading_list(
                     ArticleSearchQuery.from_reading_list(reading_list)
@@ -352,6 +358,7 @@ class ArticleQuerySet(models.QuerySet["Article"]):
     def for_tag(self, tag: Tag) -> Self:
         return (
             self
+            .defer_big_fields()
             .filter(tags__id=tag.id)
             .select_related("main_feed", "group")
             .prefetch_related("tags")
@@ -361,6 +368,7 @@ class ArticleQuerySet(models.QuerySet["Article"]):
     def for_external_tag(self, tag: str) -> Self:
         return (
             self
+            .defer_big_fields()
             .filter(external_tags__icontains=tag)
             .prefetch_related("tags")
             .select_related("main_feed", "group")
@@ -375,7 +383,13 @@ class ArticleQuerySet(models.QuerySet["Article"]):
         return self.filter(filters)
 
     def for_feed(self) -> Self:
-        return self.prefetch_related("tags").select_related("main_feed", "group").default_order_by()
+        return (
+            self
+            .defer_big_fields()
+            .prefetch_related("tags")
+            .select_related("main_feed", "group")
+            .default_order_by()
+        )
 
     def for_details(self) -> Self:
         return self.prefetch_related("tags", "comments").select_related("main_feed", "group")
@@ -829,6 +843,7 @@ class ArticleManager(models.Manager["Article"]):
             self
             .get_queryset()
             .for_user(user)
+            .defer_big_fields()
             .select_related("main_feed", "group")
             .prefetch_related("tags")
             .filter(_build_basic_filters_from_reading_list(search_query))

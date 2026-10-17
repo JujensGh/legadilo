@@ -116,7 +116,7 @@ def _get_markdown_it_instance():
 
 @register.filter
 def open_original_with_link(article: Article) -> bool:
-    return not article.content or bool(
+    return not article.annot_has_content or bool(  # type: ignore[attr-defined]
         article.main_feed and article.main_feed.open_original_url_by_default
     )
 

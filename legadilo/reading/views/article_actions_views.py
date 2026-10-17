@@ -33,7 +33,11 @@ def update_article_view(
     update_action: constants.UpdateArticleActions,
 ) -> HttpResponse:
     article_qs = (
-        Article.objects.get_queryset().for_details().filter(user=request.user, id=article_id)
+        Article.objects
+        .get_queryset()
+        .for_details()
+        .defer_big_fields()
+        .filter(user=request.user, id=article_id)
     )
     article_qs.update_articles_from_action(update_action)
     article = get_object_or_404(article_qs)
@@ -167,6 +171,7 @@ def mark_articles_as_read_in_bulk_view(request: AuthenticatedHttpRequest) -> Htt
         Article.objects
         .get_queryset()
         .for_details()
+        .defer_big_fields()
         .filter(user=request.user, id__in=article_ids)
         .order_by("id")
     )
