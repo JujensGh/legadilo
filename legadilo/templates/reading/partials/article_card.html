@@ -6,9 +6,9 @@
         <header>
             <h2 class="card-title text-break">
                 {% if article|open_original_with_link %}
-                    <a class="mark-as-read"
+                    <a
                         {% if not article.was_opened and not for_article_details %}
-                       data-mark-as-read="{{ article|opened_action_url }}"
+                            data-mark-as-opened="{{ article|opened_action_url }}"
                         {% endif %}
                        href="{{ article.url }}"
                        target="_blank">
@@ -16,9 +16,9 @@
                         <span>{% bs_icon "box-arrow-up-right" %}</span>
                     </a>
                 {% else %}
-                    <a class="mark-as-read"
+                    <a
                         {% if not article.was_opened and not for_article_details %}
-                       data-mark-as-read="{{ article|opened_action_url }}"
+                            data-mark-as-opened="{{ article|opened_action_url }}"
                         {% endif %}
                        href="{{ article|article_details_url }}?from_url={{ from_url|urlencode }}">{{ article.title }}</a>
                 {% endif %}

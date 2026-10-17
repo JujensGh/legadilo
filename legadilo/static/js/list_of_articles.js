@@ -24,13 +24,13 @@
   };
 
   const setupReadAction = () => {
-    for (const openOriginalButton of document.querySelectorAll(".mark-as-read")) {
-      openOriginalButton.addEventListener("click", openAndMarkAsRead);
-      openOriginalButton.addEventListener("auxclick", openAndMarkAsRead);
+    for (const openBtn of document.querySelectorAll("[data-mark-as-opened]")) {
+      openBtn.addEventListener("click", openAndMarkAsOpened);
+      openBtn.addEventListener("auxclick", openAndMarkAsOpened);
     }
   };
 
-  const openAndMarkAsRead = async (event) => {
+  const openAndMarkAsOpened = async (event) => {
     const actionUrl = event.currentTarget.dataset.markAsRead;
     if (!actionUrl) return;
 

@@ -56,10 +56,10 @@
 {% endpartialdef later-btn %}
 
 {% partialdef open-original-btn %}
-    <a class="btn btn-outline-secondary text-start mark-as-read"
+    <a class="btn btn-outline-secondary text-start"
        role="button"
         {% if not article.was_opened and not for_article_details %}
-       data-mark-as-read="{{ article|opened_action_url }}"
+       data-mark-as-opened="{{ article|opened_action_url }}"
         {% endif %}
        target="_blank"
        href="{{ article.url }}">
@@ -69,10 +69,10 @@
 {% endpartialdef open-original-btn %}
 
 {% partialdef open-details-btn %}
-    <a class="btn btn-outline-secondary text-start mark-as-read"
+    <a class="btn btn-outline-secondary text-start"
        role="button"
         {% if not article.was_opened and not for_article_details %}
-       data-mark-as-read="{{ article|opened_action_url }}"
+       data-mark-as-opened="{{ article|opened_action_url }}"
         {% endif %}
        target="_blank"
        href="{{ article|article_details_url }}?from_url={{ from_url|urlencode }}">
