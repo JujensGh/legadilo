@@ -13,7 +13,7 @@
     </form>
 {% endpartialdef add-comment-form %}
 {% partialdef comment-card %}
-    <div class="card mt-2" hx-target="this" hx-swap="outerHTML">
+    <div id="comment-card-{{ comment.id }}" class="card mt-2">
         <div class="card-header">
             {% blocktranslate trimmed with comment_date=comment.created_at|date:"SHORT_DATETIME_FORMAT" %}
                     You commented on {{ comment_date }}
@@ -25,13 +25,20 @@
         <div class="card-footer">
             <button class="btn btn-sm btn-primary"
                     type="button"
-                    hx-get="{% url 'reading:edit_comment' pk=comment.id %}">{% translate "Edit" %}</button>
+                    hx-get="{% url 'reading:edit_comment' pk=comment.id %}"
+                    hx-target="#comment-card-{{ comment.id }}"
+                    hx-swap="outerHTML">{% translate "Edit" %}</button>
             <form class="d-inline"
+                  method="post"
+                  action="{% url 'reading:delete_comment' pk=comment.id %}"
                   data-modal-id="danger-modal"
                   data-modal-title="{% translate 'Confirm deletion' %}"
                   data-modal-body="{% translate 'Do you really want to delete this comment?' %}"
-                  hx-post="{% url 'reading:delete_comment' pk=comment.id %}"
-                  hx-confirm="Delete?">
+                  hx-confirm="Delete?"
+                  hx-target="#comment-card-{{ comment.id }}"
+                  hx-swap="outerHTML swap:300ms"
+                  hx-boost="true"
+                  hx-push-url="false">
                 {% csrf_token %}
                 <button class="btn btn-sm btn-danger">{% translate "Delete" %}</button>
             </form>
@@ -39,15 +46,21 @@
     </div>
 {% endpartialdef comment-card %}
 {% partialdef edit-comment-form %}
-    <form hx-post="{% url 'reading:edit_comment' pk=comment.id %}"
-          hx-target="this"
-          hx-swap="outerHTML">
+    <form id="edit-comment-{{ comment.id }}"
+          method="post"
+          action="{% url 'reading:edit_comment' pk=comment.id %}"
+          hx-target="#edit-comment-{{ comment.id }}"
+          hx-swap="outerHTML"
+          hx-boost="true"
+          hx-push-url="false">
         {% csrf_token %}
         {{ comment_article_form|crispy }}
         <button class="btn btn-sm btn-outline-primary" type="submit">{% translate "Save" %}</button>
         <button class="btn btn-sm btn-outline-danger"
                 type="button"
-                hx-get="{% url 'reading:display_comment' pk=comment.id %}">{% translate "Cancel" %}</button>
+                hx-get="{% url 'reading:display_comment' pk=comment.id %}"
+                hx-target="#edit-comment-{{ comment.id }}"
+                hx-swap="outerHTML">{% translate "Cancel" %}</button>
     </form>
 {% endpartialdef edit-comment-form %}
 {% partialdef add-comment-success %}

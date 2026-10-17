@@ -35,9 +35,8 @@
             {% endif %}
             <h2 class="mt-4">{% translate "List of tokens" %}</h2>
             {% for token in tokens %}
-                <div class="card {% if not token.is_valid %}opacity-50{% endif %} mb-2"
-                     hx-target="this"
-                     hx-swap="outerHTML">
+                <div id="token-card-{{ token.id }}"
+                     class="card {% if not token.is_valid %}opacity-50{% endif %} mb-2">
                     <div class="card-body">
                         <h2 class="card-title">{{ token.title }}</h2>
                         {% if not token.is_valid %}
@@ -71,6 +70,8 @@
                     </div>
                     <div class="card-footer">
                         <form hx-post="{% url 'users:delete_token' token_id=token.id %}"
+                              hx-target="#token-card-{{ token.id }}"
+                              hx-swap="outerHTML swap:300ms"
                               data-modal-id="danger-modal"
                               data-modal-title="{% translate 'Confirm token deletion' %}"
                               data-modal-body="{% blocktranslate trimmed with token_title=token.title %}Are you sure you want to delete the token '{{ token_title }}'?{% endblocktranslate %}"

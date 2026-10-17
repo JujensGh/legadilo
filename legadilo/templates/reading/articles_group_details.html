@@ -74,7 +74,7 @@
                             type="submit"
                             form="edit-articles-group-form">
                         <span class="icon-indicator">
-                            {% include "core/partials/button_loading_indicator.html" %}
+                            {% loading_indicator %}
                         </span>
                         {% translate "Update articles group" %}
                     </button>
@@ -83,16 +83,16 @@
                     <button type="submit" class="btn btn-outline-danger"
                             form="delete-group-and-all-articles">
                         <span class="icon-indicator">
-                            {% include "core/partials/button_loading_indicator.html" %}
-                            {% include "core/partials/bs-icon.html" with name="trash" %}
+                            {% loading_indicator %}
+                            {% bs_icon "trash" %}
                         </span>
                         {% translate "Delete group and all its articles" %}
                     </button>
                     <button class="btn btn-danger"
                             form="delete-group">
                         <span class="icon-indicator">
-                            {% include "core/partials/button_loading_indicator.html" %}
-                            {% include "core/partials/bs-icon.html" with name="trash" %}
+                            {% loading_indicator %}
+                            {% bs_icon "trash" %}
                         </span>
                         {% translate "Delete group" %}
                     </button>

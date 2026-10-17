@@ -3,48 +3,48 @@
 <p class="mb-0 text-secondary">
     {% if article.authors %}
         <span class="me-2">
-            {% include "core/partials/bs-icon.html" with name="pen" %}
+            {% bs_icon "pen" %}
             {{ article.authors|join:", " }}
         </span>
     {% endif %}
     {% if article.updated_at %}
         <span class="me-2">
-            {% include "core/partials/bs-icon.html" with name="calendar" %}
+            {% bs_icon "calendar" %}
             {{ article.updated_at|date:"SHORT_DATETIME_FORMAT" }}
         </span>
     {% elif article.published_at %}
-        {% include "core/partials/bs-icon.html" with name="calendar-event" %}
+        {% bs_icon "calendar-event" %}
         {{ article.published_at|date:"SHORT_DATETIME_FORMAT" }}
     {% endif %}
     <span class="me-2">
         {% if article.main_source_type == 'FEED' and article.main_feed_id %}
             {% if article.main_feed.slug %}
                 <a href="{% url 'feeds:feed_articles' feed_id=article.main_feed.id feed_slug=article.main_feed.slug %}">
-                    {% include "core/partials/bs-icon.html" with name="feed" %}
+                    {% bs_icon "feed" %}
                     {{ article.main_source_title }}
                 </a>
             {% else %}
                 <a href="{% url 'feeds:feed_articles' feed_id=article.main_feed.id %}">
-                    {% include "core/partials/bs-icon.html" with name="feed" %}
+                    {% bs_icon "feed" %}
                     {{ article.main_source_title }}
                 </a>
             {% endif %}
         {% else %}
-            {% include "core/partials/bs-icon.html" with name="geo-alt" %}
+            {% bs_icon "geo-alt" %}
             {{ article.main_source_title }}
         {% endif %}
     </span>
     {% if article.group %}
         <span class="me-2">
             <a href="{{ article.group|articles_group_details_url }}">
-                {% include "core/partials/bs-icon.html" with name="collection" %}
+                {% bs_icon "collection" %}
                 {{ article.group.title }}
             </a>
         </span>
     {% endif %}
     {% if article.reading_time > 0 %}
         <span class="me-2">
-            {% include "core/partials/bs-icon.html" with name="clock" %}
+            {% bs_icon "clock" %}
             {% blocktranslate trimmed count reading_time=article.reading_time %}
                 {{ reading_time }} minute
             {% plural %}

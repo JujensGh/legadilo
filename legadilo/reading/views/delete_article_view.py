@@ -28,7 +28,7 @@ def delete_article_view(request: AuthenticatedHttpRequest, article_id: int) -> H
 
     article.delete()
 
-    for_article_details = request.POST.get("for_article_details", "")
+    for_article_details = request.POST.get("for_article_details", "").lower() == "true"
     if for_article_details:
         return redirect_to_reading_list(request)
 
@@ -39,7 +39,7 @@ def delete_article_view(request: AuthenticatedHttpRequest, article_id: int) -> H
             request, reading_constants.UpdateArticleActions.DO_NOTHING, deleting_article=True
         ),
         headers={
-            "HX-Reswap": "outerHTML show:none swap:1s",
+            "HX-Reswap": "delete swap:1s",
             "HX-Retarget": hx_target,
         },
     )

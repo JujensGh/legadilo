@@ -4,27 +4,27 @@
     <a class="btn btn-outline-secondary text-start"
            role="button"
            href="{{ from_url }}">
-            {% include "core/partials/bs-icon.html" with name="arrow-left" %}
+        {% bs_icon "arrow-left" %}
             <span class="d-none d-md-inline">{% translate 'Back' %}</span>
         </a>
 {% endpartialdef back-btn %}
 
 {% partialdef favorite-btn %}
     <button class="btn btn-outline-secondary text-start"
-            type="submit"
-            form="{{ article|update_article_form_id }}"
-            formaction="{{ article|favorite_action_url }}">
+            type="button"
+            hx-indicator=".{{ article|article_action_indicator }}"
+            hx-post="{{ article|favorite_action_url }}">
         {% if article.is_favorite %}
             <span class="icon-indicator {{ article|article_action_indicator }}">
-                {% include "core/partials/button_loading_indicator.html" %}
-                {% include "core/partials/bs-icon.html" with name="star-fill" %}
+                {% loading_indicator %}
+                {% bs_icon "star-fill" %}
             </span>
             <span
                 class="d-none d-md-inline">{% translate "Favorite" context "Article actions" %}</span>
         {% else %}
             <span class="icon-indicator {{ article|article_action_indicator }} text-start">
-                {% include "core/partials/button_loading_indicator.html" %}
-                {% include "core/partials/bs-icon.html" with name="star" %}
+                {% loading_indicator %}
+                {% bs_icon "star" %}
             </span>
             <span
                 class="d-none d-md-inline">{% translate "Not favorite" context "Article actions" %}</span>
@@ -34,20 +34,20 @@
 
 {% partialdef later-btn %}
     <button class="btn btn-outline-secondary text-start"
-            type="submit"
-            form="{{ article|update_article_form_id }}"
-            formaction="{{ article|for_later_action_url }}">
+            type="button"
+            hx-indicator=".{{ article|article_action_indicator }}"
+            hx-post="{{ article|for_later_action_url }}">
         {% if article.is_for_later %}
             <span class="icon-indicator {{ article|article_action_indicator }}">
-                {% include "core/partials/button_loading_indicator.html" %}
-                {% include "core/partials/bs-icon.html" with name="bookmark-fill" %}
+                {% loading_indicator %}
+                {% bs_icon "bookmark-fill" %}
             </span>
             <span
                 class="d-none d-md-inline">{% translate "For later" context "Article actions" %}</span>
         {% else %}
             <span class="icon-indicator {{ article|article_action_indicator }}">
-                {% include "core/partials/button_loading_indicator.html" %}
-                {% include "core/partials/bs-icon.html" with name="bookmark" %}
+                {% loading_indicator %}
+                {% bs_icon "bookmark" %}
             </span>
             <span
                 class="d-none d-md-inline">{% translate "Not for later" context "Article actions" %}</span>
@@ -56,40 +56,46 @@
 {% endpartialdef later-btn %}
 
 {% partialdef open-original-btn %}
-    <a class="btn btn-outline-secondary text-start open-original"
+    <a class="btn btn-outline-secondary text-start"
        role="button"
-       data-article-id="{{ article.id }}"
+        {% if not article.was_opened and not for_article_details %}
+       data-mark-as-opened="{{ article|opened_action_url }}"
+        {% endif %}
        target="_blank"
        href="{{ article.url }}">
-        {% include "core/partials/bs-icon.html" with name="binoculars" %}
+        {% bs_icon "binoculars" %}
         <span class="d-none d-md-inline">{% translate "Original" context "Article actions" %}</span>
     </a>
 {% endpartialdef open-original-btn %}
 
 {% partialdef open-details-btn %}
-<a class="btn btn-outline-secondary text-start"
-           role="button"
-           href="{{ article|article_details_url }}?from_url={{ from_url|urlencode }}">
-            {% include "core/partials/bs-icon.html" with name="eye" %}
-    <span class="d-none d-md-inline">{% translate "Details" context "Article actions" %}</span>
-        </a>
+    <a class="btn btn-outline-secondary text-start"
+       role="button"
+        {% if not article.was_opened and not for_article_details %}
+       data-mark-as-opened="{{ article|opened_action_url }}"
+        {% endif %}
+       target="_blank"
+       href="{{ article|article_details_url }}?from_url={{ from_url|urlencode }}">
+        {% bs_icon "eye" %}
+        <span class="d-none d-md-inline">{% translate "Details" context "Article actions" %}</span>
+    </a>
 {% endpartialdef open-details-btn %}
 
 {% partialdef read-btn %}
     <button class="btn btn-primary text-start"
-            type="submit"
-            form="{{ article|update_article_form_id }}"
-            formaction="{{ article|read_action_url }}">
+            type="button"
+            hx-indicator=".{{ article|article_action_indicator }}"
+            hx-post="{{ article|read_action_url }}">
         {% if article.is_read %}
             <span class="icon-indicator {{ article|article_action_indicator }}">
-                {% include "core/partials/button_loading_indicator.html" %}
-                {% include "core/partials/bs-icon.html" with name="book-fill" %}
+                {% loading_indicator %}
+                {% bs_icon "book-fill" %}
             </span>
             <span class="d-none d-md-inline">{% translate 'Read' context "Article actions" %}</span>
         {% else %}
             <span class="icon-indicator {{ article|article_action_indicator }}">
-                {% include "core/partials/button_loading_indicator.html" %}
-                {% include "core/partials/bs-icon.html" with name="book" %}
+                {% loading_indicator %}
+                {% bs_icon "book" %}
             </span>
             <span
                 class="d-none d-md-inline">{% translate 'Unread' context "Article actions" %}</span>
@@ -97,43 +103,9 @@
     </button>
 {% endpartialdef read-btn %}
 
-<form id="{{ article|update_article_form_id }}"
-      class="d-none"
-      aria-hidden="true"
-      method="post"
-      hx-indicator=".{{ article|article_action_indicator }}"
-      hx-boost="true"
-      hx-push-url="false">
-    {% csrf_token %}
-    <input type="hidden" name="from_url" value="{{ from_url }}" />
-    {% if for_article_details %}
-        <input type="hidden" name="for_article_details" value="true" />
-    {% else %}
-        <input type="hidden"
-               name="displayed_reading_list_id"
-               value="{{ displayed_reading_list.id }}" />
-    {% endif %}
-</form>
-{% if not article.was_opened and not for_article_details %}
-    <form id="mark-article-as-opened-form-{{ article.id }}"
-          class="visually-hidden"
-          aria-hidden="true"
-          method="post"
-          action="{{ article|opened_action_url }}"
-          hx-trigger="submit"
-          hx-boost="true"
-          hx-swap="outerHTML show:none"
-          hx-target="#{{ article|article_card_id }}"
-          hx-push-url="false">
-        {% csrf_token %}
-        <input type="hidden"
-               name="displayed_reading_list_id"
-               value="{{ displayed_reading_list.id }}" />
-        <input type="hidden" name="from_url" value="{{ from_url }}" />
-    </form>
-{% endif %}
 <div class="{% if vertical_group %}btn-group-vertical w-100{% else %}btn-group{% endif %}"
-     role="group">
+     role="group"
+     hx-vals:inherited='{"displayed_reading_list_id": {{ displayed_reading_list.id|default:"null" }}, "from_url": "{{ from_url|default:"false" }}", "for_article_details": {% if for_article_details %}true{% else %}false{% endif %} }'>
     {% if for_article_details and vertical_group %}
         {% partial read-btn %}
         {% partial open-original-btn %}

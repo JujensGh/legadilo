@@ -33,13 +33,17 @@ def update_article_view(
     update_action: constants.UpdateArticleActions,
 ) -> HttpResponse:
     article_qs = (
-        Article.objects.get_queryset().for_details().filter(user=request.user, id=article_id)
+        Article.objects
+        .get_queryset()
+        .for_details()
+        .defer_big_fields()
+        .filter(user=request.user, id=article_id)
     )
     article_qs.update_articles_from_action(update_action)
     article = get_object_or_404(article_qs)
 
     is_read_status_update = constants.UpdateArticleActions.is_read_status_update(update_action)
-    for_article_details = request.POST.get("for_article_details", "")
+    for_article_details = request.POST.get("for_article_details", "").lower() == "true"
 
     if for_article_details:
         if is_read_status_update:
@@ -58,7 +62,7 @@ def update_article_view(
     hx_target = f"#{article_card_id(article)}"
     headers = (
         {
-            "HX-Reswap": "outerHTML show:none swap:1s",
+            "HX-Reswap": "delete swap:1s",
             "HX-Retarget": hx_target,
         }
         if ctx["delete_article_card"]
@@ -167,6 +171,7 @@ def mark_articles_as_read_in_bulk_view(request: AuthenticatedHttpRequest) -> Htt
         Article.objects
         .get_queryset()
         .for_details()
+        .defer_big_fields()
         .filter(user=request.user, id__in=article_ids)
         .order_by("id")
     )

@@ -23,8 +23,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1"/>
       <link rel="manifest" href="/manifest.json"/>
       <meta name="theme-color" content="#0d6efd"/>
-      <meta name="htmx-config"
-            content='{"includeIndicatorStyles":false, "responseHandling": [{"code": "...", "swap": true}]}'/>
+      <meta name="htmx-config" content='{"includeIndicatorCSS":false}'/>
       <link rel="icon"
             type="image/png"
             href="/static/images/icons/legadilo.16x16.png"
@@ -60,7 +59,7 @@
           
       
   </head>
-  <body class="content-body">
+  <body class="content-body" hx-headers:inherited='{"x-csrftoken": "mockedtokenyCeuigMCuiA"}'>
   <!-- Icons for theme selector -->
   <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
       <symbol id="check2" viewBox="0 0 16 16">
@@ -272,8 +271,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1"/>
       <link rel="manifest" href="/manifest.json"/>
       <meta name="theme-color" content="#0d6efd"/>
-      <meta name="htmx-config"
-            content='{"includeIndicatorStyles":false, "responseHandling": [{"code": "...", "swap": true}]}'/>
+      <meta name="htmx-config" content='{"includeIndicatorCSS":false}'/>
       <link rel="icon"
             type="image/png"
             href="/static/images/icons/legadilo.16x16.png"
@@ -309,7 +307,7 @@
           
       
   </head>
-  <body class="content-body">
+  <body class="content-body" hx-headers:inherited='{"x-csrftoken": "mockedtokenyCeuigMCuiA"}'>
   <!-- Icons for theme selector -->
   <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
       <symbol id="check2" viewBox="0 0 16 16">
@@ -548,8 +546,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1"/>
       <link rel="manifest" href="/manifest.json"/>
       <meta name="theme-color" content="#0d6efd"/>
-      <meta name="htmx-config"
-            content='{"includeIndicatorStyles":false, "responseHandling": [{"code": "...", "swap": true}]}'/>
+      <meta name="htmx-config" content='{"includeIndicatorCSS":false}'/>
       <link rel="icon"
             type="image/png"
             href="/static/images/icons/legadilo.16x16.png"
@@ -585,7 +582,7 @@
           
       
   </head>
-  <body class="content-body">
+  <body class="content-body" hx-headers:inherited='{"x-csrftoken": "mockedtokenyCeuigMCuiA"}'>
   <!-- Icons for theme selector -->
   <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
       <symbol id="check2" viewBox="0 0 16 16">
@@ -822,8 +819,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1"/>
       <link rel="manifest" href="/manifest.json"/>
       <meta name="theme-color" content="#0d6efd"/>
-      <meta name="htmx-config"
-            content='{"includeIndicatorStyles":false, "responseHandling": [{"code": "...", "swap": true}]}'/>
+      <meta name="htmx-config" content='{"includeIndicatorCSS":false}'/>
       <link rel="icon"
             type="image/png"
             href="/static/images/icons/legadilo.16x16.png"
@@ -880,7 +876,7 @@
   
       
   </head>
-  <body class="content-body">
+  <body class="content-body" hx-headers:inherited='{"x-csrftoken": "mockedtokenyCeuigMCuiA"}'>
   <!-- Icons for theme selector -->
   <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
       <symbol id="check2" viewBox="0 0 16 16">
@@ -1014,12 +1010,7 @@
                                       <form action="/reading/search/" method="get">
                                           <div class="input-group">
                                               <span id="articles-search-glass"
-                                                    class="input-group-text">
-  
-  <svg class="bi" aria-hidden="true">
-    <use href="/static/images/bs-sprite.svg#search"></use>
-  </svg>
-  </span>
+                                                    class="input-group-text"><svg class="bi" aria-hidden="true"><use href="/static/images/bs-sprite.svg#search"></use></svg></span>
                                               <input type="text"
                                                      class="form-control"
                                                      name="q"
@@ -1037,12 +1028,7 @@
                                       <a class="nav-link "
                                          
                                          href="/reading/articles/add/">
-                                          
-  
-  <svg class="bi" aria-hidden="true">
-    <use href="/static/images/bs-sprite.svg#file-earmark-plus"></use>
-  </svg>
-  
+                                          <svg class="bi" aria-hidden="true"><use href="/static/images/bs-sprite.svg#file-earmark-plus"></use></svg>
                                           Add an article
                                       </a>
                                   </li>
@@ -1052,12 +1038,7 @@
                                          href="/users/notifications/">
                                                   <span class="position-relative">
                                                       
-                                                          
-  
-  <svg class="bi" aria-hidden="true">
-    <use href="/static/images/bs-sprite.svg#bell"></use>
-  </svg>
-  
+                                                          <svg class="bi" aria-hidden="true"><use href="/static/images/bs-sprite.svg#bell"></use></svg>
                                                       
                                                   </span>
                                       </a>
@@ -1128,12 +1109,7 @@
                                          data-bs-toggle="dropdown"
                                          data-bs-reference="parent"
                                          aria-expanded="false">
-                                          
-  
-  <svg class="bi" aria-hidden="true">
-    <use href="/static/images/bs-sprite.svg#person-circle"></use>
-  </svg>
-  
+                                          <svg class="bi" aria-hidden="true"><use href="/static/images/bs-sprite.svg#person-circle"></use></svg>
                                           <span
                                               class="visually-hidden">Profile menu</span>
                                       </a>
@@ -1290,12 +1266,7 @@
       <a class="btn btn-outline-primary sticky-bottom refresh-btn bg-secondary-subtle"
          aria-label="Refresh current reading list"
          role="button"
-         href="/reading/">
-  
-  <svg class="bi" aria-hidden="true">
-    <use href="/static/images/bs-sprite.svg#arrow-clockwise"></use>
-  </svg>
-  </a>
+         href="/reading/"><svg class="bi" aria-hidden="true"><use href="/static/images/bs-sprite.svg#arrow-clockwise"></use></svg></a>
   
       </div>
   </div>

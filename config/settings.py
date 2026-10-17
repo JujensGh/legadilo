@@ -148,6 +148,7 @@ THIRD_PARTY_APPS = [
     "axes",
     "django_htmx",
     "corsheaders",
+    "django_minify_html",
 ]
 LOCAL_APPS = [
     "legadilo.core",
@@ -216,6 +217,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
     "legadilo.core.middlewares.TimezoneMiddleware",
+    "django_minify_html.middleware.MinifyHtmlMiddleware",
     "django_htmx.middleware.HtmxMiddleware",
     # AxesMiddleware should be the last middleware in the MIDDLEWARE list.
     # It only formats user lockout messages and renders Axes lockout responses
@@ -594,7 +596,7 @@ if DEBUG:
         MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]
 
     INSTALLED_APPS += ["django_watchfiles", "django_browser_reload"]
-    MIDDLEWARE.insert(0, "django_browser_reload.middleware.BrowserReloadMiddleware")
+    MIDDLEWARE += ["django_browser_reload.middleware.BrowserReloadMiddleware"]
     # https://django-debug-toolbar.readthedocs.io/en/latest/configuration.html#debug-toolbar-config
     DEBUG_TOOLBAR_CONFIG = {
         "DISABLE_PANELS": [

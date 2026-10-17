@@ -24,6 +24,7 @@ class TestUserRegistration:
         settings.CONTACT_EMAIL = "contact@legadilo.eu"
         settings.VERSION = "0.0.0"
         settings.MIDDLEWARE.remove("legadilo.core.middlewares.CSPMiddleware")
+        settings.MIDDLEWARE.remove("django_minify_html.middleware.MinifyHtmlMiddleware")
         self.client = client
         self.mocker = mocker
         self.snapshot = snapshot

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-11 09:29+0000\n"
+"POT-Creation-Date: 2026-10-17 18:07+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Julien Enselme\n"
 "Language-Team: \n"
@@ -34,6 +34,9 @@ msgstr ""
 
 msgid "Cannot contain only spaces or special characters."
 msgstr "Ne peux pas contenir que des espaces ou des caractères spéciaux."
+
+msgid "Loading..."
+msgstr "Changement en cours…"
 
 msgid "Hourly"
 msgstr "Toutes les heures"
@@ -1063,9 +1066,6 @@ msgstr ""
 "Contactez nous à <a class=\"text-reset\" href=\"mailto:"
 "%(email)s\">%(email)s</a>"
 
-msgid "Loading..."
-msgstr "Changement en cours…"
-
 msgid "Previous"
 msgstr "Précédent"
 
@@ -2006,17 +2006,26 @@ msgstr "Navigateur sérif"
 msgid "Browser Sans Serif"
 msgstr "Navigateur sans sérif"
 
+msgid "Smallest"
+msgstr "La plus petite"
+
+msgid "Smaller"
+msgstr "Plus petite"
+
 msgid "Small"
 msgstr "Petite"
 
 msgid "Medium"
 msgstr "Moyenne"
 
+msgid "Larger"
+msgstr "Plus large"
+
 msgid "Large"
 msgstr "Large"
 
-msgid "Larger"
-msgstr "Plus large"
+msgid "Largest"
+msgstr "La plus large"
 
 msgid "This email has already been taken."
 msgstr "Ce nom d'utilisateur est déjà pris."

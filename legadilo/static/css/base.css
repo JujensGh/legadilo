@@ -44,15 +44,6 @@ html {
   fill: currentcolor;
 }
 
-.btn-primary img.bi,
-.btn-danger img.bi {
-  filter: invert(1) !important;
-}
-
-[data-bs-theme="dark"] img.bi {
-  filter: invert(0.715);
-}
-
 .htmx-indicator,
 .icon-indicator .indicator {
   display: none;
@@ -96,6 +87,11 @@ html {
   transition:
     opacity 1s ease-out,
     max-height 1s ease-out;
+}
+
+.htmx-swapping:not(.article-card-container) {
+  opacity: 0;
+  transition: opacity 300ms ease-out;
 }
 
 .refresh-btn {
@@ -214,8 +210,8 @@ details > summary:focus-visible {
 
 /* For the theme switcher */
 svg.bi {
-  width: 1rem;
-  height: 1rem;
+  width: 1em;
+  height: 1em;
 }
 
 .bd-navbar .dropdown-menu .active .bi {

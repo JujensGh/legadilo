@@ -177,5 +177,5 @@
     <a class="btn btn-outline-primary sticky-bottom refresh-btn bg-secondary-subtle"
        aria-label="{% translate 'Refresh current reading list' %}"
        role="button"
-       href="{{ request.get_full_path }}">{% include "core/partials/bs-icon.html" with name="arrow-clockwise" %}</a>
+       href="{{ request.get_full_path }}">{% bs_icon "arrow-clockwise" %}</a>
 {% endblock content %}

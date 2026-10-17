@@ -23,15 +23,6 @@
 {% endblock title %}
 
 {% block content %}
-    {% if not article.was_opened %}
-        <form class="visually-hidden"
-              aria-hidden="true"
-              hx-trigger="load"
-              hx-post="{{ article|opened_action_url }}"
-              hx-swap="none">
-            {% csrf_token %}
-        </form>
-    {% endif %}
     <div class="container-fluid px-0">
         <div class="mt-1 mt-md-2 row px-0 mx-0 justify-content-center">
             <aside class="col col-2 d-none d-md-block article-aside">
@@ -73,7 +64,7 @@
                                             type="submit">
                                         <span
                                             class="icon-indicator {{ article|article_action_indicator }}">
-                                            {% include "core/partials/button_loading_indicator.html" %}
+                                            {% loading_indicator %}
                                         </span>
                                         {% translate "Update article" %}
                                     </button>
@@ -92,8 +83,8 @@
                                         class="btn btn-outline-secondary text-start col-12 text-center">
                                         <span
                                             class="icon-indicator {{ article|article_action_indicator }}">
-                                            {% include "core/partials/button_loading_indicator.html" %}
-                                            {% include "core/partials/bs-icon.html" with name="arrow-clockwise" %}
+                                            {% loading_indicator %}
+                                            {% bs_icon "arrow-clockwise" %}
                                         </span>
                                         {% translate 'Re-fetch content' %}
                                     </button>
@@ -139,9 +130,10 @@
                                 {% if article.next_article_of_group %}
                                     <button class="btn btn-outline-primary"
                                             name="read_and_go_to_next"
-                                            type="submit"
-                                            form="{{ article|update_article_form_id }}"
-                                            formaction="{{ article|read_action_url }}">
+                                            type="button"
+                                            hx-indicator=".{{ article|article_action_indicator }}"
+                                            hx-post="{{ article|read_action_url }}"
+                                            hx-vals='{"for_article_details": true }'>
                                         {% translate "Read and go to next" %}
                                     </button>
                                 {% endif %}
@@ -165,7 +157,7 @@
                         </nav>
                         <div class="text-center mt-2">
                             <a href="#legadilo-article-title">
-                                {% include "core/partials/bs-icon.html" with name="arrow-up-circle" %}
+                                {% bs_icon "arrow-up-circle" %}
                                 {% translate "Back to top" %}
                             </a>
                         </div>

@@ -1,35 +1,19 @@
 {% load i18n %}
 
-<form id="{{ article|delete_article_form_id }}"
-      class="visually-hidden"
-      aria-hidden="true"
-      method="post"
-      action="{% url 'reading:delete_article' article.id %}"
-      data-modal-id="danger-modal"
-      data-modal-title="{% translate 'Confirm article deletion' %}"
-      data-modal-body="{% blocktranslate trimmed with article_title=article.title %}Are you sure you want to delete the article '{{ article_title }}'?{% endblocktranslate %}"
-      hx-indicator=".{{ article|article_action_indicator }}"
-      hx-boost="true"
-      hx-push-url="false"
-      hx-confirm="Delete?">
-    {% csrf_token %}
-    <input type="hidden" name="from_url" value="{{ from_url }}" />
-    {% if for_article_details %}
-        <input type="hidden" name="for_article_details" value="true" />
-    {% else %}
-        <input type="hidden"
-               name="displayed_reading_list_id"
-               value="{{ displayed_reading_list.id }}" />
-    {% endif %}
-</form>
 <div class="{% if vertical_group %}btn-group-vertical w-100{% else %}btn-group{% endif %}"
      role="group">
     <button class="btn btn-danger"
-            type="submit"
-            form="{{ article|delete_article_form_id }}">
+            type="button"
+            data-modal-id="danger-modal"
+            data-modal-title="{% translate 'Confirm article deletion' %}"
+            data-modal-body="{% blocktranslate trimmed with article_title=article.title %}Are you sure you want to delete the article '{{ article_title }}'?{% endblocktranslate %}"
+            hx-confirm="Delete?"
+            hx-indicator=".{{ article|article_action_indicator }}"
+            hx-post="{% url 'reading:delete_article' article.id %}"
+            hx-vals='{"displayed_reading_list_id": {{ displayed_reading_list.id|default:"null" }}, "from_url": "{{ from_url }}", "for_article_details": {% if for_article_details %}true{% else %}false{% endif %} }'>
         <span class="icon-indicator {{ article|article_action_indicator }}">
-            {% include "core/partials/button_loading_indicator.html" %}
-            {% include "core/partials/bs-icon.html" with name="trash" %}
+            {% loading_indicator %}
+            {% bs_icon "trash" %}
         </span>
         <span class="d-none d-md-inline">{% translate "Delete" %}</span>
     </button>

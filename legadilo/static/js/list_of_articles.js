@@ -24,20 +24,19 @@
   };
 
   const setupReadAction = () => {
-    for (const openOriginalButton of document.querySelectorAll(".open-original")) {
-      openOriginalButton.addEventListener("click", openAndMarkAsRead);
-      openOriginalButton.addEventListener("auxclick", openAndMarkAsRead);
+    for (const openBtn of document.querySelectorAll("[data-mark-as-opened]")) {
+      openBtn.addEventListener("click", openAndMarkAsOpened);
+      openBtn.addEventListener("auxclick", openAndMarkAsOpened);
     }
   };
 
-  const openAndMarkAsRead = (event) => {
-    const articleId = event.currentTarget.dataset.articleId;
-    const htmxForm = document.querySelector(`#mark-article-as-opened-form-${articleId}`);
-    if (htmxForm) {
-      htmx.trigger(htmxForm, "submit");
-      event.currentTarget.removeEventListener("click", openAndMarkAsRead);
-      event.currentTarget.removeEventListener("auxclick", openAndMarkAsRead);
-    }
+  const openAndMarkAsOpened = async (event) => {
+    const actionUrl = event.currentTarget.dataset.markAsRead;
+    if (!actionUrl) return;
+
+    const htmxDefaultHeaders = JSON.parse(document.body.getAttribute("hx-headers:inherited"));
+    // The keepalive option should help to do the request on PWA when the other tab is opened.
+    await fetch(actionUrl, { method: "POST", headers: htmxDefaultHeaders, keepalive: true });
   };
 
   const setupReadOnScroll = () => {
@@ -80,7 +79,7 @@
       return;
     }
 
-    // To make sure counters are correct at the end, we run the requests on after the other so the
+    // To make sure counters are correct at the end, we run the requests one after the other, so the
     // last one to complete has the correct count.
     console.log(`Adding ${articleIdsToMarkAsRead} to the promise chain.`);
     readOnScrollSequence = readOnScrollSequence.then(() =>
@@ -119,17 +118,18 @@
       const waitForRequestEnd = (event) => {
         if (
           event.detail &&
-          event.detail.pathInfo &&
-          event.detail.pathInfo.requestPath === formToSubmit.getAttribute("action")
+          event.detail.ctx &&
+          event.detail.ctx.request &&
+          event.detail.ctx.request.action === formToSubmit.getAttribute("action")
         ) {
           console.log(`Done for ${articleIdsToMarkAsRead}, resolving promise.`);
-          htmx.off("htmx:afterRequest", waitForRequestEnd);
+          document.removeEventListener("htmx:after:request", waitForRequestEnd);
           clearTimeout(forceResolutionTimer);
           resolve();
         }
       };
       document.getElementById("bulk-mark-as-read-data").value = articleIdsToMarkAsRead.join(",");
-      htmx.on("htmx:afterRequest", waitForRequestEnd);
+      htmx.on("htmx:after:request", waitForRequestEnd);
       htmx.trigger("#bulk-mark-as-read-form", "submit");
     });
   };

@@ -9,7 +9,7 @@
 
     {% if group.annot_total_reading_time > 0 %}
         <span class="me-2">
-            {% include "core/partials/bs-icon.html" with name="clock" %}
+            {% bs_icon "clock" %}
             {% blocktranslate trimmed count reading_time=group.annot_total_reading_time %}
                 {{ reading_time }} minute
             {% plural %}
