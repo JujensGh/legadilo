@@ -10,6 +10,9 @@ Summary of main functional changes.
 
 ## Unreleased
 
+- Improve the performance of reading lists.
+- Minify HTML.
+
 ## 26.10.2
 
 - Disable statement timeout for long migration.
