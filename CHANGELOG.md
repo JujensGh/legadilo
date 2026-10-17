@@ -10,6 +10,8 @@ Summary of main functional changes.
 
 ## Unreleased
 
+## 26.10.3
+
 - Improve the performance of reading lists.
 - Minify HTML.
 - Add extra font sizes.
