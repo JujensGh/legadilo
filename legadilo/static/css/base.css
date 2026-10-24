@@ -107,10 +107,6 @@ html {
 }
 
 @media (width >= 768px) {
-  .article-card-container {
-    max-height: 500px;
-  }
-
   .article-summary {
     max-height: 200px;
     overflow-y: hidden;
