@@ -12,6 +12,10 @@ Summary of main functional changes.
 
 ## 26.10.4
 
+- Remove the max-height on card container.
+    - It’s causing buttons to disappear when titles are very long. Since it’s rare, let’s just remove it, the display will be just fine.
+    - Let’s keep the max height on the summary that can be very long and contains lots of line breaks.
+
 ## 26.10.3
 
 - Improve the performance of reading lists.
