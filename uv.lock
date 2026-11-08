@@ -1797,15 +1797,15 @@ wheels = [
 
 [[package]]
 name = "pytest-env"
-version = "1.8.0"
+version = "1.8.4"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "pytest" },
     { name = "python-dotenv" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/19/e5/02fb78ca59d456291135b48fc95ee481a6e55dc47ad53e6cee31a7e40d54/pytest_env-1.8.0.tar.gz", hash = "sha256:e2dd383be15823a875403509949c0d975266f4f1711ccfbdcdbcbcf8fa83097c", size = 17363, upload-time = "2026-10-10T22:49:40.747Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/0d/44/a07a2ce0b9fe720af16723dcd9fe103cbd144bbf856a03316aaf66decaf9/pytest_env-1.8.4.tar.gz", hash = "sha256:1054caabdbcc6d6ef1b06b010413f8bd482f7ea19487b27cd61e3385f5262bc1", size = 52683, upload-time = "2026-10-31T14:45:17.556Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/8a/cd/c592fb78f8d5fc456568faf1983f2b994f00aa1690f0b3b24af95ad75121/pytest_env-1.8.0-py3-none-any.whl", hash = "sha256:43a026236949342be217f1539fa7ef32973f0d3a98d79d86a15eee973d3b1a2a", size = 10385, upload-time = "2026-10-10T22:49:39.251Z" },
+    { url = "https://files.pythonhosted.org/packages/53/72/eca247172bb54ab2c9acdcb00045609d296c3f1b6d8eae133956ed3a0872/pytest_env-1.8.4-py3-none-any.whl", hash = "sha256:5b2d0685f3075ce7edce79d45a3cfa1117f01ec2098d209d1de15765fe3e8105", size = 9952, upload-time = "2026-10-31T14:45:16.134Z" },
 ]
 
 [[package]]
