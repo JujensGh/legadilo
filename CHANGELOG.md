@@ -10,6 +10,8 @@ Summary of main functional changes.
 
 ## Unreleased
 
+## 26.11.1
+
 ## 26.10.4
 
 - Remove the max-height on card container.
