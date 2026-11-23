@@ -22,3 +22,9 @@ devops/envs/
 .pytest_cache/
 staticfiles/
 node_modules/
+*.sqlite
+*.sqlite3
+*.db
+*.sql
+.junie
+.*_venv

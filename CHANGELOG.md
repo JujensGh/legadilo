@@ -10,7 +10,11 @@ Summary of main functional changes.
 
 ## Unreleased
 
+- Correct image building.
+
 ## 26.11.1
+
+- Update deps.
 
 ## 26.10.4
 
