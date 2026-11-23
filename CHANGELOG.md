@@ -10,6 +10,8 @@ Summary of main functional changes.
 
 ## Unreleased
 
+## 26.11.2
+
 - Correct image building.
 
 ## 26.11.1
