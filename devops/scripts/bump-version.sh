@@ -30,3 +30,4 @@ read -r
 git commit -am "chore: releasing ${new_tag}"
 git tag "${new_tag}"
 git push --follow-tags --no-verify
+git push --follow-tags --no-verify github
